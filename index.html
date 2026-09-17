@@ -378,6 +378,7 @@
     <div class="pts-bar"><i id="ptsBar" style="width:0%"></i></div>
   </div>
   <button class="btn" id="btnLore">📖 Лор</button>
+  <button class="btn" id="btnWeaponResearch">🗡 Оружие</button>
   <button class="btn gold" id="btnSave">💾 Сохранить</button>
   <div class="menu" id="menuMore">
     <button class="btn" id="btnMore">Ещё ▾</button>
@@ -1104,6 +1105,171 @@ const FACTION_ARMOURY = {
  ogres:{m:['hand_weapon','ironfist','ogre_club','great_weapon','extra_hand'],r:['pistol','brace_pistols','javelin','handcannon'],a:['light_armour','heavy_armour'],e:['healing_draught','luckstone','trophy_rack']},
  dark_elves:{m:[...AB_MELEE,'poisoned_blades','lance','rapier'],r:['repeater_crossbow','crossbow','throwing_knives','javelin'],a:[...AB_ARM,'sea_dragon_cloak','full_plate','barding'],e:['poison_vial','luckstone','dispel_scroll','enchanted_staff','spell_scroll','wizards_robes','ingredient_ward','power_stone','trophy_rack']}
 };
+/* Арсенал уровня подфракции — ДОБАВЛЯЕТСЯ к FACTION_ARMOURY, не заменяет его.
+   Ключ — 'faction:sub' (тот же формат, что SUBFACTION_LORE_FULL). Наполняется
+   вручную по исследованию (WEAPON_RESEARCH) и через кнопку «Перенести в арсенал»
+   (см. transferWeaponToArsenal) — обе дороги пишут сюда же. */
+const SUBFACTION_ARMOURY = {};
+
+/* ===== Исследование оружия (TWW3 и другие источники) =====
+   Кандидаты на перенос в арсенал — оружие, которым по описанию/роликам/вики
+   вооружены юниты фракции, но которого ещё нет в WEAPONS/ARMOURS/EQUIPMENT.
+   Ключ — 'faction' или 'faction:sub' (как SUBFACTION_LORE_FULL). Каждая запись:
+   {slot:'m'|'r'|'a'|'e', name, units, desc, src}. Перенос НЕ автоматический —
+   это делает человек кнопкой в попапе, по одной позиции за раз. */
+const WEAPON_RESEARCH = {
+  empire: [
+    {slot:'m', name:'Цвайхандер (Zweihänder)', units:'Greatswords', desc:'Огромный двуручный меч, способный разрубить закованного в латы рыцаря одним ударом; Greatswords носят его вместе с гномьей ковки латами и сражаются в самой гуще боя.', src:'totalwarwarhammer.fandom.com, статья «Greatswords»'},
+    {slot:'m', name:'Оружие кающихся (флейлы, колокола, факелы)', units:'Flagellants', desc:'Не единообразное вооружение, а что попадёт под руку истовому фанатику: цепы-флейлы, большие колокола, горящие факелы, палицы, реже косы — оружие религиозного экстаза, а не строевой пехоты.', src:'totalwarwarhammer.fandom.com, статья «Flagellants»'}
+  ],
+  bretonnia: [
+    {slot:'m', name:'Двуручный меч с гербом Флёр-де-Лис', units:'Questing Knights', desc:'Традиционное оружие Обета Поиска — не рыцарское копьё, а двуручный меч, отмеченный лилией Леди; бронебойный, эффективен против латной пехоты.', src:'totalwarwarhammer.fandom.com, статья «Questing Knights»'}
+  ],
+  cathay: [
+    {slot:'m', name:'Гуань дао (Guan Dao)', units:'Jade Warriors, Terracotta Sentinels', desc:'Двулезвийная алебарда-глефа — ей одинаково владеют живые Нефритовые Воины (с текучестью настоящих мастеров боевых искусств) и оживлённые магией каменные Терракотовые Стражи.', src:'totalwarwarhammer.fandom.com, статья «Terracotta Sentinel»; поиск по Jade Warriors'},
+    {slot:'r', name:'Тяжёлая аркебуза на треноге', units:'Crane Gunners', desc:'Длинноствольные ружья, подпираемые массивными сошками-«журавлями» для точного дальнего боя; пара стрелков может дополнительно забрасывать зажигательные бомбы.', src:'totalwarwarhammer.fandom.com, поиск по Crane Gunners'}
+  ],
+  kislev: [
+    {slot:'m', name:'Ледяной клинок/глефа Ледяной Стражи', units:'Ice Guard', desc:'Оружие, пропитанное ледяной магией и светящееся собственным светом изнутри — парные мечи для боя с пехотой или глефа для боя с кавалерией и монстрами; и лук, и ближнее оружие несут эффект обморожения (Frostbite), замедляющий цель.', src:'totalwarwarhammer.fandom.com, статья «Frost Maiden (Ice)»; поиск по Ice Guard'}
+  ],
+  lizardmen: [
+    {slot:'m', name:'Обсидиановое копьё', units:'Saurus Warriors, Saurus Spears', desc:'Простое на вид, но убийственное оружие ящеролюдов — копьё с наконечником из обсидиана, дополняется у части воинов тяжёлыми палицами, утыканными острыми камнями.', src:'totalwarwarhammer.fandom.com, поиск по Saurus Warriors/Saurus Spears'}
+  ],
+  vampire_counts: [
+    {slot:'m', name:'Зачарованный погребальный клинок', units:'Grave Guard (Great Weapons)', desc:'Двуручные мечи этого варианта Grave Guard заколдованы при погребении — помимо обычной бронебойности, магическая природа удара пробивает сопротивление бесплотных и демонических целей, недоступное обычному оружию.', src:'totalwarwarhammer.fandom.com, статья «Grave Guard (Great Weapons)»'}
+  ],
+  tomb_kings: [
+    {slot:'r', name:'Ритуальный лук Ушабти', units:'Ushabti (Great Bows)', desc:'Гигантские храмовые статуи-стражи Нехекхары, несущие вариант с огромным луком — магическая стрела способна пробить самую тяжёлую броню.', src:'totalwarwarhammer.fandom.com, статья «Ushabti (Great Bows)»'}
+  ],
+  vampire_coast: [
+    {slot:'r', name:'Пороховые гранаты палубных банд', units:'Zombie Deckhands', desc:'Помимо кортиков и пистолетов, зомби-абордажники несут самодельные пороховые гранаты и абордажное древковое оружие — типичный пиратский набор мертвецов.', src:'totalwarwarhammer.fandom.com, поиск по Zombie Deckhands'},
+    {slot:'m', name:'Парные абордажные топоры', units:'Depth Guard', desc:'Элитная вампирская стража глубин ходит в бой с двумя абордажными топорами сразу либо с алебардой — тяжелее и целенаправленнее обычных зомби-палубников.', src:'totalwarwarhammer.fandom.com, статья «Depth Guard»'}
+  ],
+  beastmen: [
+    {slot:'m', name:'Парные секиры / секира со щитом-створом', units:'Minotaurs', desc:'У минотавров три варианта вооружения: парные секиры, секира с огромным деревянным щитом-створом («axe and board») или гигантский двуручный тесак — парная и щитовая версии отдельны от уже описанного в арсенале двуручного варианта.', src:'totalwarwarhammer.fandom.com, поиск по Minotaurs (Great Weapons)'}
+  ],
+  greenskins: [
+    {slot:'m', name:'Награбленные чоппы', units:'Black Orcs', desc:'Лучшие чоппы Чёрных орков — не выкованы самими орками, а отняты у гномов или людей; элита нередко таскает сразу по нескольку разом вместе со щитами разного размера.', src:'totalwarwarhammer.fandom.com, поиск по Black Orcs (Great Weapons)'}
+  ],
+  ogres: [
+    {slot:'r', name:'Свинецблюй (личная пушка на плече)', units:'Leadbelchers', desc:'Не ручное огнестрельное оружие, а настоящая пушка, которую огр носит и стреляет с плеча, как гигантской базукой; название унаследовано и самим орудием, и несущим его подразделением.', src:'totalwarwarhammer.fandom.com, статья «Leadbelchers»'},
+    {slot:'m', name:'Самодельное огромное оружие Айронгатов', units:'Ironguts', desc:'У элиты племени — самое статусное вооружение, но не единого образца: гигантские кривые тесаки, валуны, примотанные железными полосами к суковатым дубинам, или просто исполинские дубины — у кого что нашлось повесомее.', src:'totalwarwarhammer.fandom.com, статья «Ironguts»'}
+  ]
+};
+/* Фракции, которые целенаправленно проверены (поиском по TWW3-вики и обзорам),
+   но не дали новых позиций сверх уже имеющегося каталога WEAPONS/ARMOURS/EQUIPMENT —
+   коротко фиксирую вывод, чтобы не читалось как «руки не дошли». */
+const WEAPON_RESEARCH_NOTES = {
+  dwarfs: 'Уже насыщенно: рунное оружие, дрейкган, тролльхаммер, паровые инструменты думсикеров и другие позиции из WFRP4 «Dwarf Player’s Guide» — искать по TWW3 новых пробелов не потребовалось.',
+  high_elves: 'Итильмарский клинок/броня/щит и драконья броня уже в арсенале; Swordmasters/Phoenix Guard по TWW3-вики вооружены бронебойным мечом и алебардой без отдельного собственного названия — не нашёл, чем дополнить сверх общих категорий.',
+  wood_elves: 'Асрайские копья и длинные луки уже в арсенале; Waywatchers и Wardancers по TWW3-вики используют обычные луки и парные клинки без отдельных названий, достойных новой позиции каталога.',
+  warriors_chaos: 'Хеллблейд и клинок Хаоса уже в арсенале и подтверждены по TWW3-вики (Chosen, Skullcrushers) — искал специально, новых именных находок не нашёл.',
+  khorne: 'То же хеллблейд/клинок Хаоса покрывает Bloodletters/Bloodcrushers/Skullcrushers по TWW3-вики — оружие демонов Кхорна для обычного арсенала не подбирается (это не снаряжение, а часть тела демона).',
+  nurgle: '«Чумной клинок» (plague_blade) в арсенале уже соответствует Plaguesword чумоносцев по TWW3-вики — отдельной новой позиции не нашёл.',
+  tzeentch: 'Найденные по TWW3-вики именные клинки (Torment Blade, The Eternal Blade) — это личное снаряжение конкретных лордов/героев, не оружие рядовых юнитов; для общего арсенала фракции не подходят.',
+  slaanesh: 'У Daemonettes/Fiends — когти и клинки-отростки как часть тела демона (естественное оружие), не снаряжение, которое можно выдать другому юниту — переносить в арсенал как экипировку не имеет смысла.',
+  skaven: 'Клан Скрайр и его дрейкганы/варплок-джезейлы уже в арсенале; Stormvermin/Clanrats по TWW3-вики вооружены обычными алебардами и клинками без отдельных названий.',
+  chaos_dwarfs: '«Ensorcelled Weapon» в арсенале уже соответствует зачарованным клинкам Infernal Ironsworn по TWW3-вики; бландербасс дави-жарр — тот же общий бландербасс, без новой позиции.',
+  norsca: 'Целенаправленный поиск по Marauders/Chosen/Skin Wolves не дал именных находок сверх уже общего клинка Хаоса — норсийцы в TWW3 вооружены довольно обобщённо.',
+  daemons: 'Демоны в основном сражаются частью тела (когти, хеллблейды у леттеров/краши) — предметы, годные для передачи «арсеналу» как экипировке, здесь редкость; см. также Кхорн/Нургл/Тзинч/Слаанеш выше.',
+  dark_elves: 'Отравленные клинки (poisoned_blades) уже в арсенале соответствуют яду Witch Elves; Black Guard по TWW3-вики вооружены обычной бронебойной алебардой без отдельного названия.'
+};
+
+const LS_CUSTOM_ARMOURY = 'fb_builder_custom_armoury';
+let customArmouryCache = null;
+function loadCustomArmoury(){
+  if(customArmouryCache) return customArmouryCache;
+  try{ customArmouryCache = JSON.parse(localStorage.getItem(LS_CUSTOM_ARMOURY)||'{}'); }
+  catch(e){ customArmouryCache = {}; }
+  customArmouryCache.items = customArmouryCache.items || {m:{},r:{},a:{},e:{}};
+  customArmouryCache.grants = customArmouryCache.grants || {};
+  return customArmouryCache;
+}
+function saveCustomArmoury(){ try{ localStorage.setItem(LS_CUSTOM_ARMOURY, JSON.stringify(customArmouryCache||{})); }catch(e){} }
+/* Восстанавливает перенесённое оружие после перезагрузки страницы: досыпает
+   черновые записи в каталоги и разрешения в FACTION_ARMOURY/SUBFACTION_ARMOURY.
+   Вызывается один раз при старте, до первого рендера. */
+function applyCustomArmoury(){
+  const c = loadCustomArmoury();
+  const catalogs = {m:WEAPONS, r:WEAPONS, a:ARMOURS, e:EQUIPMENT};
+  ['m','r','a','e'].forEach(slot=>{
+    Object.entries(c.items[slot]||{}).forEach(([id,def])=>{ if(!catalogs[slot][id]) catalogs[slot][id]=def; });
+  });
+  Object.entries(c.grants||{}).forEach(([scopeKey,slots])=>{
+    const store = scopeKey.includes(':') ? SUBFACTION_ARMOURY : FACTION_ARMOURY;
+    store[scopeKey] = store[scopeKey] || {m:[],r:[],a:[],e:[]};
+    ['m','r','a','e'].forEach(slot=>{
+      (slots[slot]||[]).forEach(id=>{ if(!store[scopeKey][slot].includes(id)) store[scopeKey][slot].push(id); });
+    });
+  });
+}
+/* Транслитерация под id — названия оружия чаще всего по-русски. */
+const CYR_MAP = {а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'i',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'c',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
+function weaponDraftId(name){
+  return 'custom_'+name.toLowerCase().split('').map(ch=>CYR_MAP[ch]!==undefined?CYR_MAP[ch]:ch).join('')
+    .replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+}
+function isTransferred(scopeKey, slot, id){
+  const store = scopeKey.includes(':') ? SUBFACTION_ARMOURY : FACTION_ARMOURY;
+  return !!(store[scopeKey] && store[scopeKey][slot] && store[scopeKey][slot].includes(id));
+}
+/* Собственно перенос: досоздаёт черновую запись в каталоге (если её ещё нет)
+   и добавляет её id в арсенал нужного охвата (фракция целиком или 'faction:sub'). */
+function transferWeaponToArsenal(scopeKey, slot, name, desc){
+  const id = weaponDraftId(name);
+  const catalog = (slot==='m'||slot==='r') ? WEAPONS : slot==='a' ? ARMOURS : EQUIPMENT;
+  const c = loadCustomArmoury();
+  if(!catalog[id]){
+    const note = '⚠ ЧЕРНОВИК: статы условны, не сбалансированы — '+(desc||'требует доработки');
+    const def = slot==='a' ? {n:name, sv:5, c:0, tr:note}
+              : slot==='e' ? {n:name, c:0, tr:note}
+              : {n:name, t:slot, h:1, c:0, tr:note};
+    catalog[id]=def;
+    c.items[slot][id]=def;
+  }
+  const store = scopeKey.includes(':') ? SUBFACTION_ARMOURY : FACTION_ARMOURY;
+  store[scopeKey]=store[scopeKey]||{m:[],r:[],a:[],e:[]};
+  if(!store[scopeKey][slot].includes(id)) store[scopeKey][slot].push(id);
+  c.grants[scopeKey]=c.grants[scopeKey]||{m:[],r:[],a:[],e:[]};
+  if(!c.grants[scopeKey][slot].includes(id)) c.grants[scopeKey][slot].push(id);
+  saveCustomArmoury();
+  return id;
+}
+function renderWeaponResearchRow(scopeKey, idx, row){
+  const catalog = (row.slot==='m'||row.slot==='r') ? WEAPONS : row.slot==='a' ? ARMOURS : EQUIPMENT;
+  const id = weaponDraftId(row.name);
+  const done = isTransferred(scopeKey,row.slot,id) && catalog[id];
+  return `<tr>
+    <td style="text-align:left;color:var(--ink);font-weight:600">${esc(row.name)}</td>
+    <td>${esc(row.units)}</td>
+    <td>${row.desc?esc(row.desc)+'<br>':''}<span class="note">Источник: ${esc(row.src)}</span></td>
+    <td><button class="btn sm ${done?'':'gold'}" data-weapon-transfer="${esc(scopeKey)}::${idx}" ${done?'disabled':''}>${done?'✓ В арсенале':'➜ Перенести'}</button></td>
+  </tr>`;
+}
+function openWeaponResearch(factionId, subId){
+  factionId = factionId || state.factionId || GAME_DATA.factions[0].id;
+  const f = GAME_DATA.factions.find(x=>x.id===factionId) || GAME_DATA.factions[0];
+  subId = subId===undefined ? '' : subId;
+  const subs = f.subfactions||[];
+  const scopeKey = subId ? f.id+':'+subId : f.id;
+  const rows = WEAPON_RESEARCH[scopeKey]||[];
+  const body = `<h3>🗡 Оружие — ${esc(f.name)}${subId?' · '+esc((subs.find(s=>s.id===subId)||{}).name||subId):''}</h3>
+    <p class="note">Оружие из Total War: Warhammer III и других источников, которого ещё нет в арсенале билдера — собрано по описаниям юнитов и способностей, не по игровым профилям. «Перенести» добавляет позицию в арсенал ${subId?'этой подфракции':'фракции целиком'} с черновыми статами (баланс — отдельным заходом); повторный клик по уже перенесённой позиции ничего не задвоит.</p>
+    <div class="devbar">
+      <select id="wrFactionSel">${GAME_DATA.factions.map(x=>`<option value="${x.id}" ${x.id===factionId?'selected':''}>${esc(x.name)}</option>`).join('')}</select>
+      <select id="wrSubSel"><option value="">— вся фракция —</option>${subs.map(s=>`<option value="${esc(s.id)}" ${s.id===subId?'selected':''}>${esc(s.name)}</option>`).join('')}</select>
+    </div>
+    ${rows.length? `<table class="ref" style="width:100%"><thead><tr><th>Оружие</th><th>Юнит(ы)</th><th>Описание / источник</th><th></th></tr></thead>
+      <tbody>${rows.map((r,i)=>renderWeaponResearchRow(scopeKey,i,r)).join('')}</tbody></table>`
+      : WEAPON_RESEARCH_NOTES[factionId] ? `<p class="note">✓ Проверено: ${esc(WEAPON_RESEARCH_NOTES[factionId])}</p>`
+      : '<p class="faint">Пока не исследовано — в очереди.</p>'}
+    <div class="row" style="margin-top:14px"><button class="btn" data-close>Закрыть</button></div>`;
+  openModal(body);
+  wrapRefTables('#modalBox');
+  document.getElementById('wrFactionSel').value = factionId;
+  document.getElementById('wrFactionSel').onchange = e=>openWeaponResearch(e.target.value, '');
+  document.getElementById('wrSubSel').onchange = e=>openWeaponResearch(factionId, e.target.value);
+}
 /* Дополнения из коллекции WFRP/Mordheim («Во всеоружии», Mordheim 2022,
    «Антикварный магазинчикъ», «Экстраординарные товары»): [слот, id, фракции] */
 const WFRP_ADDONS = [
@@ -3802,7 +3968,12 @@ function optionsFor(unit){
 }
 /* Арсенал фракции для конкретного юнита */
 function armouryFor(u){
-  const ar=FACTION_ARMOURY[state.factionId]||{m:[],r:[],a:[],e:[]};
+  const base=FACTION_ARMOURY[state.factionId]||{m:[],r:[],a:[],e:[]};
+  const sub=state.subfactionId && SUBFACTION_ARMOURY[state.factionId+':'+state.subfactionId];
+  const ar=sub ? {
+    m:[...base.m,...sub.m], r:[...base.r,...sub.r],
+    a:[...base.a,...sub.a], e:[...base.e,...sub.e]
+  } : base;
   const isBeast=u.tags.includes('beast')||u.unitType==='monster'||u.unitType==='machine'||u.tags.includes('swarm');
   if(isBeast) return {m:[],r:[],a:[],e:[],s:[]};
   return {
@@ -6310,6 +6481,7 @@ function bind(){
   });
   $('#btnSave').addEventListener('click',doSave);
   $('#btnLore').addEventListener('click',()=>openLoreViewer());
+  $('#btnWeaponResearch').addEventListener('click',()=>openWeaponResearch());
 
   // делегирование кликов
   document.addEventListener('click',e=>{
@@ -6472,6 +6644,18 @@ function bind(){
       const overrides=loadLoreOverrides(); delete overrides[key]; saveLoreOverrides();
       openLoreViewer(document.getElementById('loreFactionSel').value, document.getElementById('loreSubSel').value);
       toast('Правка сброшена к исходному тексту');
+    }
+    // исследование оружия: перенос конкретной строки в арсенал фракции/подфракции
+    const wTransfer=e.target.closest('[data-weapon-transfer]');
+    if(wTransfer){
+      const [scopeKey,idxStr]=wTransfer.dataset.weaponTransfer.split('::');
+      const row=(WEAPON_RESEARCH[scopeKey]||[])[+idxStr];
+      if(row){
+        transferWeaponToArsenal(scopeKey,row.slot,row.name,row.desc);
+        const fSel=document.getElementById('wrFactionSel'), sSel=document.getElementById('wrSubSel');
+        openWeaponResearch(fSel?fSel.value:state.factionId, sSel?sSel.value:'');
+        toast('«'+row.name+'» добавлено в арсенал'+(scopeKey.includes(':')?' подфракции':''));
+      }
     }
     // модалка найма: выбор строки → 🎲 → одна кнопка «Добавить» (паттерн Trench)
     const sr=e.target.closest('[data-selrow]');
@@ -7382,6 +7566,7 @@ function openLoreViewer(factionId, subId){
    СТАРТ
    ========================================================================= */
 devSnapshotBase();
+applyCustomArmoury();
 devLoadOverrides();
 devApplyStoredOverrides();
 if(devIsOn()) document.getElementById('tabDev').style.display='';
