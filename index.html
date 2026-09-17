@@ -58,6 +58,19 @@
   .pts-bar > i{display:block; height:100%; background:linear-gradient(90deg,var(--ok),var(--gold)); transition:width .2s}
   .pts-readout.over .pts-bar > i{background:var(--danger)}
 
+  /* Компактный хедер на мобильных — иначе форма сборки уходит на второй экран */
+  @media(max-width:640px){
+    header.app{padding:8px 10px; gap:6px 10px}
+    .brand .ver{display:none}
+    .brand h1{font-size:15px}
+    .pts-readout{min-width:0}
+    .pts-readout .big{font-size:15px}
+    .pts-bar{width:64px}
+    header.app .btn{padding:6px 9px; font-size:12px}
+    /* Пока открыт модал (в т.ч. Лор) — хедеру и вкладкам нечего делать поверх контента */
+    body.modal-open header.app, body.modal-open .tabs{display:none}
+  }
+
   .btn{
     background:var(--panel2); color:var(--ink); border:1px solid var(--line2);
     border-radius:8px; padding:7px 12px; font-size:13px; transition:.12s;
@@ -331,6 +344,10 @@
   .modal-bg{position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:90}
   .modal-bg.open{display:flex}
   .modal{background:var(--panel); border:1px solid var(--line2); border-radius:12px; padding:18px; width:min(560px,92vw); max-height:88vh; overflow:auto}
+  @media(max-width:640px){
+    .modal-bg{padding:0}
+    .modal{width:100vw; max-width:100vw; height:100vh; max-height:100dvh; border-radius:0; padding:14px 14px calc(14px + env(safe-area-inset-bottom))}
+  }
   .modal h3{margin:0 0 10px; color:var(--gold2)}
   .modal textarea{width:100%; height:200px; background:#15110b; color:var(--ink); border:1px solid var(--line2); border-radius:8px; padding:10px; font-family:ui-monospace,Consolas,monospace; font-size:12px}
   .modal .row{display:flex; gap:8px; justify-content:flex-end; margin-top:12px}
@@ -6244,8 +6261,8 @@ function download(kind){
 }
 
 /* ---------- Модалка / тост ---------- */
-function openModal(html){ $('#modalBox').innerHTML=html; $('#modalBg').classList.add('open'); }
-function closeModal(){ $('#modalBg').classList.remove('open'); }
+function openModal(html){ $('#modalBox').innerHTML=html; $('#modalBg').classList.add('open'); document.body.classList.add('modal-open'); }
+function closeModal(){ $('#modalBg').classList.remove('open'); document.body.classList.remove('modal-open'); }
 let toastT;
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),1800); }
 
