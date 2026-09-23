@@ -244,8 +244,9 @@
   .kwchip{display:inline-block; border:1px solid var(--line2); border-radius:6px; padding:2px 9px; margin:2px 4px 2px 0; font-size:11.5px; color:#a8d4e8; background:rgba(79,157,191,.08)}
   /* Trench-лейаут сборки: банда / ростер на игру / карточка */
   .tc-layout{display:grid; grid-template-columns:minmax(280px,360px) minmax(260px,360px) 1fr; gap:16px; padding:14px 18px; align-items:start}
+  .tc-layout>*{min-width:0; overflow-wrap:anywhere}
   @media (max-width:1300px){ .tc-layout{grid-template-columns:minmax(280px,360px) minmax(260px,360px)} .tc-right{grid-column:1 / -1} }
-  @media (max-width:900px){ .tc-layout{grid-template-columns:1fr} .tc-right{grid-column:auto} }
+  @media (max-width:900px){ .tc-layout{grid-template-columns:minmax(0,1fr)} .tc-right{grid-column:auto} }
   .tc-row.excluded{opacity:.5}
   .tc-row .tcheck{flex:none; width:16px; height:16px; cursor:pointer; accent-color:var(--gold2)}
   .tc-row.nested{padding-left:30px; background:var(--panel2); font-size:.95em}
@@ -282,7 +283,7 @@
   .addunit-row .aumain{flex:1; min-width:0}
   .modal-foot{display:flex; gap:8px; justify-content:flex-end; margin-top:12px; padding-top:10px; border-top:1px solid var(--line)}
   /* шапки секций снаряжения в карточке (Battlekit-стиль Тренча) */
-  .dt-gearhead{display:flex; align-items:center; gap:8px; margin-top:10px; padding:6px 10px; background:var(--panel3); border:1px solid var(--line); border-radius:7px; font-weight:600; font-size:12.5px}
+  .dt-gearhead{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:10px; padding:6px 10px; background:var(--panel3); border:1px solid var(--line); border-radius:7px; font-weight:600; font-size:12.5px}
   .dt-gearhead .tc-add{width:22px; height:22px; font-size:14px; margin-left:auto}
   .optrow.on{border-color:#3b6b84}
   /* XP-трек квадратиками (Trench-стиль) */
@@ -389,6 +390,7 @@
       <button data-more="expJson">⬇ Экспорт JSON</button>
       <button data-more="impJson">⬆ Импорт JSON</button>
       <button data-more="expMd">📝 Экспорт в Markdown</button>
+      <button data-more="bake">🧷 Выгрузить правки в исходник</button>
       <hr>
       <button data-more="dev">🛠 Дев-режим (вкл/выкл)</button>
     </div>
@@ -1175,6 +1177,11 @@ const WEAPON_RESEARCH_NOTES = {
   dark_elves: 'Отравленные клинки (poisoned_blades) уже в арсенале соответствуют яду Witch Elves; Black Guard по TWW3-вики вооружены обычной бронебойной алебардой без отдельного названия.'
 };
 
+/* Перенесённое оружие и правки лора, «вшитые» в исходник: меню «Ещё» → «Выгрузить правки» → bake.py.
+   Их видят все, в том числе публичный сайт; правки этого браузера (localStorage) ложатся поверх.
+   Строку целиком переписывает bake.py — держать её одной строкой. */
+const BAKED_CONTENT = {"armoury":{"items":{"m":{},"r":{},"a":{},"e":{}},"grants":{}},"lore":{}};
+const DRAFT_RANGE = 10;   // дальность черновика стрелкового оружия — медиана по арсеналу, пока нет своих статов
 const LS_CUSTOM_ARMOURY = 'fb_builder_custom_armoury';
 let customArmouryCache = null;
 function loadCustomArmoury(){
@@ -1190,18 +1197,49 @@ function saveCustomArmoury(){ try{ localStorage.setItem(LS_CUSTOM_ARMOURY, JSON.
    черновые записи в каталоги и разрешения в FACTION_ARMOURY/SUBFACTION_ARMOURY.
    Вызывается один раз при старте, до первого рендера. */
 function applyCustomArmoury(){
-  const c = loadCustomArmoury();
   const catalogs = {m:WEAPONS, r:WEAPONS, a:ARMOURS, e:EQUIPMENT};
-  ['m','r','a','e'].forEach(slot=>{
-    Object.entries(c.items[slot]||{}).forEach(([id,def])=>{ if(!catalogs[slot][id]) catalogs[slot][id]=def; });
-  });
-  Object.entries(c.grants||{}).forEach(([scopeKey,slots])=>{
-    const store = scopeKey.includes(':') ? SUBFACTION_ARMOURY : FACTION_ARMOURY;
-    store[scopeKey] = store[scopeKey] || {m:[],r:[],a:[],e:[]};
+  [BAKED_CONTENT.armoury, loadCustomArmoury()].forEach(c=>{
     ['m','r','a','e'].forEach(slot=>{
-      (slots[slot]||[]).forEach(id=>{ if(!store[scopeKey][slot].includes(id)) store[scopeKey][slot].push(id); });
+      Object.entries((c.items||{})[slot]||{}).forEach(([id,def])=>{
+        if(slot==='r' && def.rng==null) def.rng=DRAFT_RANGE;   // черновики до 23.09.2026 создавались без дальности
+        if(!catalogs[slot][id]) catalogs[slot][id]=def;
+      });
+    });
+    Object.entries(c.grants||{}).forEach(([scopeKey,slots])=>{
+      const store = scopeKey.includes(':') ? SUBFACTION_ARMOURY : FACTION_ARMOURY;
+      store[scopeKey] = store[scopeKey] || {m:[],r:[],a:[],e:[]};
+      ['m','r','a','e'].forEach(slot=>{
+        (slots[slot]||[]).forEach(id=>{ if(!store[scopeKey][slot].includes(id)) store[scopeKey][slot].push(id); });
+      });
     });
   });
+}
+/* Всё перенесённое и отредактированное — вшитое плюс локальное — одним объектом для bake.py. */
+function customContentMerged(){
+  const out = {armoury:{items:{m:{},r:{},a:{},e:{}}, grants:{}}, lore:{}};
+  [BAKED_CONTENT.armoury, loadCustomArmoury()].forEach(c=>{
+    ['m','r','a','e'].forEach(sl=>Object.assign(out.armoury.items[sl], (c.items||{})[sl]||{}));
+    Object.entries(c.grants||{}).forEach(([k,slots])=>{
+      const g = out.armoury.grants[k] = out.armoury.grants[k] || {m:[],r:[],a:[],e:[]};
+      ['m','r','a','e'].forEach(sl=>(slots[sl]||[]).forEach(id=>{ if(!g[sl].includes(id)) g[sl].push(id); }));
+    });
+  });
+  Object.assign(out.lore, BAKED_CONTENT.lore||{}, loadLoreOverrides());
+  return out;
+}
+function exportCustomContent(){
+  const c = customContentMerged();
+  const nItems = ['m','r','a','e'].reduce((n,sl)=>n+Object.keys(c.armoury.items[sl]).length,0);
+  const nLore = Object.keys(c.lore).length;
+  const data = JSON.stringify(c,null,1);
+  window.__exportData = data;
+  openModal(`<h3>⬇ Выгрузить правки в исходник</h3>
+    <p class="note">Перенесённое оружие (${nItems}) и правки лора (${nLore}) пока живут только в этом браузере — их нет ни на публичном сайте, ни в экспорте ростера. Чтобы они стали частью билдера:<br>
+    1) «Скачать» и положить <b>fb_custom_content.json</b> в папку билдера (или оставить в «Загрузках»);<br>
+    2) <code>python bake.py</code> — впишет их в index.html;<br>
+    3) <code>python publish.py</code> — выложит.</p>
+    <textarea readonly>${esc(data)}</textarea>
+    <div class="row"><button class="btn" data-copy>Копировать</button><button class="btn gold" data-download="bake">Скачать .json</button><button class="btn" data-close>Закрыть</button></div>`);
 }
 /* Транслитерация под id — названия оружия чаще всего по-русски. */
 const CYR_MAP = {а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'i',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'c',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
@@ -1223,13 +1261,16 @@ function transferWeaponToArsenal(scopeKey, slot, name, desc){
     const note = '⚠ ЧЕРНОВИК: статы условны, не сбалансированы — '+(desc||'требует доработки');
     const def = slot==='a' ? {n:name, sv:5, c:0, tr:note}
               : slot==='e' ? {n:name, c:0, tr:note}
-              : {n:name, t:slot, h:1, c:0, tr:note};
+              : slot==='r' ? {n:name, t:'r', h:1, rng:DRAFT_RANGE, c:0, tr:note}
+              : {n:name, t:'m', h:1, c:0, tr:note};
     catalog[id]=def;
     c.items[slot][id]=def;
   }
   const store = scopeKey.includes(':') ? SUBFACTION_ARMOURY : FACTION_ARMOURY;
   store[scopeKey]=store[scopeKey]||{m:[],r:[],a:[],e:[]};
   if(!store[scopeKey][slot].includes(id)) store[scopeKey][slot].push(id);
+  // перенесённое — часть базы для дев-режима: «сбросить фракцию» не должно его стирать
+  if(!scopeKey.includes(':') && DEV_BASE_ARMOURY && DEV_BASE_ARMOURY[scopeKey] && !DEV_BASE_ARMOURY[scopeKey][slot].includes(id)) DEV_BASE_ARMOURY[scopeKey][slot].push(id);
   c.grants[scopeKey]=c.grants[scopeKey]||{m:[],r:[],a:[],e:[]};
   if(!c.grants[scopeKey][slot].includes(id)) c.grants[scopeKey][slot].push(id);
   saveCustomArmoury();
@@ -3878,7 +3919,11 @@ function defaultGodId(){
   const ov=SUBFACTION_GODS[state.factionId+':'+state.subfactionId]; if(ov) return ov;
   const gl=FACTION_GODS[state.factionId]||[]; return gl[0]||null;
 }
-function selectedGodId(){ return state.godId || defaultGodId(); }
+function selectedGodId(){
+  const g=state.godId;
+  if(g && (g==='none' || (FACTION_GODS[state.factionId]||[]).includes(g) || g===SUBFACTION_GODS[state.factionId+':'+state.subfactionId])) return g;
+  return defaultGodId();   // бог чужой фракции (старый сейв, смена фракции) не действует
+}
 function currentGodId(){ const s=selectedGodId(); return s==='none' ? null : s; }
 function traitById(id){ const t=traitsFor(); return t?t.items.find(x=>x[0]===id):null; }
 
@@ -6130,7 +6175,7 @@ const SUB_POOL = {
 const SUB_ONLY = new Set(Object.values(SUB_POOL).reduce((a,b)=>a.concat(b),[]));
 // доп. юниты подфракции: НЕ заменяют весь ростер (как SUB_POOL), а добавляются сверху него —
 // видны только пока активна именно эта подфракция, иначе скрыты (сверено с ростерами Total War: Warhammer)
-const SUBFACTION_EXCLUSIVE_UNITS = {"beastmen": {"shadowgave": ["bst_spawn_of_shadowgave", "bst_fleshwarp"], "harbingers": ["bst_crow_shaman", "bst_feral_manticore"], "warherd": ["bst_razorgor_chariot"]}, "bretonnia": {"couronne": ["brt_royal_hippogryph_knights"], "lyonesse": ["brt_grail_reliquae", "brt_grail_maiden"], "carcassonne": ["brt_fay_enchantress", "brt_grail_guardians"], "bordeleaux": ["brt_sea_duke"], "aoi_exiles": ["brt_outcast_wizard"]}, "cathay": {"tiger_court": ["cat_tiger_sawai", "cat_clawspeaker", "cat_tiger_warriors", "cat_iron_claw_tiger_warriors", "cat_tiger_warrior_stalkers"], "jade_court": ["cat_jade_fatekeeper", "cat_jade_lion", "cat_onyx_crowmen"]}, "chaos_dwarfs": {"azgorh": ["cdw_deathshrieker", "cdw_dreadquake_mortar", "cdw_ironsworn", "cdw_bale_taurus"], "khanate": ["cdw_hobgoblin_archers", "cdw_hobgoblin_bolt_thrower", "cdw_hobgoblin_sneaky_gits", "cdw_hobgoblin_khan"], "gorgoth": ["cdw_artillery_marshal"]}, "daemons": {"undivided_prince": ["doc_shadow_prince"]}, "dark_elves": {"naggarond": ["del_black_guard"], "har_ganeth": ["del_sisters_of_slaughter"], "cult_pleasure": ["del_devotees_of_slaanesh", "del_devotees_of_slaanesh_crossbows", "del_ghrond_matriarch", "del_daemonettes_of_slaanesh", "del_exalted_daemonettes_of_slaanesh"], "blessed_dread": ["del_ark_warlord", "del_corsairs_handbows"]}, "dwarfs": {"clan_angrund": ["dw_angrund_ancestor", "dw_claimant_king"], "ancestral_throng": ["dw_grombrindal"], "aoi_expeditionary": ["dw_slayer_engineer"]}, "empire": {"reikland": ["emp_reiksguard"], "cult_sigmar": ["emp_war_altar", "emp_flagellants"], "amethyst_order": ["emp_carmine_dragon"], "middenland": ["emp_elector_griffon"], "aoi_nuln_train": ["emp_steam_tank", "emp_outriders", "emp_great_cannon"], "aoi_knightly_orders": ["emp_blazing_sun"]}, "greenskins": {"bonerattlaz": ["grn_wyvern", "grn_orc_boss_wyvern"], "crooked_moon": ["grn_gobbla", "grn_ng_fanatics", "grn_arachnarok_spider"], "bloody_handz": ["grn_savage_boar_boyz", "grn_savage_orc_great_shaman"], "grimgor": ["grn_black_orc_warlord"], "broken_axe": ["grn_cauldron_boss", "grn_goblin_wolf_chariot", "grn_snotling_pump_wagon", "grn_goblin_rock_lobber"]}, "high_elves": {"caledor": ["helf_moon_dragon", "helf_star_dragon", "helf_dragonlord", "helf_dragon_princes"], "yvresse": ["helf_griffon", "helf_yvresse_warden", "helf_faithbearers", "helf_silverin_guard"], "avelorn": ["helf_sisters_of_avelorn", "helf_gaean_treeman", "helf_ishas_chosen", "helf_dryads", "helf_treekin"], "nagarythe": ["helf_shadow_marshal", "helf_shadow_walkers"], "aoi_seaguard": ["helf_ship_company", "helf_oceanids"]}, "khorne": {"unbroken": ["kho_chosen", "kho_chaos_knights", "kho_undefeated_champion"], "exiles_khorne": ["kho_outcast_bloodthirster", "kho_soul_grinder", "kho_bloodcrushers"], "skulltakers": ["kho_skullcloak_champion", "kho_exalted_bloodletters"]}, "kislev": {"hag_covens": ["kis_hag_witch", "kis_akshina_ambushers", "kis_woodland_horror", "kis_hag_mother", "kis_incarnate_elemental_of_beasts"], "tzarinas_court": ["kis_ice_guard"], "great_orthodoxy": ["kis_grand_hierarch", "kis_kislevite_warriors", "kis_kossovite_dervishes"], "ursun_revivalists": ["kis_ursun_champion"]}, "lizardmen": {"last_defenders": ["liz_carnosaur", "liz_oldblood_on_carnosaur"], "cult_sotek": ["liz_horned_one_riders", "liz_red_crested_skinks", "liz_prophet_of_sotek"], "spirit_jungle": ["liz_ancient_kroxigor"]}, "norsca": {"wintertooth": ["nor_stone_troll", "nor_river_troll", "nor_trollkin_warlord", "nor_chaos_troll", "nor_bile_troll"], "dolgan": ["nor_chimera", "nor_kurgan_horsemen", "nor_marauder_bearmen", "nor_chaos_warriors"]}, "nurgle": {"rot_legion": ["nur_knights", "nur_warshrine"], "maggot_host": ["nur_plague_ogres", "nur_maggot_warlord", "nur_pestigors", "nur_rot_knights", "nur_toad_dragon"], "poxmakers": ["nur_plague_warden", "nur_chaos_furies"], "tallymen": ["nur_plague_proctor", "nur_rot_flies", "nur_exalted_plaguebearers"], "rot_coven": ["nur_chaos_trolls"]}, "ogres": {"mercenary_camp": ["ogr_maneater_captain", "ogr_pigback_riders", "ogr_golgfags_maneaters"], "maw_disciples": ["ogr_blood_vultures", "ogr_yhetees", "ogr_thundertusk"]}, "skaven": {"clan_skryre": ["skv_doomwheel", "skv_ratling_gun", "skv_pw_mortars", "skv_death_globe", "skv_doom_flayers"], "clan_eshin": ["skv_eshin_triads", "skv_gutter_runners", "skv_death_runners"], "clan_moulder": ["skv_master_moulder", "skv_brood_horror", "skv_mutant_rat_ogre"], "clan_pestilens": ["skv_plagueclaw", "skv_plague_censer"]}, "slaanesh": {"thrall_court": ["sla_devotee_crossbows", "sla_preyton", "sla_slaangors", "sla_druchii_anointed", "sla_manticore_warlord"], "decadent_host": ["sla_champions", "sla_sorcerer_lord", "sla_gilded_lord", "sla_chaos_warriors"], "painseekers": ["sla_dance_herald", "sla_heartseekers"], "nkari_court": ["sla_hellflayers"]}, "tomb_kings": {"nagash_followers": ["tk_crypt_ghouls", "tk_dire_wolves", "tk_hexwraiths", "tk_liche_warlord", "tk_fell_bats"], "lybaras": ["tk_serpent_queen"]}, "tzeentch": {"oracles": ["tze_blue_scribes", "tze_twoheaded_oracle"], "puppets_of_misrule": ["tze_mutalith_vortex_beast", "tze_tzaangors", "tze_centigors_tzeentch", "tze_grafted_sorcerer"], "warpflame_cabal": ["tze_changebringers", "tze_burning_chariot", "tze_exalted_flamer"], "changehost": ["tze_masked_herald"]}, "vampire_coast": {"sartosa": ["vco_sartosa_militia", "vco_sartosa_corsair_queen", "vco_merc_maneater"], "drowned": ["vco_damned_knights", "vco_siren_wraith"], "dreadfleet": ["vco_graveyard_fleet_lord"], "awakened": ["vco_split_mind_captain"]}, "vampire_counts": {"lichemaster_cult": ["vc_krell"], "von_carstein": ["vc_lord_carstein", "vc_sylvanian_crossbowmen", "vc_sylvanian_handgunners"], "strigoi": ["vc_lord_strigoi"], "blood_dragon": ["vc_lord_blood_dragon"], "lahmia": ["vc_lady_lahmia"], "necrarch": ["vc_lord_necrarch"], "barrow_legion": ["vc_barrow_archnecromancer"], "blue_roses": ["vc_corpse_cart_necromancer"]}, "warriors_chaos": {"firstborn_wastes": ["woc_dragon_ogre", "woc_dragon_ogre_shaggoth", "woc_firstborn_warlord"], "nurgle_marked": ["woc_rot_knights"], "undivided": ["woc_fourfold_champion"], "khorne_marked": ["woc_skullreapers", "woc_wrathmongers"]}, "wood_elves": {"wargrove_woe": ["wel_dark_ancient", "wel_malevolent_dryads", "wel_thorn_matriarch", "wel_giant_spiders", "wel_cave_bats", "wel_feral_manticore", "wel_feral_bears"], "heralds_ariel": ["wel_great_eagle", "wel_forest_dragon", "wel_talon_rider"], "argwylon": ["wel_ancient_warden"]}};
+const SUBFACTION_EXCLUSIVE_UNITS = {"beastmen": {"shadowgave": ["bst_spawn_of_shadowgave", "bst_fleshwarp"], "harbingers": ["bst_crow_shaman", "bst_feral_manticore"], "warherd": ["bst_razorgor_chariot"]}, "bretonnia": {"couronne": ["brt_royal_hippogryph_knights"], "lyonesse": ["brt_grail_reliquae", "brt_grail_maiden"], "carcassonne": ["brt_fay_enchantress", "brt_grail_guardians"], "bordeleaux": ["brt_sea_duke"], "aoi_exiles": ["brt_outcast_wizard"]}, "cathay": {"tiger_court": ["cat_tiger_sawai", "cat_clawspeaker", "cat_tiger_warriors", "cat_iron_claw_tiger_warriors", "cat_tiger_warrior_stalkers"], "jade_court": ["cat_jade_fatekeeper", "cat_jade_lion", "cat_onyx_crowmen"]}, "chaos_dwarfs": {"azgorh": ["cdw_deathshrieker", "cdw_dreadquake_mortar", "cdw_ironsworn", "cdw_bale_taurus"], "khanate": ["cdw_hobgoblin_archers", "cdw_hobgoblin_bolt_thrower", "cdw_hobgoblin_sneaky_gits", "cdw_hobgoblin_khan"], "gorgoth": ["cdw_artillery_marshal"]}, "daemons": {"undivided_prince": ["doc_shadow_prince"]}, "dark_elves": {"naggarond": ["del_black_guard"], "har_ganeth": ["del_sisters_of_slaughter"], "cult_pleasure": ["del_devotees_of_slaanesh", "del_devotees_of_slaanesh_crossbows", "del_ghrond_matriarch", "del_daemonettes_of_slaanesh", "del_exalted_daemonettes_of_slaanesh"], "blessed_dread": ["del_ark_warlord", "del_corsairs_handbows"]}, "dwarfs": {"clan_angrund": ["dw_angrund_ancestor", "dw_claimant_king"], "ancestral_throng": ["dw_grombrindal"], "aoi_expeditionary": ["dw_slayer_engineer"]}, "empire": {"reikland": ["emp_reiksguard"], "cult_sigmar": ["emp_war_altar", "emp_flagellants"], "amethyst_order": ["emp_carmine_dragon"], "middenland": ["emp_elector_griffon"], "aoi_nuln_train": ["emp_steam_tank", "emp_outriders", "emp_great_cannon"], "aoi_knightly_orders": ["emp_blazing_sun"]}, "greenskins": {"bonerattlaz": ["grn_wyvern", "grn_orc_boss_wyvern"], "crooked_moon": ["grn_gobbla", "grn_ng_fanatics", "grn_arachnarok_spider"], "bloody_handz": ["grn_savage_boar_boyz", "grn_savage_orc_great_shaman"], "grimgor": ["grn_black_orc_warlord"], "broken_axe": ["grn_cauldron_boss", "grn_goblin_wolf_chariot", "grn_snotling_pump_wagon", "grn_goblin_rock_lobber"]}, "high_elves": {"caledor": ["helf_moon_dragon", "helf_star_dragon", "helf_dragonlord", "helf_dragon_princes"], "yvresse": ["helf_griffon", "helf_yvresse_warden", "helf_faithbearers", "helf_silverin_guard"], "avelorn": ["helf_sisters_of_avelorn", "helf_gaean_treeman", "helf_ishas_chosen", "helf_dryads", "helf_treekin"], "nagarythe": ["helf_shadow_marshal", "helf_shadow_walkers"], "aoi_seaguard": ["helf_ship_company", "helf_oceanids"]}, "khorne": {"unbroken": ["kho_chosen", "kho_chaos_knights", "kho_undefeated_champion"], "exiles_khorne": ["kho_outcast_bloodthirster", "kho_soul_grinder", "kho_bloodcrushers"], "skulltakers": ["kho_skullcloak_champion", "kho_exalted_bloodletters"]}, "kislev": {"hag_covens": ["kis_hag_witch", "kis_akshina_ambushers", "kis_woodland_horror", "kis_hag_mother", "kis_incarnate_elemental_of_beasts"], "tzarinas_court": ["kis_ice_guard"], "great_orthodoxy": ["kis_grand_hierarch", "kis_kislevite_warriors", "kis_kossovite_dervishes"], "ursun_revivalists": ["kis_ursun_champion"]}, "lizardmen": {"last_defenders": ["liz_carnosaur", "liz_oldblood_on_carnosaur"], "cult_sotek": ["liz_horned_one_riders", "liz_red_crested_skinks", "liz_prophet_of_sotek"], "spirit_jungle": ["liz_ancient_kroxigor"]}, "norsca": {"wintertooth": ["nor_stone_troll", "nor_river_troll", "nor_trollkin_warlord", "nor_chaos_troll", "nor_bile_troll"], "dolgan": ["nor_chimera", "nor_kurgan_horsemen", "nor_marauder_bearmen", "nor_chaos_warriors"]}, "nurgle": {"rot_legion": ["nur_knights", "nur_warshrine"], "maggot_host": ["nur_plague_ogres", "nur_maggot_warlord", "nur_pestigors", "nur_rot_knights", "nur_toad_dragon"], "poxmakers": ["nur_plague_warden", "nur_chaos_furies"], "tallymen": ["nur_plague_proctor", "nur_rot_flies", "nur_exalted_plaguebearers"], "rot_coven": ["nur_chaos_trolls"]}, "ogres": {"mercenary_camp": ["ogr_maneater_captain", "ogr_pigback_riders", "ogr_golgfags_maneaters"], "maw_disciples": ["ogr_blood_vultures", "ogr_yhetees", "ogr_thundertusk"]}, "skaven": {"clan_skryre": ["skv_doomwheel", "skv_ratling_gun", "skv_pw_mortars", "skv_death_globe", "skv_doom_flayers"], "clan_eshin": ["skv_eshin_triads", "skv_gutter_runners", "skv_death_runners"], "clan_moulder": ["skv_master_moulder", "skv_brood_horror", "skv_mutant_rat_ogre"], "clan_pestilens": ["skv_plagueclaw", "skv_plague_censer"]}, "slaanesh": {"thrall_court": ["sla_devotee_crossbows", "sla_preyton", "sla_slaangors", "sla_druchii_anointed", "sla_manticore_warlord"], "decadent_host": ["sla_champions", "sla_sorcerer_lord", "sla_gilded_lord", "sla_chaos_warriors"], "painseekers": ["sla_dance_herald", "sla_heartseekers"], "nkari_court": ["sla_hellflayers"]}, "tomb_kings": {"nagash_followers": ["tk_crypt_ghouls", "tk_dire_wolves", "tk_hexwraiths", "tk_liche_warlord", "tk_fell_bats"], "lybaras": ["tk_serpent_queen"]}, "tzeentch": {"oracles": ["tze_blue_scribes", "tze_twoheaded_oracle"], "puppets_of_misrule": ["tze_mutalith_vortex_beast", "tze_tzaangors", "tze_centigors_tzeentch", "tze_grafted_sorcerer"], "warpflame_cabal": ["tze_changebringers", "tze_burning_chariot", "tze_exalted_flamer"], "changehost": ["tze_masked_herald"]}, "vampire_coast": {"sartosa": ["vco_sartosa_militia", "vco_sartosa_corsair_queen", "vco_merc_maneater"], "drowned": ["vco_damned_knights", "vco_siren_wraith"], "dreadfleet": ["vco_graveyard_fleet_lord"], "awakened": ["vco_split_mind_captain"]}, "vampire_counts": {"lichemaster_cult": ["vc_krell"], "sylvania": ["vc_lord_carstein"], "mousillon": ["vc_lord_blood_dragon"], "von_carstein": ["vc_lord_carstein", "vc_sylvanian_crossbowmen", "vc_sylvanian_handgunners"], "strigoi": ["vc_lord_strigoi"], "blood_dragon": ["vc_lord_blood_dragon"], "lahmia": ["vc_lady_lahmia"], "necrarch": ["vc_lord_necrarch"], "barrow_legion": ["vc_barrow_archnecromancer"], "blue_roses": ["vc_corpse_cart_necromancer"]}, "warriors_chaos": {"firstborn_wastes": ["woc_dragon_ogre", "woc_dragon_ogre_shaggoth", "woc_firstborn_warlord"], "nurgle_marked": ["woc_rot_knights"], "undivided": ["woc_fourfold_champion"], "khorne_marked": ["woc_skullreapers", "woc_wrathmongers"]}, "wood_elves": {"wargrove_woe": ["wel_dark_ancient", "wel_malevolent_dryads", "wel_thorn_matriarch", "wel_giant_spiders", "wel_cave_bats", "wel_feral_manticore", "wel_feral_bears"], "heralds_ariel": ["wel_great_eagle", "wel_forest_dragon", "wel_talon_rider"], "argwylon": ["wel_ancient_warden"]}};
 const EXCLUSIVE_ONLY = new Set(Object.values(SUBFACTION_EXCLUSIVE_UNITS).reduce((a,subMap)=>a.concat(Object.values(subMap).reduce((x,y)=>x.concat(y),[])),[]));
 /* Подфракции с ИМЕННЫМ командиром: пока активна эта подфракция, лидером банды может быть
    только один из перечисленных юнитов (даже если у него category='hero', а не 'leader') —
@@ -6424,10 +6469,10 @@ function exportMD(){
   window.__exportData=md;
 }
 function download(kind){
-  const ext=kind==='json'?'json':'md';
+  const ext=kind==='md'?'md':'json';
   const blob=new Blob([window.__exportData||''],{type:'text/plain;charset=utf-8'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download=(state.campaignName||'roster').replace(/[^\w\-]+/g,'_')+'.'+ext;
+  a.download=kind==='bake' ? 'fb_custom_content.json' : (state.campaignName||'roster').replace(/[^\w\-]+/g,'_')+'.'+ext;
   a.click(); URL.revokeObjectURL(a.href);
 }
 
@@ -6461,6 +6506,9 @@ function bind(){
     state.factionId=e.target.value;
     state.subfactionId=faction().subfactions[0]?faction().subfactions[0].id:null;
     state.units=[]; state.selectedUid=null; state.filters.tag='all'; state.filters.cat='all';
+    // покровители и фракционные механики принадлежат прежней банде — вместе с ростером уходят и они
+    state.patronId=null; state.godId=null; state.favor=0;
+    state.grudges=[]; state.waaagh=0; state.waaaghCalled=null; state.labour=0; state.council={}; state.contract=null; state.contractLog=[];
     renderAll(); autosave();
   });
   $('#fSubfaction').addEventListener('change',e=>{state.subfactionId=e.target.value||null;renderSetup();renderRoster();autosave();});
@@ -6477,7 +6525,7 @@ function bind(){
   menu.querySelector('.drop').addEventListener('click',e=>{
     const b=e.target.closest('[data-more]'); if(!b)return;
     menu.classList.remove('open');
-    ({load:openLoad,new:newRoster,expJson:exportJSON,impJson:importJSON,expMd:exportMD,dev:devToggleMode})[b.dataset.more]();
+    ({load:openLoad,new:newRoster,expJson:exportJSON,impJson:importJSON,expMd:exportMD,bake:exportCustomContent,dev:devToggleMode})[b.dataset.more]();
   });
   $('#btnSave').addEventListener('click',doSave);
   $('#btnLore').addEventListener('click',()=>openLoreViewer());
@@ -7521,8 +7569,9 @@ function renderLoreSectionBlock(kind,id,section){
   const overrides = loadLoreOverrides();
   const key = loreOverridesKey(kind,id,section);
   const overridden = Object.prototype.hasOwnProperty.call(overrides,key) ? overrides[key] : null;
+  const baked = Object.prototype.hasOwnProperty.call(BAKED_CONTENT.lore,key) ? BAKED_CONTENT.lore[key] : null;
   const baseParas = loreParagraphsFor(kind,id,section);
-  const displayText = overridden!=null ? overridden : loreFlatten(baseParas);
+  const displayText = overridden!=null ? overridden : baked!=null ? baked : loreFlatten(baseParas);
   const isEmpty = !displayText;
   const viewHtml = isEmpty ? '<p class="faint">Пока не описано — в очереди на заполнение.</p>'
     : esc(displayText).split('\n\n').map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
@@ -7565,8 +7614,8 @@ function openLoreViewer(factionId, subId){
 /* =========================================================================
    СТАРТ
    ========================================================================= */
+applyCustomArmoury();   // до снимка базы: иначе дев-«сброс» стирает перенесённое оружие
 devSnapshotBase();
-applyCustomArmoury();
 devLoadOverrides();
 devApplyStoredOverrides();
 if(devIsOn()) document.getElementById('tabDev').style.display='';
