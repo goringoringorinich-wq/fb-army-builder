@@ -1705,7 +1705,7 @@ F('empire','The Empire','order','Гибрид людей, огнестрела, 
  [['State Troops','core-пехота дешевле на 5 очков, если в ростере есть Captain/General.'],
   ['Black Powder Line','первый gunpowder core/special получает reroll 1 ranged-проверки за игру.'],
   ['Colleges of Magic','можно взять 1 wizard-hero в Patrol/Warband, до 2 в Host.']],
- [['reikland','Reikland','+1 нервы лидеру; unlock Reiksguard в Warband.'],
+ [['reikland','Reikland','+1 нервы лидеру; Рейксгвардия — только здесь.'],
   ['middenland','Middenland','Борис Тодбрингер и культ Ульрика — агрессивная доктрина: бонус в чардже вместо обороны, «никакой пассивности».'],
   ['nuln','Nuln','Элспет фон Дракен, пороховая школа Нульна: порох и артиллерия −5%.'],
   ['cult_sigmar','Cult of Sigmar','Warrior Priest дешевле; wizard max 1.'],
@@ -1799,10 +1799,10 @@ F('empire','The Empire','order','Гибрид людей, огнестрела, 
 
 F('dwarfs','Dwarfs','order','Медленные, стойкие, бронированные, сильный огнестрел и инженеры.',
  [['Dammaz Kron (Книга Обид)','обязательная механика: банда ведёт Книгу Обид (вкладка «Кампания»). Перед боем объяви одну открытую обиду против сегодняшнего противника — вся банда получает Враждебность к обидчику (кровная обида — Ненависть). Оплата обиды даёт XP исполнителю; вписанное не стирается.'],
-  ['Shieldwall','infantry со щитом получает +1 защита при неподвижности.'],
-  ['Rune Craft','1 оружие/броня может получить rune-upgrade.']],
+  ['Shieldwall','infantry со щитом, не двигавшаяся в этот ход, получает броню лучше на 1.'],
+  ['Rune Craft','руны покупаются герою как особенности — до 3 на героя.']],
  [['karaz_a_karak','Karaz-a-Karak','+1 нервы всем core.'],
-  ['karak_kadrin','Karak Kadrin','Slayers становятся core, gunpowder −1 слот.'],
+  ['karak_kadrin','Karak Kadrin','Slayers становятся core; пороха — не больше одного юнита.'],
   ['clan_angrund','Clan Angrund','Белегар Айронхаммер отвоёвывает Карак Восьми Вершин: бонус Воли при осаде, юниты не отступают, пока идёт штурм родового карака.'],
   ['ironbrow','Ironbrow Expedition',"Торек Айронброу — рунический традиционалист («не признаёт новых технологий»): экспедиция за утраченными артефактами и рунным ремеслом, а не порохом (пушки и порох — епархия инженера-истребителя из экспедиционного корпуса другого клана)."],
   ['ancestral_throng','The Ancestral Throng','Громбриндал ведёт Книгу Обид и черпает благословения Предков-богов (Грунгни/Валайя/Гримнир) — не плоский бонус ветерана.']],
@@ -1853,7 +1853,7 @@ F('bretonnia','Bretonnia','order','Рыцарская кавалерия, кре
  [['couronne','Couronne',"Король Луэн Львиное Сердце: его heroic aura воодушевляет свиту, а Knights of the Realm — становой хребет королевской рати."],
   ['carcassonne','Carcassonne',"Дева-чаровница (Fay Enchantress) Каркассона: Damsel и Prophetess обучаются дешевле, её магия Жизни оберегает земли от тварей глухих лесов."],
   ['bordeleaux','Bordeleaux',"Альберик де Бордело: морской герцог — свита не несёт потерь от шторма и открытого моря, рыцари-мореходы держат строй в любую бурю."],
-  ['aquitaine','Aquitaine',"Арман, герцог Аквитании: Impetuous — рыцари безрассудно рвутся в чардж; сниженное содержание почти для всех орденов герцогства, от Странствующих до Грааля и небесной кавалерии."],
+  ['aquitaine','Aquitaine',"Арман, герцог Аквитании: Impetuous — рыцари безрассудно рвутся в чардж; найм дешевле почти для всех орденов герцогства, от Странствующих до Грааля и небесной кавалерии."],
   ['lyonesse','Lyonesse','Репанс де Лионесс: ранний доступ к Обету Грааля, бонус Questing Knights, охота на нежить — не крестьянская тема.']],
  [U('brt_paladin','Paladin','leader',85,1,1,['cavalry','knight','officer', "human", "bretonnia"],'рыцарь-лидер'),
   U('brt_damsel','Damsel','hero',65,1,1,['wizard','cavalry', "human", "bretonnia", "carcassonne"],'маг поддержки'),
@@ -1885,10 +1885,10 @@ F('bretonnia','Bretonnia','order','Рыцарская кавалерия, кре
 
 F('cathay','Grand Cathay','order','Гармония ближнего/дальнего боя, небесная магия, порох, терракотовые чудовища.',
  [['Harmony','юнит с тегом yang (ближний бой) в 6" от юнита с тегом yin (дальний бой) — оба получают конкретный бонус: yang-юнит +1 Воля (держит строй под обстрелом), yin-юнит реролл 1 при стрельбе (прикрыт с фланга). Работает в обе стороны одновременно, если условие выполнено для обоих.'],
-  ['Celestial Bureaucracy','один campaign_asset дешевле.'],
+  ['Celestial Bureaucracy','первый юнит rare в ростере дешевле на 15%.'],
   ['Caravan Guard','после победы можно получить торговый трофей.']],
- [['northern_provinces','Northern Provinces','+1 защита против chaos/daemon.'],
-  ['western_provinces','Western Provinces','маги дешевле, artillery −1.'],
+ [['northern_provinces','Northern Provinces','броня лучше на 1 против chaos/daemon.'],
+  ['western_provinces','Western Provinces','маги дешевле, артиллерия дороже.'],
   ['jade_court','Jade Court',"Двор делает ставку на гадательную магию судьбы и живых нефритово-обсидиановых стражей-статуй вместо строевой пехоты — Jade-Blooded Fatekeeper и прорицающая магия дешевле и мощнее, а привычная скидка на линейных Jade Warriors уходит в прошлое."],
   ['celestial_loyalists','Celestial Loyalists',"малая лоялистская фракция без своего лорда и уникального ростера — держится на элитной страже Celestial Dragon Guard и общем бонусе морали как доктрине верности Дракону-Императору, а не на полноценном «легендарном» стиле игры."]],
  [U('cat_lord_magistrate','Lord Magistrate','leader',75,1,1,['infantry','officer', "human", "cathay"],'командный лидер'),
@@ -1923,7 +1923,7 @@ F('kislev','Kislev','order','Гибридная пехота, ледяная м�
   ["Motherland's Resolve",'в снежной/руинной миссии +1 нервы.']],
  [['tzarinas_court','The Ice Court','Катарин, Ледяная Царица: Ice Guard и Frost Maiden — её настоящие фавориты; Ice Witch дешевле, frost-апгрейды.'],
   ['great_orthodoxy','Great Orthodoxy','Patriarch дешевле, больше holy boons.'],
-  ['ursun_revivalists','Ursun Revivalists','War Bear Riders доступны в Warband.'],
+  ['ursun_revivalists','Ursun Revivalists','War Bear Riders считаются special — не занимают слот rare.'],
   ['ungol_host','Ungol Host','Horse Archers становятся core.']],
  [U('kis_boyar','Boyar','leader',80,1,1,['infantry','officer','armored', "human", "kislev"],'лидер'),
   U('kis_ice_witch','Ice Witch','leader',95,1,1,['wizard','officer', "human", "kislev", "infantry"],'маг-лидер'),
@@ -1959,7 +1959,7 @@ F('high_elves','High Elves','order','Элитность, дисциплина, �
  [['eataine','Eataine','Тирион, Combined Elites: Spearmen/Sea Guard/Archers/Silver Helms дешевле разом (Фениксы — не его тема, см. Saphery).'],
   ['avelorn','Avelorn',"Аларьель Лучезарная, Tradition Dictates: Sisters of Avelorn дешевле и быстрее в найме, а сама Вечная Королева — лучший лекарь и благословитель острова."],
   ['nagarythe','Nagarythe',"Алит Анар, Владыка Теней: Shadow Warriors становятся core и дешевле, а армии по умолчанию действуют из Stalking Stance — бьют из засады, а не в открытую."],
-  ['caledor','Caledor','Имрик: Invocation of Eldrazor — Dragon Princes и драконы дешевле, Bone Gulch снижает их содержание.'],
+  ['caledor','Caledor','Имрик: Invocation of Eldrazor — Dragon Princes и драконы дешевле, Bone Gulch удешевляет их найм.'],
   ['saphery','Saphery','Теклис, Scrolls of Knowledge: 6 школ магии сразу, и именно он открывает наём Фениксов через святилища.']],
  [U('helf_noble','Noble','leader',85,1,1,['infantry','officer','elite', "high_elf", "ulthuan"],'лидер'),
   U('helf_mage','Mage','hero',75,1,1,['wizard', "high_elf", "ulthuan", "infantry"],'маг'),
@@ -2053,7 +2053,7 @@ F('lizardmen','Lizardmen','order','Стойкие саурусы, быстрые
  [],
  [['hexoatl','Hexoatl','Маздамунди, старейший Слэнн: Temple Guard и Arcane Conduit — храмовая гвардия и врождённое усиление заклинаний.'],
   ['itza','Itza','Гор-Рок, «Скала» Итцы: Saurus получают unbreakable и бонус при обороне поселений — стойкость, не скидка.'],
-  ['tlaqua','Tlaqua','flying units unlock earlier.'],
+  ['tlaqua','Tlaqua','летуны раньше других: Terradon считаются special.'],
   ['cult_sotek','Cult of Sotek',"Техенхауин, пророк Сотека: красночубые скинки и яд возведены в культ, а жертвоприношения приближают возвращение змеиного бога."],
   ['spirit_jungle','Spirit of the Jungle',"Накаи-Скиталец ведёт орду монстров: скидки на кроксигоров и чудовищ джунглей вместо обычных саурских и скинковых полков."]],
  [U('liz_saurus_oldblood','Saurus Oldblood','leader',95,1,1,['infantry','armored','officer', "lizardman", "lustria", "itza"],'сильный лидер'),
@@ -2247,7 +2247,7 @@ F('warriors_chaos','Warriors of Chaos','chaos','Элитные брониров�
 F('khorne','Khorne','chaos','Чистый ближний бой, черепа, ярость, демоны, отсутствие магии.',
  [],
  [['exiles_khorne','Exiles of Khorne',"Смертные отступники и демоны-изгои идут в бой плечом к плечу под началом низложенного богом полководца, искупающего свой позор только резнёй в ближнем бою без стрелков и колдовства."],
-  ['blood_host','Blood Host','Bloodletters core focus.'],
+  ['blood_host','Blood Host','ставка на Кровопускателей: они дешевле.'],
   ['skulltakers','Skulltakers',"Охотники за вражескими полководцами: подразделение вознаграждается за победы в поединках с героями и лордами противника, собирая их черепа как трофеи."]],
  [U('kho_herald','Herald of Khorne','leader',95,1,1,['daemon','frenzy','officer', "the_wastes", "infantry"],'демон-лидер'),
   U('kho_bloodreaper','Bloodreaper','hero',75,1,1,['daemon','frenzy', "the_wastes", "infantry"],'герой-убийца'),
@@ -2377,7 +2377,7 @@ F('beastmen','Beastmen','chaos','Засады, стада, монстры, ра�
  [['warherd','Warherd','Хазрак Одноглазый: засадный бонус через Beast-paths и заметная надбавка Bestigors — не минотавры (те у Таурокса).'],
   ['shadowgave','Shadowgave',"Моргур Дарованный Тенью: стадо, поражённое аурой перерождения, — упор на спаунов и монстров-мутантов, а не на минотавров (тех берите у Таурокса)."],
   ['harbingers','Harbingers',"Малагор Тёмное Знамение: летающий маг-провидец во главе крылатых тварей — упор на летающих монстров и колдовство, а не на быстрых наездников земли."],
-  ['slaughterhorn','Slaughterhorn Tribe','gorebull/minotaur бонусы.']],
+  ['slaughterhorn','Slaughterhorn Tribe','племя минотавров: Gorebull, Doombull и минотавры дешевле.']],
  [U('bst_wargor','Wargor','leader',85,1,1,['infantry','chaos','officer', "beastman"],'лидер'),
   U('bst_bray_shaman','Bray-Shaman','leader',85,1,1,['wizard','chaos', "beastman", "infantry", "harbingers"],'маг-лидер'),
   U('bst_gorebull','Gorebull','hero',95,1,1,['monstrous','chaos', "beastman", "monster", "slaughterhorn"],'герой-монстр'),
@@ -2479,7 +2479,7 @@ F('chaos_dwarfs','Chaos Dwarfs','chaos','Элитные злые дварфы, �
  [],
  [['zharr','Zharr-Naggrund','Астрагот Железнорукий, Верховный жрец Хашута: боец-каст-гибрид, растит влияние в Совете, надбавка именно Bull Centaur Renders.'],
   ['azgorh','Legion of Azgorh','Дразхот Пепельный, Пророк-Колдун: пороховая осадная техника — но в первую очередь могучий чародей, не просто «пушки».'],
-  ['gorgoth','Tower of Gorgoth','industry/campaign assets.']],
+  ['gorgoth','Tower of Gorgoth','индустрия Горгота: после каждой игры +1к6 золотых.']],
  [U('cdw_castellan','Infernal Castellan','leader',95,1,1,['infantry','armored','gunpowder', "chaos_dwarf", "zharr_naggrund"],'лидер'),
   U('cdw_sorcerer_prophet','Sorcerer-Prophet','leader',110,1,1,['wizard','armored', "chaos_dwarf", "zharr_naggrund", "infantry"],'маг-лидер'),
   U('cdw_daemonsmith','Daemonsmith','hero',75,1,1,['wizard','engineer', "chaos_dwarf", "zharr_naggrund", "infantry"],'бафф машин'),
@@ -2555,10 +2555,10 @@ F('norsca','Norsca','chaos','Рейдеры, чудовища, охоты, по�
 F('daemons','Daemons of Chaos','chaos','Конструктор демонического принца и смешивание четырёх богов.',
  [],
  [['undivided_prince','Undivided Prince',"Пятипутевая «Демоническая слава» (Неделимый и четыре бога): посвящение Хаосу Неделимому открывает доступ ко всем Великим демонам."],
-  ['khorne_ascendant','Khorne Ascendant','Khorne дешевле, wizards forbidden.'],
-  ['nurgle_ascendant','Nurgle Ascendant','Nurgle units tougher.'],
-  ['tzeentch_ascendant','Tzeentch Ascendant','Tzeentch magic/ranged.'],
-  ['slaanesh_ascendant','Slaanesh Ascendant','speed/control.']],
+  ['khorne_ascendant','Khorne Ascendant','демоны Кхорна дешевле; победа в поединке приносит опыт.'],
+  ['nurgle_ascendant','Nurgle Ascendant','демоны Нургла выносливее.'],
+  ['tzeentch_ascendant','Tzeentch Ascendant','огонь Тзинча: стрельба его демонов точнее, а сами они дешевле.'],
+  ['slaanesh_ascendant','Slaanesh Ascendant','скорость Слаанеш: её демоны быстрее.']],
  [U('doc_daemon_prince','Daemon Prince','leader',140,1,1,['daemon','flying','monstrous','customizable'],'главный конструктор'),
   U('doc_herald_any','Herald of Chaos','hero',80,1,1,['daemon','god_mark', "infantry"],'герой бога'),
   U('doc_exalted_herald','Exalted Herald','leader',95,1,1,['daemon','god_mark','officer', "infantry"],'дешевле Принца'),
@@ -2652,11 +2652,11 @@ F('ogres','Ogre Kingdoms','destruction','Малочисленные больши
 
 F('dark_elves','Dark Elves','neutral','Агрессия, арбалеты, рабы, чудовища, убийства, ковены.',
  [],
- [['naggarond','Naggarond','disciplined elite.'],
+ [['naggarond','Naggarond','дисциплина Наггарота: Воля core лучше на 1; Чёрная стража — только здесь.'],
   ['cult_pleasure','Cult of Pleasure',"Моратхи, Хаг-чародейка Гронда: культ делает ставку на Друхийских Помазанников и Преданных Слаанеш вместо Ведьм Кхейна, а порча Слаанеш превращает рабов в покорных тружеников."],
-  ['har_ganeth','Har Ganeth','executioners/witch elves.'],
+  ['har_ganeth','Har Ganeth','город Кхейна: палачи и ведьмы дешевле.'],
   ['blessed_dread','Blessed Dread','Лохир Фелльхарт, Краколорд: корсары и Kharibdyss дешевле, страх для корсаров, найм Чёрных Ковчегов в каждом захваченном порту.'],
-  ['hag_graef','Hag Graef','cold one cavalry.']],
+  ['hag_graef','Hag Graef','земля хладнокровных: Cold One Knights считаются core.']],
  [U('del_dreadlord','Dreadlord','leader',90,1,1,['infantry','officer','elite', "dark_elf", "naggaroth"],'лидер'),
   U('del_sorceress','Sorceress','leader',90,1,1,['wizard','officer', "dark_elf", "naggaroth", "infantry"],'маг-лидер'),
   U('del_death_hag','Death Hag','hero',70,1,1,['infantry','frenzy', "dark_elf", "naggaroth"],'герой'),
@@ -2886,7 +2886,7 @@ const EXTRA_SUBS = {
   khorne:[["unbroken","The Unbroken","Чисто смертный отряд без единого демона в строю, вознаграждаемый за серию побед без единого поражения.","doctrine","Не всякий избранник Кхорна нуждается в демонах, чтобы доказать свою ценность. «Непобеждённые» — смертные воители, поднявшиеся исключительно через бесконечную цепь личных поединков: каждый вызов принят, каждый враг обезглавлен собственной рукой, без единого зова к демоническим легионам. Такие вожди презирают тех, кто прикрывается кровопускателями или зачарованными тварями — истинная слава приходит лишь от клинка и воли. Трон Черепов охотнее примет череп, срубленный смертной рукой в одиночном бою, чем сотню черепов, брошенных к его подножию демонами."]],
   vampire_counts:[["lichemaster_cult","Cult of the Lichemaster","necromancer-leaders дешевле, wight-юниты получают бонус к terror и лечатся рядом с заклинателем.","doctrine","Хайнрих Кемлер не признаёт себя вампиром и презирает кровные дома Сильвании — его путь лежит через чистую некромантию, Дар Лихмастера, что не нуждается в благородной крови. Он собирает вокруг себя таких же изгнанников: некромантов без клыков и без трона, что служат не роду, а знанию о смерти. Их легионы состоят не из вампирской свиты, а из древних воинов, поднятых заклятием — вроде Крелла, маршала самого Нагаша. Владетели фон Карштайн терпят Кемлера как полезного безумца, но в свой круг не примут никогда."],["strigoi","Strigoi","одичавшая, проклятая линия крови — регенерация и звериная ярость вместо этикета двора.","doctrine","Стригои — позор благородных домов: линия крови, что не сумела удержать разум и манеры смертной жизни и скатилась к звериному одичанию. Изгнанные из приличных ковенов Сильвании, они кутаются в лохмотья бывшей роскоши и правят не через двор и интриги, а через страх и наскок из руин. Раны затягиваются на них быстрее, чем на любом другом вампире — но вместе с плотью медленно истлевает и последний след того, кем стригой был при жизни."],["blood_dragon","Blood Dragon","рыцарский кодекс чести — бонус против героев и монстров, дуэльная одержимость славой.","doctrine","Кровь Дракона — единственная линия, которую смертные рыцари способны уважать: её вампиры чтят кодекс чести строже иного паладина Бретоннии, вызывают на честный поединок вместо засады и коллекционируют трофеи великих побед, а не жертв. Испить эту кровь означает не убежать от смерти, а обрести вечность для одной-единственной цели — стать величайшим воином из всех, кто когда-либо поднимал меч."],["lahmia","Lahmia","древнейшая линия, гипноз и придворные интриги вместо грубой силы.","doctrine","Лахмия — первая и древнейшая из линий крови, давшая начало самому проклятию вампиризма в городе-грехе среди песков Нехекхары. Её наследницы правят не мечом, а нашёптанным словом и подчинённым взглядом — целые дворы смертных служат им, искренне веря, что действуют по собственной воле. Там, где фон Карштайны штурмуют стены, дочери Лахмии просто входят в открытые ворота как желанные гостьи."],["necrarch","Necrarch","чистая одержимость запретной магией смерти — бонус Ветров, презираемы другими линиями.","doctrine","Некрархи давно променяли остатки человеческого облика на чистое, беспримесное знание некромантии — иссохшие, полуистлевшие затворники, что вызывают отвращение даже у собственных кровных сородичей. Прочие вампиры терпят их лишь потому, что ни один некромант-смертный не сравнится в мастерстве с тем, кто изучает Тёмную магию уже который век без сна и без отдыха. Дворы и троны их не интересуют — только следующий фолиант, следующий секрет, следующая граница между жизнью и смертью, которую можно стереть."]],
   lizardmen:[["last_defenders","Last Defenders","Крок-Гар, Последний защитник Ксотля, верхом на карнозавре: чудовищные бойцы наносят больше урона крупным целям, а войско скорее падёт, чем дрогнет — эффект «последнего боя».","doctrine","Крок-Гар — древний саурус-олдблод, последний защитник Ксотла, храм-города, что был стёрт с карты нашествием скавенских орд и с тех пор существует лишь в виде руин и клятвы. Он не признаёт самого понятия отступления: пока хоть один камень Ксотла лежит в чужих лапах, война для него не окончена. Каждый ветеран этой линии связан со своим верховым хищником — многие ведут родословную от Гримлока, личного карнозавра Крок-Гара, — крепче, чем иной саурус связан с храмовым долгом перед Старейшими. Для Последних Защитников любая битва — лишь очередная глава войны, проигранной много веков назад, и второй раз они проиграть её не намерены."]],
-  kislev:[["hag_covens","Hag Covens","Мать Останкья, Daughters of the Forest: Hag Witch дешевле, Woodland Horror доступен в Warband.","doctrine","Задолго до того, как Ледяной Двор объявил каноном единственно верную магию льда, в глухих борах и мшистых болотах Кислева уже шептали заговоры матушки-ведьмы. Хаг-ковены не подчиняются ни трону, ни Ортодоксии: для них старая ведьма, изгнанная когда-то за нарушение устава Двора, ближе и понятнее, чем любая царица или патриарх. Здесь не строят полки — здесь держат уговор с лесом, платя ему трофеями и кровью врагов за сглазы, порчи и тварей, что выходят из бурелома по первому зову. Крестьяне зовут их еретичками у костра и матушками — когда нужна помощь, и редко признаются, к кому именно ходили."]],
+  kislev:[["hag_covens","Hag Covens","Мать Останкья, Daughters of the Forest: Hag Witch дешевле, Woodland Horror считается special.","doctrine","Задолго до того, как Ледяной Двор объявил каноном единственно верную магию льда, в глухих борах и мшистых болотах Кислева уже шептали заговоры матушки-ведьмы. Хаг-ковены не подчиняются ни трону, ни Ортодоксии: для них старая ведьма, изгнанная когда-то за нарушение устава Двора, ближе и понятнее, чем любая царица или патриарх. Здесь не строят полки — здесь держат уговор с лесом, платя ему трофеями и кровью врагов за сглазы, порчи и тварей, что выходят из бурелома по первому зову. Крестьяне зовут их еретичками у костра и матушками — когда нужна помощь, и редко признаются, к кому именно ходили."]],
   cathay:[["tiger_court","Tiger Court","Sawai и Clawspeaker дешевле; их атака с фланга/из засады сильнее — но бонусы гармонии инь-ян прочих дворов не действуют.","doctrine","Задолго до того, как Бхашива, Белая Тигрица, заявила права на собственный двор при дворе Чжао Мина, тигриные кланы горных теснин Шан-Яна уже охотились на демонов и контрабандистов без благословения небесного мандата. Тигриный двор не сверяет решения по компасу инь-ян и не ждёт указа драконьих магистратов — здесь верят в коготь, застигший врага раньше, чем тот успел построить строй. Воители этого двора присягают не бюрократии Дракона-Императора, а живому тигриному духу-покровителю, и легко срываются в набег там, где регулярная армия Катая предпочла бы дождаться приказа. Для остального Катая они — беспокойные наёмники с окраины; для самого двора — единственные, кто по-настоящему понимает, что бастион держится не только терпением, но и внезапностью."]],
   empire:[
     ['averland','Averland','золото и пикинёры; cavalry/handgunners тематичны.','province','Аверланд — богатая золотом южная провинция (жёлто-чёрные цвета) у Чёрных гор.'],
@@ -2924,7 +2924,7 @@ const EXTRA_SUBS = {
     ['aoi_chracian','Chracian Warhost ⚙','Old World AoI: воинство Краса — Белые Львы с топорами.','aoi','Воинство Краса — официальная «Army of Infamy» Old World: горные охотники королевства Крас и прославленные Белые Львы, гвардия Феникса-Короля.'],
     ['aoi_seaguard','Sea Guard Garrison ⚙','Old World AoI: гарнизон Морской Стражи Лотерна (копьё+лук).','aoi','Гарнизон Морской Стражи — официальная «Army of Infamy» Old World: прибрежная оборона Лотерна, сочетающая копьё и лук.'],
     ['cothique','Cothique (Морские стражи)','WFRP4 (Sea Wardens of Cothique): торгово-морское королевство — Морская Стража, скайкаттеры, орлы, купцы-авантюристы.','doctrine','Котик — суровое северо-восточное королевство Ультуана, земля рыбаков и купцов-авантюристов. Его берега прикрывают Скользящие острова, среди которых охотятся кракены и мегалодоны; порт Тор Коруали кипит интригами князей и культов роскоши. Над волнами скользят скайкаттеры, запряжённые рок-птицами, и тайдкаттеры на летучих рыбах («Sea Wardens of Cothique»).']
-  ,["yvresse","Yvresse","Эльтарион Мрачный: Spearmen/Shadow Warriors дешевле и +1 защита, труднее застать врасплох; Хранитель Тор Ивресса поднимается в небо на грифоне, а грифонов-одиночек держат в дозоре над побережьем.","doctrine","Ивресс, Земля Красоты, — узкая полоса обрывистых берегов и меловых скал восточного Ультуана, что веками стоит дозором против того, что порой всплывает из вод у Проклятого острова. Здесь не растят громких героев напоказ — здесь растят упорных копейщиков и следопытов, что несут вахту поколение за поколением, зная, что смена может не прийти. Совет Ивресса хранит собственные туманные заклинания, укрывающие границы провинции незримой пеленой задолго до того, как враг разглядит стены Тор Ивресса. Легенда о страже, что в одиночку приручил дикого грифона родных утёсов, здесь не считается подвигом для баллад — лишь ещё одним примером того, что Ивресс не просит ничьего разрешения выживать по-своему."]],
+  ,["yvresse","Yvresse","Эльтарион Мрачный: Spearmen/Shadow Warriors дешевле и в броне не хуже 6+, труднее застать врасплох; Хранитель Тор Ивресса поднимается в небо на грифоне, а грифонов-одиночек держат в дозоре над побережьем.","doctrine","Ивресс, Земля Красоты, — узкая полоса обрывистых берегов и меловых скал восточного Ультуана, что веками стоит дозором против того, что порой всплывает из вод у Проклятого острова. Здесь не растят громких героев напоказ — здесь растят упорных копейщиков и следопытов, что несут вахту поколение за поколением, зная, что смена может не прийти. Совет Ивресса хранит собственные туманные заклинания, укрывающие границы провинции незримой пеленой задолго до того, как враг разглядит стены Тор Ивресса. Легенда о страже, что в одиночку приручил дикого грифона родных утёсов, здесь не считается подвигом для баллад — лишь ещё одним примером того, что Ивресс не просит ничьего разрешения выживать по-своему."]],
   wood_elves:[
     ['aoi_talsyn_host','Host of Talsyn ⚙','Old World AoI: сбалансированное воинство Талсина.','aoi','Воинство Талсина — официальная «Army of Infamy» Old World: классический асраи-двор Glade Guard и Eternal Guard.'],
     ['aoi_wild_hunt',"Orion's Wild Hunt ⚙",'Old World AoI: Дикая Охота Ориона — звери, духи, агрессия.','aoi','Дикая Охота Ориона — официальная «Army of Infamy» Old World: яростный поход Короля-в-Лесу — Дикие Всадники, духи и звери.']
@@ -3981,7 +3981,10 @@ const PATRON_SKILLS = {"emp_pat_kessler":["Клеймо Еретика","Ата�
    бывает: checks/audit_runtime.js роняет батарею на патроне или боге без разметки.
    Скидки найма — в очках ростера; золото, займы и доля с добычи — в казне.
    ========================================================================= */
-const FX_KINDS={cost:1,limit:1,stat:1,ava2off:1,grant:1,income:1,cut:1,favor:1,injury:1,token:1,counter:1,freeModel:1,tribute:1,captiveSale:1,noReturn:1,oath:1,duelXp:1,bet:1,debtPer:1,trophyStat:1,table:1,manual:1};
+const FX_KINDS={cost:1,limit:1,stat:1,ava2off:1,grant:1,income:1,cut:1,favor:1,injury:1,token:1,counter:1,freeModel:1,tribute:1,captiveSale:1,noReturn:1,oath:1,duelXp:1,bet:1,debtPer:1,trophyStat:1,table:1,manual:1,
+  // блок 2 (правила фракций и подфракций): категория для слотов, потолок и обязательный юнит, опыт после игры,
+  // своя система билдера (Книга обид, особенности, контракт), запрет особенностей
+  cat:1,cap:1,require:1,xp:1,system:1,noTraits:1};
 const FX_T=[{k:'table'}];
 const PATRON_FX={
  emp_pat_kessler:[{k:'income',cond:'Банда уничтожила хотя бы один вражеский юнит с тегом chaos или undead',gold:'1d6*10'}],
@@ -4068,7 +4071,7 @@ const PATRON_SKILL_FX={
  tk_pat_necrotect_imeten:[{k:'manual',why:'повреждений конструктов и колесниц билдер не ведёт'}],
  vco_pat_smuggler_fence:[{k:'manual',why:'трофеев и чёрного рынка билдер не ведёт'}],
  woc_pat_astragoth:[{k:'manual',why:'пленников у Воинов Хаоса билдер не ведёт'}],
- kho_pat_krull_unbowed:[{k:'duelXp',xp:1}],
+ kho_pat_krull_unbowed:[{k:'duelXp',xp:1,holdersOnly:true}],
  kho_pat_vekh_skulljudge:[{k:'bet',gold:'3d6'},{k:'table',note:'проигранная ставка: −1 куб во всех боях следующей игры'}],
  tze_pat_court_herald:[{k:'manual',why:'таблиц Исследования и Найма билдер не ведёт'}],
  sla_pat_zsharixx_collector:[{k:'token',use:'injuryReroll',scope:'game',self:true}],
@@ -4127,6 +4130,231 @@ const GOD_FX={
  mathlann:{bless:FX_T,curse:FX_T},
  hoeth:{bless:FX_T,curse:[{k:'manual',why:'опознание магических предметов билдер не ведёт'}]}
 };
+/* Правила фракций — по порядку factionRules в GAME_DATA (индекс = номер правила). Решено 23.09.2026: у каждого правила
+   уровня билдера — машинные части, у правил поля — 🎲 с памяткой. */
+const FACTION_FX={
+ empire:[
+  [{k:'cost',sel:{cat:'core',hasTags:['infantry']},flat:-5,need:['emp_captain','emp_general']}],
+  [{k:'table',note:'первый пороховой юнит core/special перебрасывает одну проверку стрельбы за игру'}],
+  [{k:'cap',sel:{tags:['wizard'],hero:true},fmt:{patrol:1,warband:1,host:2}}]],
+ dwarfs:[
+  [{k:'system',what:'grudges'},{k:'table',note:'объявленная обида: Враждебность к обидчику, кровная — Ненависть'}],
+  [{k:'table',note:'пехота со щитом, не двигавшаяся в этот ход: броня лучше на 1'}],
+  [{k:'system',what:'traits'}]],
+ bretonnia:[
+  [{k:'table',note:'раз за игру кавалерия без бесчестья игнорирует первое ранение'}],
+  [{k:'table',note:'потери рыцарей не считаются для морали пейзан'}],
+  [{k:'table',note:'кавалерия: бонус в первом чардже'}]],
+ cathay:[
+  [{k:'table',note:'yang в 6" от yin: yang Воля лучше на 1, yin перебрасывает 1 при стрельбе'}],
+  [{k:'cost',sel:{cat:'rare'},pct:-15,first:true}],
+  [{k:'manual',why:'трофеев в билдере пока нет — система трофеев строится после блоков 2–4'}]],
+ kislev:[
+  [{k:'table',note:'раз за игру юнит остаётся с 1 раной вместо удаления'}],
+  [{k:'table',note:'стрелковая пехота меняет оружие без штрафа'}],
+  [{k:'table',note:'в снежной или руинной миссии Воля лучше на 1'}]]
+};
+/* Правила подфракций: ключ «фракция:подфракция». Ava 2, эксклюзивы и именной командир — отдельно, в своих таблицах.
+   Где в описании было «дешевле» без числа — это −10%; «+1 нервы» — Воля лучше на 1 (resolve −1);
+   «+1 защита» (показатель Защ убран 09.07) — броня не хуже 6+ (save:6). */
+const SUB_FX={
+ // ---------- Империя ----------
+ 'empire:reikland':[{k:'stat',sel:{leader:true},resolve:-1}],
+ 'empire:middenland':[{k:'cost',sel:{units:['emp_white_wolves','emp_teutogen','emp_ulric_warriors']},pct:-10},{k:'table',note:'+1 куб в чардже; в обороне без бонусов'}],
+ 'empire:nuln':[{k:'cost',sel:{tags:['gunpowder','artillery']},pct:-5}],
+ 'empire:cult_sigmar':[{k:'cost',sel:{units:['emp_warrior_priest','emp_arch_lector']},pct:-15},{k:'cap',sel:{tags:['wizard']},max:1}],
+ 'empire:golden_order':[{k:'limit',what:'spells',add:1,sel:{units:['emp_battle_wizard','emp_wizard_lord']},lore:'metal'}],
+ 'empire:averland':[{k:'cost',sel:{tags:['cavalry']},pct:-10}],
+ 'empire:hochland':[{k:'stat',sel:{units:['emp_handgunners']},rangedN:-1}],
+ 'empire:nordland':[{k:'cost',sel:{units:['emp_free_company']},pct:-10},{k:'income',cond:'Сценарий на воде или побережье',gold:'1d6'}],
+ 'empire:ostland':[{k:'injury',mod:1,sel:{cat:'core'}},{k:'table',note:'против chaos и beastmen: переброс первого проваленного теста Воли'}],
+ 'empire:ostermark':[{k:'income',when:'win',vs:['vampire_counts','tomb_kings','vampire_coast'],gold:'2d6'}],
+ 'empire:stirland':[{k:'cost',sel:{units:['emp_witch_hunter','emp_free_company']},pct:-10}],
+ 'empire:talabecland':[{k:'favor',on:'win',d:1,god:'taal_rhya'},{k:'cost',sel:{units:['emp_crossbowmen']},pct:-10}],
+ 'empire:wissenland':[{k:'cost',sel:{units:['emp_spearmen','emp_mortar','emp_cannon']},pct:-5}],
+ 'empire:talabheim':[{k:'stat',sel:{units:['emp_spearmen','emp_crossbowmen']},save:6}],
+ 'empire:middenheim':[{k:'cost',sel:{units:['emp_white_wolves']},pct:-15}],
+ 'empire:the_moot':[{k:'injury',mod:1,sel:{tags:['halfling']}}],
+ 'empire:solland':[{k:'income',when:'win',vs:['greenskins'],gold:'2d6'},{k:'table',note:'Ненависть к зеленокожим'}],
+ 'empire:drakwald':[{k:'cost',sel:{units:['emp_free_company','emp_spearmen']},pct:-10}],
+ 'empire:westerland':[{k:'limit',what:'merc',add:1},{k:'cost',sel:{cat:'merc'},pct:-10}],
+ 'empire:aoi_nuln_train':[{k:'cost',sel:{tags:['artillery']},pct:-10}],
+ 'empire:aoi_knightly_orders':[{k:'cat',sel:{units:['emp_knights']},to:'core'}],
+ 'empire:amethyst_order':[{k:'limit',what:'spells',add:1,sel:{units:['emp_battle_wizard','emp_wizard_lord']},lore:'death'},{k:'cap',sel:{units:['emp_witch_hunter']},max:0}],
+ // ---------- Дварфы ----------
+ 'dwarfs:karaz_a_karak':[{k:'stat',sel:{cat:'core'},resolve:-1}],
+ 'dwarfs:karak_kadrin':[{k:'cat',sel:{units:['dw_slayers']},to:'core'},{k:'cap',sel:{tags:['gunpowder']},max:1}],
+ 'dwarfs:clan_angrund':[{k:'income',when:'win',vs:['greenskins','skaven'],gold:'2d6'},{k:'table',note:'в сценарии штурма: Воля лучше на 1, юниты не отступают'}],
+ 'dwarfs:ironbrow':[{k:'cap',sel:{tags:['gunpowder']},max:0},{k:'cost',sel:{units:['dw_runesmith','dw_runelord']},pct:-15}],
+ 'dwarfs:ancestral_throng':[{k:'favor',on:'win',d:1}],
+ 'dwarfs:aoi_royal_clan':[{k:'cat',sel:{units:['dw_hammerers']},to:'core'}],
+ 'dwarfs:aoi_expeditionary':[{k:'cost',sel:{tags:['war_machine','artillery']},pct:-10}],
+ 'dwarfs:barak_varr':[{k:'income',cond:'Сценарий на воде или побережье',gold:'2d6'}],
+ 'dwarfs:karak_azul':[{k:'cost',sel:{all:true},gearPct:-10},{k:'table',note:'Ненависть к зеленокожим'}],
+ 'dwarfs:zhufbar':[{k:'cost',sel:{units:['dw_gyrocopter','dw_gyrobomber','dw_war_balloon']},pct:-15}],
+ 'dwarfs:karak_norn':[{k:'cost',sel:{units:['dw_quarrellers','dw_bolt_thrower']},pct:-10}],
+ 'dwarfs:norse_dwarfs':[{k:'token',use:'recover',scope:'game'}],
+ 'dwarfs:imperial_dwarfs':[{k:'income',when:'game',gold:'1d6'}],
+ // ---------- Бретония ----------
+ 'bretonnia:couronne':[{k:'cat',sel:{units:['brt_knights_realm']},to:'core'}],
+ 'bretonnia:carcassonne':[{k:'cost',sel:{units:['brt_damsel','brt_prophetess']},pct:-15}],
+ 'bretonnia:bordeleaux':[{k:'cost',sel:{units:['brt_men_at_arms','brt_spearmen']},pct:-10},{k:'table',note:'шторм и открытое море не наносят банде потерь'}],
+ 'bretonnia:aquitaine':[{k:'cost',sel:{tags:['cavalry'],hasTags:['knight']},pct:-10},{k:'table',note:'рыцари обязаны чарджить ближайшего врага в досягаемости'}],
+ 'bretonnia:lyonesse':[{k:'cost',sel:{units:['brt_questing_knight']},pct:-15},{k:'income',when:'win',vs:['vampire_counts','tomb_kings','vampire_coast'],gold:'2d6'}],
+ 'bretonnia:aoi_errantry':[{k:'cap',sel:{tags:['peasant']},max:0},{k:'require',sel:{units:['brt_knights_errant']},min:1},{k:'limit',what:'rare',add:1,only:['brt_grail_knights','brt_pegasus']},{k:'table',note:'при виде врага рыцари обязаны атаковать'}],
+ 'bretonnia:aoi_exiles':[{k:'xp',when:'game',sel:{leader:true},xp:1},{k:'limit',what:'merc',add:1,only:['brt_merc_battle_pilgrims']}],
+ // ---------- Катай ----------
+ 'cathay:northern_provinces':[{k:'cost',sel:{units:['cat_jade_warriors','cat_iron_hail']},pct:-5},{k:'table',note:'против chaos и daemon броня лучше на 1'}],
+ 'cathay:western_provinces':[{k:'cost',sel:{tags:['wizard']},pct:-10},{k:'cost',sel:{tags:['artillery']},pct:10}],
+ 'cathay:jade_court':[{k:'cost',sel:{units:['cat_jade_fatekeeper','cat_astromancer']},pct:-10},{k:'limit',what:'spells',add:1,sel:{units:['cat_jade_fatekeeper','cat_astromancer']}},{k:'cost',sel:{units:['cat_jade_warriors']},pct:10}],
+ 'cathay:celestial_loyalists':[{k:'stat',sel:{all:true},resolve:-1}],
+ 'cathay:tiger_court':[{k:'cost',sel:{units:['cat_tiger_sawai','cat_clawspeaker']},pct:-10},{k:'table',note:'атака с фланга или из засады: +1 куб; Гармония не действует'}],
+ // ---------- Кислев ----------
+ 'kislev:tzarinas_court':[{k:'cost',sel:{units:['kis_ice_witch','kis_frost_maiden']},pct:-10},{k:'limit',what:'spells',add:1,sel:{units:['kis_ice_witch','kis_frost_maiden']},lore:'ice'}],
+ 'kislev:great_orthodoxy':[{k:'cost',sel:{units:['kis_patriarch','kis_grand_hierarch']},pct:-15},{k:'favor',on:'win',d:1}],
+ 'kislev:ursun_revivalists':[{k:'cat',sel:{units:['kis_war_bear_riders']},to:'special'}],
+ 'kislev:ungol_host':[{k:'cat',sel:{units:['kis_horse_archers']},to:'core'}],
+ 'kislev:hag_covens':[{k:'cost',sel:{units:['kis_hag_witch','kis_hag_mother']},pct:-10},{k:'cat',sel:{units:['kis_woodland_horror']},to:'special'}],
+ // ---------- Высшие эльфы ----------
+ 'high_elves:eataine':[{k:'cost',sel:{units:['helf_spearmen','helf_lothern','helf_archers','helf_silver_helms']},pct:-10}],
+ 'high_elves:avelorn':[{k:'cost',sel:{units:['helf_sisters_of_avelorn']},pct:-10},{k:'token',use:'injuryReroll',scope:'game'}],
+ 'high_elves:nagarythe':[{k:'cat',sel:{units:['helf_shadow_warriors']},to:'core'},{k:'cost',sel:{units:['helf_shadow_warriors']},pct:-10},{k:'table',note:'в первом ходу банда действует из засады (Stalking)'}],
+ 'high_elves:caledor':[{k:'cost',sel:{units:['helf_dragon_princes','helf_dragon','helf_moon_dragon','helf_star_dragon','helf_dragonlord']},pct:-10}],
+ 'high_elves:saphery':[{k:'limit',what:'spells',add:1,sel:{tags:['wizard']}}],
+ 'high_elves:aoi_chracian':[{k:'cat',sel:{units:['helf_white_lions']},to:'core'}],
+ 'high_elves:aoi_seaguard':[{k:'cost',sel:{units:['helf_lothern']},pct:-10}],
+ 'high_elves:cothique':[{k:'income',when:'game',gold:'1d6'}],
+ 'high_elves:yvresse':[{k:'cost',sel:{units:['helf_spearmen','helf_shadow_warriors']},pct:-10},{k:'stat',sel:{units:['helf_spearmen','helf_shadow_warriors']},save:6},{k:'table',note:'банду нельзя застать врасплох: засада и удар с тыла по ней без бонуса'}],
+ // ---------- Лесные эльфы ----------
+ 'wood_elves:talsyn':[{k:'cost',sel:{units:['wel_wardancers','wel_glade_riders']},pct:-10}],
+ 'wood_elves:argwylon':[{k:'cost',sel:{tags:['forest_spirit']},pct:-10}],
+ 'wood_elves:heralds_ariel':[{k:'cost',sel:{tags:['flying']},pct:-10}],
+ 'wood_elves:wargrove_woe':[{k:'cap',sel:{units:['wel_waywatchers','wel_wild_riders','wel_wardancers']},max:0},{k:'limit',what:'rare',add:1}],
+ 'wood_elves:aoi_talsyn_host':[{k:'cat',sel:{units:['wel_wardens_talsyn']},to:'core'}],
+ 'wood_elves:aoi_wild_hunt':[{k:'cat',sel:{units:['wel_wild_riders']},to:'core'},{k:'table',note:'Дикая Охота: +1" к чарджу'}],
+ // ---------- Люди-ящеры ----------
+ 'lizardmen:hexoatl':[{k:'cost',sel:{units:['liz_temple_guard']},pct:-10},{k:'limit',what:'spells',add:1,sel:{units:['liz_slann']}}],
+ 'lizardmen:itza':[{k:'stat',sel:{units:['liz_saurus_warriors','liz_temple_guard']},resolve:-1},{k:'table',note:'Saurus неломки при обороне поселения'}],
+ 'lizardmen:tlaqua':[{k:'cat',sel:{units:['liz_terradon']},to:'special'}],
+ 'lizardmen:cult_sotek':[{k:'counter',id:'sotek',label:'Пленников принесено в жертву Сотеку',goal:10,units:['liz_prophet_of_sotek','liz_serpent_charmer']},{k:'cost',sel:{tags:['poison']},pct:-5}],
+ 'lizardmen:spirit_jungle':[{k:'cost',sel:{units:['liz_kroxigor','liz_stegadon','liz_bastiladon','liz_dread_saurian']},pct:-10}],
+ 'lizardmen:last_defenders':[{k:'stat',sel:{all:true},when:'lossStreak',resolve:-1},{k:'table',note:'чудовищные бойцы: +1 к ранению крупных целей'}],
+ // ---------- Графы-вампиры ----------
+ 'vampire_counts:sylvania':[{k:'limit',what:'hero',add:1,only:['vc_vampire_thrall']},{k:'stat',sel:{hasTags:['vampire'],hero:true},meleeN:-1},{k:'table',note:'вся банда — авангард: +3" к расстановке'}],
+ 'vampire_counts:von_carstein':[{k:'stat',sel:{units:['vc_dire_wolves','vc_fell_bats','vc_vargheists']},move:1}],
+ 'vampire_counts:barrow_legion':[{k:'cost',sel:{units:['vc_skeletons','vc_grave_guard','vc_cairn_wraith']},pct:-10}],
+ 'vampire_counts:blue_roses':[{k:'cost',sel:{units:['vc_grave_guard','vc_wight_king']},pct:-10},{k:'table',note:'атаки зомби ядовиты'}],
+ 'vampire_counts:mousillon':[{k:'cost',sel:{units:['vc_blood_knights','vc_black_knights']},pct:-10}],
+ 'vampire_counts:lichemaster_cult':[{k:'cost',sel:{units:['vc_necromancer']},pct:-15},{k:'injury',mod:1,sel:{units:['vc_wight_king','vc_grave_guard']}},{k:'table',note:'вайты вызывают Ужас'}],
+ 'vampire_counts:strigoi':[{k:'token',use:'regrow',scope:'game'},{k:'cost',sel:{units:['vc_crypt_ghouls','vc_crypt_horrors']},pct:-10}],
+ 'vampire_counts:blood_dragon':[{k:'duelXp',xp:1},{k:'table',note:'+1 к ранению против героев и монстров'}],
+ 'vampire_counts:lahmia':[{k:'token',use:'advReroll',scope:'win'},{k:'table',note:'гипноз: раз за игру вражеский герой в 8" на 4+ пропускает активацию'}],
+ 'vampire_counts:necrarch':[{k:'limit',what:'spells',add:1,sel:{tags:['wizard']}}],
+ // ---------- Цари гробниц ----------
+ 'tomb_kings:khemri':[{k:'stat',sel:{units:['tk_tomb_guard','tk_chariots']},save:5},{k:'income',when:'win',gold:'1d6'}],
+ 'tomb_kings:nagash_followers':[{k:'limit',what:'spells',add:1,sel:{tags:['wizard'],hero:true}}],
+ 'tomb_kings:exiles_nehek':[{k:'limit',what:'spells',add:1,sel:{units:['tk_liche_priest','tk_high_liche_death','tk_high_liche_light','tk_high_liche_nehekhara','tk_high_liche_undeath']}},{k:'cap',sel:{units:['tk_chariots']},max:0}],
+ 'tomb_kings:lybaras':[{k:'stat',sel:{units:['tk_skeleton_archers']},rangedN:-1},{k:'table',note:'атаки всей банды ядовиты'}],
+ 'tomb_kings:aoi_royal_host':[{k:'cat',sel:{units:['tk_chariots']},to:'core'}],
+ 'tomb_kings:aoi_mortuary':[{k:'cost',sel:{tags:['construct']},pct:-10}],
+ // ---------- Вампирское побережье ----------
+ 'vampire_coast:awakened':[{k:'limit',what:'spells',add:1,sel:{units:['vco_split_mind_captain','vco_vampire_admiral']},lore:'deep'},{k:'table',note:'одно заклинание Лора Глубин определяется жребием перед игрой'}],
+ 'vampire_coast:drowned':[{k:'cost',sel:{units:['vco_mournguls','vco_siren_wraith','vco_mourngul_haunter']},pct:-10}],
+ 'vampire_coast:dreadfleet':[{k:'cost',sel:{units:['vco_necrofex']},pct:-15},{k:'table',note:'громадные твари: +1 куб в чардже'}],
+ 'vampire_coast:sartosa':[{k:'cost',sel:{units:['vco_sartosa_free','vco_sartosa_militia']},pct:-10},{k:'limit',what:'merc',add:1}],
+ // ---------- Воины Хаоса ----------
+ 'warriors_chaos:undivided':[{k:'xp',when:'win',sel:{leader:true},xp:1},{k:'table',note:'+2 куба против юнитов других сил Хаоса'}],
+ 'warriors_chaos:khorne_marked':[{k:'xp',when:'win',sel:{leader:true},xp:1,streak:true}],
+ 'warriors_chaos:nurgle_marked':[{k:'token',use:'regrow',scope:'game'},{k:'table',note:'атаки банды ядовиты на 6'}],
+ 'warriors_chaos:tzeentch_marked':[{k:'token',use:'advReroll',scope:'game'},{k:'table',note:'разведка: после расстановки переставь один свой юнит'}],
+ 'warriors_chaos:slaanesh_marked':[{k:'duelXp',xp:1},{k:'table',note:'соблазнение: раз за игру вражеский юнит в 8" проходит Волю или теряет активацию'}],
+ 'warriors_chaos:aoi_wolves_sea':[{k:'income',cond:'Сценарий на воде или побережье',gold:'2d6'}],
+ 'warriors_chaos:aoi_heralds_dark':[{k:'cat',sel:{units:['woc_chaos_knights']},to:'special'},{k:'cap',sel:{cat:'core',hasTags:['infantry']},max:1}],
+ 'warriors_chaos:firstborn_wastes':[{k:'noTraits'},{k:'cap',sel:{units:['woc_marauders']},max:1},{k:'table',note:'огры-драконы: +1 к ранению крупных целей, огненные атаки'}],
+ // ---------- Кхорн ----------
+ 'khorne:exiles_khorne':[{k:'xp',when:'win',sel:{leader:true},xp:1},{k:'table',note:'без стрелков и колдовства — вся банда бьётся врукопашную'}],
+ 'khorne:blood_host':[{k:'cost',sel:{units:['kho_bloodletters']},pct:-10}],
+ 'khorne:skulltakers':[{k:'duelXp',xp:1},{k:'table',note:'череп вражеского героя или лорда — трофей подразделения'}],
+ 'khorne:unbroken':[{k:'cap',sel:{tags:['daemon']},max:0},{k:'xp',when:'unbeaten',sel:{hero:true},xp:1}],
+ // ---------- Нургл ----------
+ 'nurgle:poxmakers':[{k:'counter',id:'pox',label:'Заражено вражеских моделей',goal:12,units:['nur_plague_warden']},{k:'table',note:'«Гниль, Славная Гниль»: раненый врагом юнит в конце хода получает ещё 1 рану на 6'}],
+ 'nurgle:rot_coven':[{k:'token',use:'injuryHeal',scope:'campaign'},{k:'limit',what:'spells',add:1,sel:{units:['nur_herald','nur_cultist']}}],
+ 'nurgle:garden_host':[{k:'injury',mod:1,sel:{tags:['daemon']}}],
+ 'nurgle:tallymen':[{k:'counter',id:'tally',label:'Счёт чумы: вражеских моделей выведено',goal:7,units:['nur_plague_proctor']}],
+ 'nurgle:maggot_host':[{k:'limit',what:'hero',add:1}],
+ 'nurgle:rot_legion':[{k:'stat',sel:{hasTags:['armored'],notTags:['daemon']},resolve:-1}],
+ // ---------- Тзинч ----------
+ 'tzeentch:oracles':[{k:'limit',what:'spells',add:1,sel:{tags:['wizard']}},{k:'token',use:'advReroll',scope:'game'}],
+ 'tzeentch:changehost':[{k:'counter',id:'schemes',label:'Схемы: исполненных планов на игру',goal:8,units:['tze_masked_herald']}],
+ 'tzeentch:warpflame_cabal':[{k:'cost',sel:{tags:['flame']},pct:-10},{k:'table',note:'Warpflame: каждое следующее огненное попадание по той же цели +1 к ранению'}],
+ 'tzeentch:puppets_of_misrule':[{k:'cost',sel:{tags:['mutant']},pct:-10},{k:'table',note:'в начале игры каждый мутант бросает к6: 1 — Бой хуже на 1, 6 — лучше на 1'}],
+ // ---------- Слаанеш ----------
+ 'slaanesh:decadent_host':[{k:'stat',sel:{units:['sla_marauders','sla_chaos_warriors','sla_champions']},move:1}],
+ 'slaanesh:nkari_court':[{k:'counter',id:'devotees',label:'Преданные: победы и соблазнённые враги',goal:6,units:['sla_alluress']}],
+ 'slaanesh:painseekers':[{k:'cat',sel:{units:['sla_seekers']},to:'core'},{k:'table',note:'Вечный Танец: каждый ход кавалерия +1" к движению (до +3")'}],
+ 'slaanesh:thrall_court':[{k:'income',when:'win',gold:'2d6'}],
+ // ---------- Зверолюды ----------
+ 'beastmen:warherd':[{k:'cost',sel:{units:['bst_bestigors']},pct:-10},{k:'table',note:'засада: один юнит выходит с любого края стола во 2-м ходу'}],
+ 'beastmen:shadowgave':[{k:'cost',sel:{tags:['monster']},pct:-10}],
+ 'beastmen:harbingers':[{k:'cost',sel:{tags:['flying']},pct:-10},{k:'limit',what:'spells',add:1,sel:{units:['bst_crow_shaman','bst_bray_shaman']}}],
+ 'beastmen:slaughterhorn':[{k:'cost',sel:{units:['bst_minotaurs','bst_gorebull','bst_doombull']},pct:-10}],
+ 'beastmen:aoi_blood_herd':[{k:'cat',sel:{units:['bst_minotaurs']},to:'special'}],
+ 'beastmen:aoi_wild_herd':[{k:'cost',sel:{units:['bst_gors','bst_ungors','bst_primal_warherd']},pct:-10}],
+ // ---------- Скавены ----------
+ 'skaven:clan_mors':[{k:'xp',when:'win',sel:{leader:true},xp:1}],
+ 'skaven:clan_skryre':[{k:'cost',sel:{tags:['gunpowder','war_machine']},pct:-10}],
+ 'skaven:clan_pestilens':[{k:'cost',sel:{units:['skv_plague_monks','skv_plague_censer']},pct:-10},{k:'table',note:'чумные монахи: атаки ядовиты'}],
+ 'skaven:clan_moulder':[{k:'cost',sel:{tags:['monster']},pct:-10}],
+ 'skaven:clan_eshin':[{k:'cost',sel:{tags:['stealth']},pct:-10}],
+ 'skaven:clan_rictus':[{k:'cost',sel:{units:['skv_clanrats','skv_slaves']},pct:-10},{k:'table',note:'проигравший бой юнит может отступить без проверки Воли'}],
+ 'skaven:clan_scruten':[{k:'cost',sel:{tags:['daemon']},pct:-10},{k:'token',use:'advReroll',scope:'game'}],
+ 'skaven:clan_skurvy':[{k:'income',cond:'Сценарий на воде или побережье',gold:'2d6'},{k:'cost',sel:{units:['skv_slaves']},pct:-15}],
+ 'skaven:clan_morbidus':[{k:'cost',sel:{units:['skv_plague_monks']},pct:-10},{k:'limit',what:'merc',add:1,only:['skv_merc_wolf_rats']}],
+ // ---------- Хаос-дварфы ----------
+ 'chaos_dwarfs:zharr':[{k:'cost',sel:{units:['cdw_bull_centaurs']},pct:-10}],
+ 'chaos_dwarfs:azgorh':[{k:'limit',what:'spells',add:1,sel:{units:['cdw_sorcerer_prophet','cdw_daemonsmith']}},{k:'cost',sel:{tags:['artillery']},pct:-5}],
+ 'chaos_dwarfs:gorgoth':[{k:'income',when:'game',gold:'1d6'}],
+ 'chaos_dwarfs:khanate':[{k:'cost',sel:{tags:['hobgoblin']},pct:-10}],
+ // ---------- Норска ----------
+ 'norsca:world_walkers':[{k:'duelXp',xp:1},{k:'table',note:'набег Seafang: банда выходит с любого края стола у воды'}],
+ 'norsca:wintertooth':[{k:'cost',sel:{tags:['troll']},pct:-10}],
+ 'norsca:aesling':[{k:'stat',sel:{units:['nor_marauders','nor_berserkers']},save:6}],
+ 'norsca:monster_hunters':[{k:'income',per:'Вражеских монстров и крупных юнитов убито',gold:'2d6'},{k:'table',note:'+1 к ранению против monster и monstrous'}],
+ 'norsca:aoi_wolves_sea_nor':[{k:'income',cond:'Сценарий на воде или побережье',gold:'2d6'}],
+ 'norsca:skaeling_coast':[{k:'limit',what:'merc',add:1,only:['nor_merc_syreen','nor_merc_gymmcrab']},{k:'income',cond:'Сценарий на воде или побережье',gold:'1d6'}],
+ 'norsca:dolgan':[{k:'limit',what:'spells',add:1,sel:{units:['nor_shaman']}},{k:'limit',what:'rare',add:1,only:['nor_fimir','nor_cursed_ettin','nor_dread_maw','nor_chimera']}],
+ // ---------- Демоны Хаоса ----------
+ 'daemons:undivided_prince':[{k:'cost',sel:{units:['doc_greater_daemon']},pct:-10}],
+ 'daemons:khorne_ascendant':[{k:'cost',sel:{tags:['khorne']},pct:-10},{k:'duelXp',xp:1}],
+ 'daemons:nurgle_ascendant':[{k:'stat',sel:{tags:['nurgle']},endurance:1}],
+ 'daemons:tzeentch_ascendant':[{k:'stat',sel:{tags:['tzeentch'],hasTags:['ranged']},rangedN:-1},{k:'cost',sel:{tags:['tzeentch']},pct:-5}],
+ 'daemons:slaanesh_ascendant':[{k:'stat',sel:{tags:['slaanesh']},move:1}],
+ // ---------- Зеленокожие ----------
+ 'greenskins:grimgor':[{k:'cost',sel:{units:['grn_black_orcs','grn_boar_boyz']},pct:-10}],
+ 'greenskins:broken_axe':[{k:'counter',id:'cauldron',label:'Котёл: вражеских моделей выведено',goal:10,units:['grn_cauldron_boss']}],
+ 'greenskins:bloody_handz':[{k:'limit',what:'spells',add:1,sel:{tags:['wizard']}},{k:'cost',sel:{units:['grn_savage_orcs']},pct:-10}],
+ 'greenskins:crooked_moon':[{k:'cost',sel:{units:['grn_night_goblins','grn_ng_fanatics','grn_squig_hoppers']},pct:-10}],
+ 'greenskins:aoi_nomadic':[{k:'cat',sel:{units:['grn_boar_boyz']},to:'core'}],
+ 'greenskins:aoi_troll_horde':[{k:'cat',sel:{units:['grn_trolls']},to:'core'}],
+ 'greenskins:stone_snakes':[{k:'income',when:'win',vs:['chaos_dwarfs'],gold:'2d6'},{k:'cost',sel:{units:['grn_savage_orcs']},pct:-10}],
+ 'greenskins:cluster_eye':[{k:'income',per:'captives',gold:'2'},{k:'cost',sel:{units:['grn_merc_forest_spider_riders']},pct:-10}],
+ 'greenskins:broken_nose':[{k:'income',when:'win',vs:['dwarfs'],gold:'2d6'}],
+ 'greenskins:black_mountain_boyz':[{k:'income',when:'game',gold:'1d6'},{k:'table',note:'засада: один юнит выходит с края стола во 2-м ходу'}],
+ 'greenskins:whiteskull_tribe':[{k:'cap',sel:{tags:['goblin']},max:0},{k:'income',per:'captives',gold:'1'}],
+ 'greenskins:bonerattlaz':[{k:'limit',what:'spells',add:1,sel:{units:['grn_shaman','grn_great_shaman','grn_orc_boss_wyvern']}}],
+ // ---------- Королевства огров ----------
+ 'ogres:goldtooth':[{k:'cost',sel:{units:['ogr_ironguts']},pct:-10},{k:'income',when:'win',gold:'1d6'}],
+ 'ogres:maw_disciples':[{k:'limit',what:'spells',add:1,sel:{units:['ogr_butcher','ogr_firebelly']}},{k:'table',note:'жертва Утробе: раз за игру мясник снимает с себя 1 рану, съев павшую модель'}],
+ 'ogres:mercenary_camp':[{k:'limit',what:'merc',add:1},{k:'system',what:'contract'}],
+ 'ogres:stonehorn_tribe':[{k:'cat',sel:{units:['ogr_mournfang']},to:'special'}],
+ // ---------- Тёмные эльфы ----------
+ 'dark_elves:naggarond':[{k:'stat',sel:{cat:'core'},resolve:-1}],
+ 'dark_elves:cult_pleasure':[{k:'favor',on:'win',d:1,god:'slaanesh'}],
+ 'dark_elves:har_ganeth':[{k:'cost',sel:{units:['del_executioners','del_witch_elves']},pct:-10}],
+ 'dark_elves:blessed_dread':[{k:'cost',sel:{units:['del_corsairs','del_corsairs_handbows','del_merc_kharibdyss']},pct:-10},{k:'table',note:'корсары вызывают Страх'}],
+ 'dark_elves:hag_graef':[{k:'cat',sel:{units:['del_cold_ones']},to:'core'}],
+ 'dark_elves:black_ark':[{k:'income',cond:'Сценарий на воде или побережье',gold:'2d6'}]
+};
 const FAVOR_PER_STRICTURE=1;   // завет соблюдён: +1 к милости, нарушен: −1 (отмечается в окне «После игры»)
 const LEADER_CATS=['hero','leader'];
 
@@ -4140,9 +4368,16 @@ function fxDice(expr){   // '2d6' | '1d6*10' | '6d6*5' | '150'
 }
 function fxDiceTxt(expr){ const m=String(expr).match(/^(\d+)d(\d+)(?:\*(\d+))?$/); return m?(m[1]+'к'+m[2]+(m[3]?'×'+m[3]:'')):String(expr); }
 function lastGame(){ return (state.log||[])[0]||null; }   // журнал: новые сверху
-// все действующие части эффектов банды: патрон, навык патрона (если его взял живой герой), милость или немилость бога
+// все действующие части эффектов банды: правила фракции, подфракция, патрон, навык патрона (если его взял живой герой),
+// милость или немилость бога
 function activeFx(){
-  const out=[]; const pat=currentPatron();
+  const out=[]; const pat=currentPatron(); const f=faction();
+  if(f){
+    (FACTION_FX[f.id]||[]).forEach((parts,i)=>{ const r=(f.factionRules||[])[i]||{};
+      (parts||[]).forEach(p=>out.push(Object.assign({src:'faction',srcId:'faction:'+f.id+':'+i,srcName:r.name||'Правило фракции'},p))); });
+    const sf=state.subfactionId&&f.subfactions.find(s=>s.id===state.subfactionId);
+    if(sf) (SUB_FX[f.id+':'+sf.id]||[]).forEach(p=>out.push(Object.assign({src:'sub',srcId:'sub:'+f.id+':'+sf.id,srcName:sf.name},p)));
+  }
   if(pat){
     (PATRON_FX[pat[0]]||[]).forEach(p=>out.push(Object.assign({src:'patron',srcId:pat[0],srcName:pat[1]},p)));
     const holders=state.units.filter(r=>(r.skills||[]).includes('pat_'+pat[0])&&r.status!=='dead');
@@ -4157,29 +4392,44 @@ function activeFx(){
   return out;
 }
 function fxOn(kind,pred){ return activeFx().filter(p=>p.k===kind&&(!pred||pred(p))); }
+// селектор юнитов: units / cat / tags — «любой из», hero / leader / hasTags / notTags — обязательные фильтры.
+// cat сверяется с категорией из данных, а не с пересчитанной (effCat), — иначе правило «считаются core» зациклится
 function fxSel(sel,u){
   if(!u) return false;
   if(!sel||sel.all) return true;
   if(sel.hero&&!LEADER_CATS.includes(u.category)) return false;
+  if(sel.leader&&!isLeaderUnit(u)) return false;
   if(sel.notTags&&sel.notTags.some(t=>u.tags.includes(t))) return false;
+  if(sel.hasTags&&!sel.hasTags.some(t=>u.tags.includes(t))) return false;
   const tests=[];
   if(sel.units) tests.push(sel.units.includes(u.id));
-  if(sel.cat) tests.push(u.category===sel.cat);
+  if(sel.cat) tests.push([].concat(sel.cat).includes(u.category));
   if(sel.tags) tests.push(sel.tags.some(t=>u.tags.includes(t)));
   return tests.length?tests.some(Boolean):true;
 }
+// лидер банды: у подфракции с именным командиром — только он, иначе юнит категории leader
+function isLeaderUnit(u){ const req=requiredLeaderIds(); return req?req.includes(u.id):u.category==='leader'; }
+// категория юнита для слотов формата с учётом правил «X считаются core»
+function effCat(u){ const c=fxOn('cat',p=>fxSel(p.sel,u))[0]; return c?c.to:u.category; }
+function winStreak(){ let n=0; for(const g of (state.log||[])){ if(g.result==='win') n++; else break; } return n; }
 function fxWhen(p){   // условия, которые билдер видит сам
   if(!p.when) return true;
   if(p.when==='livingAndUndead'){ const us=state.units.map(r=>findUnit(r.unitId)).filter(Boolean); return us.some(x=>x.tags.includes('undead'))&&us.some(x=>!x.tags.includes('undead')); }
   if(p.when==='lossStreak'){ for(const g of (state.log||[])){ if(g.result==='win') return false; if(g.result==='loss') return true; } return false; }
   return true;
 }
-// цена одной модели с учётом скидок банды: проценты складываются и округляются в пользу банды, flat — на весь юнит
-function priceInfo(u){
+// первый в ростере юнит под селектор — ему достаётся скидка «один такой юнит»
+function firstMatchingUid(sel){ const r=state.units.find(x=>fxSel(sel,findUnit(x.unitId))); return r?r.uid:null; }
+// цена одной модели с учётом скидок банды: проценты складываются и округляются в пользу банды, flat — на весь юнит;
+// ru — конкретная запись ростера (для скидок «если в ростере есть…» и «один такой юнит»)
+function priceInfo(u,ru){
   let pct=0, perModel=0, flat=0, gearPct=0; const why=[];
   fxOn('cost').forEach(p=>{
     if(!fxSel(p.sel,u)) return;
+    if(p.need&&!state.units.some(r=>p.need.includes(r.unitId))) return;
+    if(p.first){ const fu=firstMatchingUid(p.sel); if(ru?fu!==ru.uid:!!fu) return; }
     if(p.pct){ pct+=p.pct; if(p.gear) gearPct+=p.pct; why.push(p.srcName+' '+(p.pct>0?'+':'')+p.pct+'%'); }
+    if(p.gearPct){ gearPct+=p.gearPct; why.push(p.srcName+': снаряжение '+(p.gearPct>0?'+':'')+p.gearPct+'%'); }
     if(p.perModel){ perModel+=p.perModel; why.push(p.srcName+' '+p.perModel+' за модель'); }
     if(p.flat){ flat+=p.flat; why.push(p.srcName+' '+p.flat); }
   });
@@ -4193,12 +4443,14 @@ function priceHtml(u){
   if(pi.model===u.baseCost&&!pi.flat) return String(u.baseCost);
   return `<span title="${esc(pi.why.join(' · '))}"><s style="opacity:.55">${u.baseCost}</s> ${pi.model}${pi.flat?(pi.flat>0?' +':' ')+pi.flat:''}</span>`;
 }
-function fxLimit(what,u){ return fxOn('limit',p=>p.what===what&&!p.only&&(!p.sel||fxSel(p.sel,u))).reduce((s,p)=>s+p.add,0); }
+// прибавка к лимиту: merc / hero / rare (слоты формата) или spells (заклинания мага; lore — только при этой школе)
+function fxLimit(what,u,ru){ return fxOn('limit',p=>p.what===what&&!p.only&&(!p.sel||fxSel(p.sel,u))&&(!p.lore||(ru&&ru.loreId===p.lore))).reduce((s,p)=>s+p.add,0); }
 function ava2Off(){ return fxOn('ava2off').length>0; }
 function bandStatMods(u){
   const m={};
   fxOn('stat').forEach(p=>{ if(!fxSel(p.sel,u)||!fxWhen(p)) return;
-    ['move','meleeN','meleeB','rangedN','rangedB','armour','wounds','resolve','endurance'].forEach(k=>{ if(p[k]) m[k]=(m[k]||0)+p[k]; }); });
+    ['move','meleeN','meleeB','rangedN','rangedB','armour','wounds','resolve','endurance'].forEach(k=>{ if(p[k]) m[k]=(m[k]||0)+p[k]; });
+    if(p.save) m._save=m._save?Math.min(m._save,p.save):p.save; });   // save — броня не хуже N+ (у кого брони нет, получает N+)
   return m;
 }
 // одноразовые права: scope game — раз за записанную игру, win — раз за победу, campaign — раз за кампанию
@@ -4239,35 +4491,60 @@ function applyPatronGrants(pid){
 const FX_TOKEN_TXT={injuryReroll:'переиграть бросок травмы',injuryHeal:'обратить травму в лёгкую',recover:'вернуть в строй бойца, пропускающего игру',regrow:'одна травма: на 5+ зарастает',advReroll:'переиграть бросок развития героя',riftReturn:'вернуть демона после «Убит»',vaulGift:'+1 AP одному оружию навсегда',freeMerc:'нанять наёмника бесплатно',debtMerc:'нанять наёмника в долг патрону',grabnikSale:'продать реликвию: +2к6'};
 const FX_SCOPE_TXT={game:'раз за игру',win:'после каждой победы',campaign:'раз за кампанию'};
 const FX_STAT_TXT={move:'Движение',meleeN:'Бой',meleeB:'Куб.бой',rangedN:'Стрельба',rangedB:'Куб.стр',armour:'Броня',wounds:'Раны',resolve:'Воля',endurance:'Выносливость'};
+const FX_CAT_TXT={leader:'лидер',hero:'hero',core:'core',special:'special',rare:'rare',merc:'наёмник'};
+const FX_SYSTEM_TXT={grudges:'Книга обид — вкладка «Кампания»',traits:'особенности героя (руны) — в карточке героя',contract:'контракт наёмников — вкладка «Кампания»'};
+const unitNames=ids=>ids.map(id=>(findUnit(id)||{}).name||id).join(', ');
+const factionNames=ids=>[].concat(ids).map(id=>(GAME_DATA.factions.find(f=>f.id===id)||{}).name||id).join(', ');
 function fxSelTxt(sel){
   if(!sel||sel.all) return 'всей банде';
   const bits=[];
-  if(sel.units) bits.push(sel.units.map(id=>{const u=findUnit(id);return u?u.name:id;}).join(', '));
-  if(sel.cat==='merc') bits.push('наёмникам');
+  if(sel.units) bits.push(unitNames(sel.units));
+  if(sel.cat) bits.push([].concat(sel.cat).map(c=>c==='merc'?'наёмникам':FX_CAT_TXT[c]||c).join(' / '));
   if(sel.tags) bits.push(sel.tags.map(t=>'#'+t).join(' / '));
+  if(sel.hasTags) bits.push('с #'+sel.hasTags.join(' / #'));
   if(sel.notTags) bits.push('кроме #'+sel.notTags.join(' #'));
   if(sel.hero) bits.push('героям');
+  if(sel.leader) bits.push('лидеру');
   return bits.join(', ');
 }
 function fxLabel(p){
   switch(p.k){
-    case 'cost': return 'цена найма '+fxSelTxt(p.sel)+': '+(p.pct?(p.pct>0?'+':'')+p.pct+'%':p.perModel?(p.perModel+' за модель'):(p.flat+' очк.'))+(p.gear?' (и снаряжение)':'');
-    case 'limit': return p.what==='merc'?('+'+p.add+' к лимиту наёмников'+(p.only?' ('+p.only.map(id=>(findUnit(id)||{}).name||id).join(', ')+')':'')):('+'+p.add+' заклинание: '+fxSelTxt(p.sel));
-    case 'stat': return Object.keys(FX_STAT_TXT).filter(k=>p[k]).map(k=>FX_STAT_TXT[k]+' '+(p[k]>0?'+':'')+p[k]).join(', ')+' — '+fxSelTxt(p.sel)+(p.when==='livingAndUndead'?', пока в банде есть и живые, и нежить':p.when==='lossStreak'?', после поражения — до первой победы':'');
+    case 'cost': return (p.first?'один (первый в ростере) ':'')+'цена найма '+fxSelTxt(p.sel)+': '
+      +(p.pct?(p.pct>0?'+':'')+p.pct+'%':p.perModel?(p.perModel+' за модель'):p.flat?(p.flat+' очк.'):'')
+      +(p.gearPct?'снаряжение '+(p.gearPct>0?'+':'')+p.gearPct+'%':'')+(p.gear?' (и снаряжение)':'')
+      +(p.need?', если в ростере есть '+unitNames(p.need):'');
+    case 'limit': {
+      const only=p.only?' ('+unitNames(p.only)+')':'';
+      if(p.what==='merc') return '+'+p.add+' к лимиту наёмников'+only;
+      if(p.what==='hero') return '+'+p.add+' к лимиту героев'+only;
+      if(p.what==='rare') return '+'+p.add+' к лимиту rare'+only;
+      return '+'+p.add+' заклинание: '+fxSelTxt(p.sel)+(p.lore?' (школа '+((SPELL_LORES[p.lore]||{}).n||p.lore)+')':'');
+    }
+    // n+ показатели (Бой, Стрельба, Броня, Воля) лучше, когда меньше, — подпись говорит «лучше/хуже», а не знак
+    case 'stat': return Object.keys(FX_STAT_TXT).filter(k=>p[k]).map(k=>FX_STAT_TXT[k]+(['meleeN','rangedN','armour','resolve'].includes(k)?(p[k]<0?' лучше на '+(-p[k]):' хуже на '+p[k]):' '+(p[k]>0?'+':'')+p[k])).concat(p.save?['броня не хуже '+p.save+'+']:[]).join(', ')+' — '+fxSelTxt(p.sel)+(p.when==='livingAndUndead'?', пока в банде есть и живые, и нежить':p.when==='lossStreak'?', после поражения — до первой победы':'');
     case 'ava2off': return 'Ava 2 подфракции не действует';
     case 'grant': return 'при выборе патрона: '+(p.gold?'+'+fxDiceTxt(p.gold)+' в казну':p.loan?('заём '+fxDiceTxt(p.loan)+' в казну, возврат '+p.rate+'% добычи каждой игры'):(p.favor?'милость '+(p.favor>0?'+':'')+p.favor:''));
-    case 'income': return (p.per==='captives'?'за каждого взятого пленника':p.per?('за каждого: «'+p.per+'»'+(p.chance?', на '+p.chance+'+ по к6':'')):p.cond?('после '+(p.when==='win'?'победы':'игры')+', если «'+p.cond+'»'):('после '+(p.when==='win'?'победы':'игры')))+': +'+fxDiceTxt(p.gold)+' в казну';
+    case 'income': return (p.per==='captives'?'за каждого взятого пленника':p.per?('за каждого: «'+p.per+'»'+(p.chance?', на '+p.chance+'+ по к6':''))
+      :p.vs?('после победы над: '+factionNames(p.vs)):p.cond?('после '+(p.when==='win'?'победы':'игры')+', если «'+p.cond+'»'):('после '+(p.when==='win'?'победы':'каждой игры')))
+      +': +'+fxDiceTxt(p.gold)+(p.streak?' × серия побед подряд':'')+' в казну';
     case 'cut': return p.pct+'% добычи патрону'+(p.profit?' после прибыльной игры':'')+(p.every?(' каждую '+p.every+'-ю игру'):'');
-    case 'favor': return 'первое поражение: милость '+p.d;
+    case 'favor': return p.on==='win'?('после победы: милость '+(p.d>0?'+':'')+p.d+(p.god?' (если бог — '+((PANTHEON[p.god]||{}).n||p.god)+')':'')):'первое поражение: милость '+p.d;
+    case 'cat': return fxSelTxt(p.sel)+' считаются '+(FX_CAT_TXT[p.to]||p.to)+' — для слотов формата';
+    case 'cap': return p.fmt?('не больше: '+fxSelTxt(p.sel)+' — '+GAME_DATA.formats.map(fm=>fm.id[0].toUpperCase()+fm.id.slice(1)+' '+p.fmt[fm.id]).join(', '))
+      :p.max===0?('запрещены: '+fxSelTxt(p.sel)):('не больше '+p.max+': '+fxSelTxt(p.sel));
+    case 'require': return 'обязательно в игре: '+fxSelTxt(p.sel)+((p.min||1)>1?' (не меньше '+p.min+')':'');
+    case 'xp': return '+'+p.xp+' XP '+fxSelTxt(p.sel)+(p.when==='unbeaten'?' после каждой победы, пока банда не знает поражений':p.when==='win'?' после победы':' после каждой игры')+(p.streak?' × серия побед подряд':'');
+    case 'system': return FX_SYSTEM_TXT[p.what]||p.what;
+    case 'noTraits': return 'особенности (марки) недоступны';
     case 'injury': return p.mod?((p.mod>0?'+':'')+p.mod+' к броску травмы: '+fxSelTxt(p.sel)):p.firstMod?(p.firstMod+' к первому броску травмы за игру'):p.deathTo?'«Убит» героя в бою с зеленокожими или скавенами — просто выбыл из игры':p.skipAfterLoss?'после поражения маг не бросает травму — сбежал':p.forceMiss?'раненый пропускает следующую игру':'';
     case 'token': return (FX_TOKEN_TXT[p.use]||p.use)+(p.self?' — себе самому':'')+', '+(FX_SCOPE_TXT[p.scope]||'');
-    case 'counter': return 'счёт «'+p.label+'»: на '+p.goal+' — бесплатное повышение '+p.units.map(id=>(findUnit(id)||{}).name||id).join(', ');
+    case 'counter': return 'счёт «'+p.label+'»: на '+p.goal+' — бесплатное повышение '+unitNames(p.units);
     case 'freeModel': return 'после победы +1 модель '+p.units.map(id=>(findUnit(id)||{}).name||id).join(', ')+' бесплатно';
     case 'tribute': return 'после каждой игры — '+p.captives+' пленник ковену, иначе покровительство сгорает';
     case 'captiveSale': return 'пленника можно продать за '+fxDiceTxt(p.gold)+'; за пролежавшего с прошлой игры — '+p.holdFee+' крона';
     case 'noReturn': return '«Убит» окончателен — возвраты не действуют';
     case 'oath': return 'герой, нарушивший слово: '+p.xp+' XP';
-    case 'duelXp': return 'герой с навыком, выигравший единоборство: +'+p.xp+' XP';
+    case 'duelXp': return (p.holdersOnly?'герой с навыком':'герой банды')+', выигравший единоборство: +'+p.xp+' XP';
     case 'bet': return 'объявленная ставка: победа +'+fxDiceTxt(p.gold)+' в казну';
     case 'debtPer': return 'каждый раз: +'+p.gold+' к долгу';
     case 'trophyStat': return 'добивший монстра: Воля '+p.resolve+' навсегда';
@@ -4357,7 +4634,7 @@ function openVaulPick(ru,p){
   openModal(`<div class="gmhead" style="background:#6b4e1f">⚒ Дар Ваула — какому оружию +1 AP навсегда?<button class="x" data-close>✕</button></div><div style="padding:8px 2px">${rows||'<div class="empty">У юнита нет оружия.</div>'}</div>`);
 }
 // окно «После игры»: доход и доли патрона, долги, пленники, заветы бога, события навыков
-function postGameNeeded(){ return activeFx().some(p=>['income','cut','favor','counter','freeModel','tribute','captiveSale','oath','duelXp','bet','debtPer','trophyStat'].includes(p.k)||(p.k==='token'&&p.use==='grabnikSale'&&tokFree(p))||(p.k==='injury'&&p.deathTo))||(state.debts||[]).some(d=>d.left>0)||!!currentGodId(); }
+function postGameNeeded(){ return activeFx().some(p=>['income','cut','favor','counter','freeModel','tribute','captiveSale','oath','duelXp','bet','debtPer','trophyStat','xp'].includes(p.k)||(p.k==='token'&&p.use==='grabnikSale'&&tokFree(p))||(p.k==='injury'&&p.deathTo))||(state.debts||[]).some(d=>d.left>0)||!!currentGodId(); }
 function openPostGame(gi){
   const g=state.log[gi]; if(!g) return;
   const fx=activeFx(); const gid=currentGodId(); const god=gid?PANTHEON[gid]:null;
@@ -4376,14 +4653,14 @@ function openPostGame(gi){
     if(p.k==='captiveSale') rowsH.push(`<div class="gearline">${src}: продать пленников <input id="pgSell" type="number" min="0" value="0" style="width:60px"> по ${esc(fxDiceTxt(p.gold))}</div>`);
     if(p.k==='bet') rowsH.push(`<label class="gearline"><input type="checkbox" id="pgC${i}"> ${src}: перед боем была объявлена ставка</label>`);
     if(p.k==='debtPer') rowsH.push(`<div class="gearline">${src}: ${esc(p.label)} <input id="pgN${i}" type="number" min="0" value="0" style="width:60px"></div>`);
-    if(p.k==='duelXp') heroes.filter(r=>(p.holders||[]).includes(r.uid)).forEach(r=>rowsH.push(`<label class="gearline"><input type="checkbox" id="pgD${i}_${r.uid}"> ${src}: ${esc(r.customName||findUnit(r.unitId).name)} выиграл единоборство</label>`));
+    if(p.k==='duelXp') heroes.filter(r=>!p.holders||p.holders.includes(r.uid)).forEach(r=>rowsH.push(`<label class="gearline"><input type="checkbox" id="pgD${i}_${r.uid}"> ${src}: ${esc(r.customName||findUnit(r.unitId).name)} выиграл единоборство</label>`));
     if(p.k==='oath') heroes.forEach(r=>rowsH.push(`<label class="gearline"><input type="checkbox" id="pgO${i}_${r.uid}"> ${src}: ${esc(r.customName||findUnit(r.unitId).name)} нарушил данное слово (−1 XP)</label>`));
     if(p.k==='trophyStat') rowsH.push(`<div class="gearline">${src}: ${esc(p.label)} <select id="pgT${i}"><option value="">— никто —</option>${state.units.filter(r=>r.status!=='dead').map(r=>`<option value="${r.uid}">${esc(r.customName||findUnit(r.unitId).name)}</option>`).join('')}</select></div>`);
     if(p.k==='token'&&p.use==='grabnikSale'&&tokFree(p)) rowsH.push(`<label class="gearline"><input type="checkbox" id="pgC${i}"> ${src}: продать Грабнику реликвию или голову вражеского лидера (+${esc(fxDiceTxt(p.gold))}, раз за кампанию)</label>`);
   });
   if(god) rowsH.push(`<div class="gearline" style="margin-top:8px"><b>☩ Заветы: ${esc(god.n)}</b> <span style="color:var(--faint);font-size:11px">соблюдён +${FAVOR_PER_STRICTURE} · нарушен −${FAVOR_PER_STRICTURE} · сейчас ${state.favor||0}</span></div>`+
     (god.strictures||[]).map((s,j)=>`<div class="gearline" style="font-size:12px"><span style="flex:1">${esc(s)}</span>${[['1','✓'],['0','—'],['-1','✗']].map(([v,l])=>`<label style="margin-left:6px"><input type="radio" name="pgS${j}" value="${v}" ${v==='0'?'checked':''}> ${l}</label>`).join('')}</div>`).join(''));
-  const auto=fx.filter(p=>['cut','freeModel','tribute','favor'].includes(p.k)).map(p=>'⚙ '+esc(p.srcName)+': '+esc(fxLabel(p)));
+  const auto=fx.filter(p=>['cut','freeModel','tribute','favor','xp'].includes(p.k)||(p.k==='income'&&!p.cond&&!p.per)).map(p=>'⚙ '+esc(p.srcName)+': '+esc(fxLabel(p)));
   (state.debts||[]).filter(d=>d.left>0).forEach(d=>auto.push('⚙ долг '+esc(d.name)+': осталось '+d.left+', возврат '+d.rate+'% добычи'));
   openModal(`<div class="gmhead" style="background:#5b4a1e">📜 После игры: ${g.result==='win'?'победа':g.result==='loss'?'поражение':'ничья'}${g.opponent?' vs '+esc(g.opponent):''}<button class="x" data-act="pgskip">✕</button></div>
     <div style="padding:6px 2px;max-height:65vh;overflow:auto">${rowsH.join('')}
@@ -4415,7 +4692,7 @@ function applyPostGame(gi){
   fx.forEach((p,i)=>{
     if(p.k==='income'){
       if(p.when==='win'&&g.result!=='win') return;
-      if(p.vs){ if(g.oppFaction!==p.vs) return; }   // условие «соперник — такая-то фракция» проверяется по выбранной фракции
+      if(p.vs){ if(![].concat(p.vs).includes(g.oppFaction)) return; }   // «соперник — такая-то фракция» — по выбранной фракции
       else if(p.cond&&!chk('pgC'+i)) return;
       if(p.per){
         const n=p.per==='captives'?num('pgCapt'):num('pgN'+i);
@@ -4425,14 +4702,22 @@ function applyPostGame(gi){
         }
         return;
       }
-      if(!p.cond&&p.when!=='win') return;
-      const r=fxDice(p.gold); gold+=r.v; lines.push(p.srcName+': +'+r.v+(r.txt!==String(r.v)?' ('+r.txt+')':''));
+      if(!p.cond&&!p.vs&&p.when!=='win'&&p.when!=='game') return;   // доход без условия обязан сказать, когда платит
+      const r=fxDice(p.gold), mul=p.streak?Math.max(1,winStreak()):1, v=r.v*mul; gold+=v;
+      lines.push(p.srcName+': +'+v+(r.txt!==String(r.v)?' ('+r.txt+(mul>1?', × серия '+mul:'')+')':mul>1?' (× серия '+mul+')':''));
     }
+    if(p.k==='xp'){
+      const unbeaten=!(state.log||[]).some(x=>x.result==='loss');
+      const ok=p.when==='game'||(g.result==='win'&&(p.when==='win'||(p.when==='unbeaten'&&unbeaten)));
+      if(ok){ const n=p.xp*(p.streak?Math.max(1,winStreak()):1);
+        state.units.filter(r=>r.status!=='dead'&&r.forGame!==false&&fxSel(p.sel,findUnit(r.unitId))).forEach(r=>{ r.xp=(r.xp||0)+n; lines.push((r.customName||findUnit(r.unitId).name)+': +'+n+' XP ('+p.srcName+')'); }); }
+    }
+    if(p.k==='favor'&&p.on==='win'&&g.result==='win'&&currentGodId()&&(!p.god||currentGodId()===p.god)){ state.favor=(state.favor||0)+p.d; lines.push(p.srcName+': победа, милость '+(p.d>0?'+':'')+p.d); }
     if(p.k==='bet'&&chk('pgC'+i)&&g.result==='win'){ const r=fxDice(p.gold); gold+=r.v; lines.push(p.srcName+': ставка сыграла, +'+r.v+' ('+r.txt+')'); }
     if(p.k==='token'&&p.use==='grabnikSale'&&chk('pgC'+i)&&tokFree(p)){ const r=fxDice(p.gold); gold+=r.v; tokUse(p); lines.push(p.srcName+': +'+r.v+' ('+r.txt+')'); }
     if(p.k==='debtPer'){ const n=num('pgN'+i); if(n>0){ addDebt(p.creditor,(patronsFor().find(x=>x[0]===p.creditor)||[,p.srcName])[1],n*p.gold,20); lines.push(p.srcName+': +'+(n*p.gold)+' к долгу'); } }
     if(p.k==='counter'){ const n=num('pgN'+i); state.counters=state.counters||{}; state.counters[p.id]=(state.counters[p.id]||0)+n; if(n) lines.push(p.srcName+': счёт '+state.counters[p.id]+' / '+p.goal); }
-    if(p.k==='duelXp') (p.holders||[]).forEach(uid=>{ if(chk('pgD'+i+'_'+uid)){ const r=getRU(uid); if(r){ r.xp=(r.xp||0)+p.xp; lines.push((r.customName||findUnit(r.unitId).name)+': +'+p.xp+' XP за единоборство'); } } });
+    if(p.k==='duelXp') (p.holders||state.units.filter(r=>{const u=findUnit(r.unitId);return u&&LEADER_CATS.includes(u.category)&&r.status!=='dead';}).map(r=>r.uid)).forEach(uid=>{ if(chk('pgD'+i+'_'+uid)){ const r=getRU(uid); if(r){ r.xp=(r.xp||0)+p.xp; lines.push((r.customName||findUnit(r.unitId).name)+': +'+p.xp+' XP за единоборство'); } } });
     if(p.k==='oath') state.units.forEach(r=>{ if(chk('pgO'+i+'_'+r.uid)){ r.xp=Math.max(0,(r.xp||0)+p.xp); lines.push((r.customName||findUnit(r.unitId).name)+': '+p.xp+' XP — нарушил слово'); } });
     if(p.k==='trophyStat'){ const r=getRU(val('pgT'+i)); if(r&&!r.trophyStat){ r.statMods=r.statMods||{}; r.statMods.resolve=(r.statMods.resolve||0)+p.resolve; r.trophyStat=true; lines.push((r.customName||findUnit(r.unitId).name)+': Воля '+p.resolve+' навсегда ('+p.srcName+')'); } }
     if(p.k==='freeModel'&&g.result==='win'){
@@ -4643,7 +4928,7 @@ function armProfile(a){
   if(a.shield) p.push('спас лучше на 1');
   return p.join(' · ')+(a.tr?' · '+a.tr:'');
 }
-function spellsLimitOf(ru){ return 1+(ru.wizLevel||1)+fxLimit('spells',findUnit(ru.unitId)); }
+function spellsLimitOf(ru){ return 1+(ru.wizLevel||1)+fxLimit('spells',findUnit(ru.unitId),ru); }
 const WIZ_LEVEL_COST={1:0,2:20,3:45,4:80};
 function loresFor(u,ru){ return (FACTION_LORE_IDS[state.factionId]||[]).filter(id=>!u||godAllows(u,id,ru)); }
 function unitCost(ru){
@@ -4657,8 +4942,9 @@ function unitCost(ru){
   const ecost=(ru.equip||[]).reduce((s,id)=>s+(EQUIPMENT[id]?EQUIPMENT[id].c:0),0)*mult;
   const tcost=(ru.traits||[]).reduce((s,id)=>{const t=traitById(id);return s+(t?t[3]:0);},0);
   const wlcost=WIZ_LEVEL_COST[ru.wizLevel||1]||0;
-  // цена найма со скидками патрона и бога; нанятый бесплатно (навык патрона) не платит за найм, подаренные модели — тоже
-  const pi=priceInfo(u);
+  // цена найма со скидками фракции, подфракции, патрона и бога; нанятый бесплатно (навык патрона) не платит за найм,
+  // подаренные модели — тоже
+  const pi=priceInfo(u,ru);
   const hire=ru.costWaived?0:Math.max(0,pi.model*Math.max(0,ru.modelCount-(ru.freeModels||0))+pi.flat);
   return hire + opt + gearPrice(wcost+acost+ecost,pi.gearPct) + tcost + wlcost + (mt?mt.cost:0);
 }
@@ -4667,6 +4953,7 @@ function effStats(ru){
   const u=findUnit(ru.unitId); if(!u) return null;
   const base={...u.stats}; const m=ru.statMods||{}; const bm=bandStatMods(u);   // bm — эффекты банды: патрон, бог
   for(const k in base){ base[k]=Math.max(0, base[k]+(m[k]||0)+(bm[k]||0)); }
+  if(bm._save) base.armour = base.armour ? Math.min(base.armour, bm._save) : bm._save;
   // Маунт: одна модель — общий пул Ран, движение/полёт маунта, лучшая броня
   const mt=mountOf(ru);
   if(mt){
@@ -4711,7 +4998,8 @@ function validate(){
     if(!u){ errors.push('Неизвестный юнит: '+ru.unitId); return; }
     // подфракция с именным командиром: эксклюзивный юнит считается лидером, даже если его category='hero';
     // «обычный» лидер, который сюда не входит, лидером НЕ считается (ловится отдельной ошибкой ниже)
-    let catForCounts=u.category;
+    // категория для слотов — с правилами «X считаются core» подфракции (effCat)
+    let catForCounts=effCat(u);
     if(reqLeader){
       if(reqLeader.includes(u.id)) catForCounts='leader';
       else if(u.category==='leader'){ catForCounts='hero'; mismatchedLeaders.push(u.name); }
@@ -4761,15 +5049,23 @@ function validate(){
   if(counts.leader>1) errors.push('Больше одного лидера ('+counts.leader+'). Допустим ровно 1.');
   if(mismatchedLeaders.length) errors.push('Не годится в лидеры для этой подфракции: '+mismatchedLeaders.join(', ')+' — нужен: '+reqLeader.map(id=>(findUnit(id)||{}).name||id).join(' / ')+'.');
   if(total>fmt.points) errors.push('Превышен лимит очков: '+total+' / '+fmt.points+'.');
-  if(counts.hero>fmt.heroMax) errors.push('Слишком много героев: '+counts.hero+' (макс '+fmt.heroMax+' для '+fmt.id+').');
-  if(counts.rare>fmt.rareMax){
-    if(fmt.rareMax===0) errors.push('Редкие (rare) юниты недоступны в формате '+fmt.id+'.');
-    else errors.push('Слишком много rare-юнитов: '+counts.rare+' (макс '+fmt.rareMax+').');
+  // слоты формата: база + прибавки правил и патрона; «only» — места только для названных юнитов (Яруна, Мернеб)
+  const slot=(what,base)=>{ const only=fxOn('limit',p=>p.what===what&&p.only).reduce((s,p)=>s+Math.min(p.add,gu.filter(r=>p.only.includes(r.unitId)).length),0);
+    const cap=(base||0)+fxLimit(what); return {cap,only,max:cap+only,plus:cap!==(base||0)||only>0}; };
+  const hs=slot('hero',fmt.heroMax), rs=slot('rare',fmt.rareMax), ms=slot('merc',fmt.mercMax);
+  if(counts.hero-hs.only>hs.cap) errors.push('Слишком много героев: '+counts.hero+' (макс '+hs.max+' для '+fmt.id+(hs.plus?', с учётом правил':'')+').');
+  if(counts.rare-rs.only>rs.cap){
+    if(rs.max===0) errors.push('Редкие (rare) юниты недоступны в формате '+fmt.id+'.');
+    else errors.push('Слишком много rare-юнитов: '+counts.rare+' (макс '+rs.max+(rs.plus?', с учётом правил':'')+').');
   }
-  // лимит наёмников: формат + патрон; «only» — места только для названных юнитов (Яруна, Мернеб)
-  const mercOnly=fxOn('limit',p=>p.what==='merc'&&p.only).reduce((s,p)=>s+Math.min(p.add,gu.filter(r=>p.only.includes(r.unitId)).length),0);
-  const mercCap=(fmt.mercMax||0)+fxLimit('merc');
-  if(counts.merc-mercOnly>mercCap) errors.push('Слишком много наёмников/прислужников: '+counts.merc+' (макс '+(mercCap+mercOnly)+' для '+fmt.id+(mercCap!==(fmt.mercMax||0)||mercOnly?', с учётом патрона':'')+').');
+  if(counts.merc-ms.only>ms.cap) errors.push('Слишком много наёмников/прислужников: '+counts.merc+' (макс '+ms.max+' для '+fmt.id+(ms.plus?', с учётом правил и патрона':'')+').');
+  // потолки и обязательные юниты правил фракции и подфракции
+  const selN=sel=>gu.filter(r=>fxSel(sel,findUnit(r.unitId))).length;
+  fxOn('cap').forEach(p=>{ const max=p.fmt?p.fmt[fmt.id]:p.max; if(max===undefined) return; const n=selN(p.sel);
+    if(n>max) errors.push(p.srcName+': '+(max===0?'запрещены':'не больше '+max)+' — '+fxSelTxt(p.sel)+' (сейчас '+n+').'); });
+  fxOn('require').forEach(p=>{ const n=selN(p.sel); if(n<(p.min||1)) errors.push(p.srcName+': обязательно '+fxSelTxt(p.sel)+(p.min>1?' (не меньше '+p.min+')':'')+'.'); });
+  if(fxOn('noTraits').length){ const bad=gu.filter(r=>(r.traits||[]).length).map(r=>(findUnit(r.unitId)||{}).name);
+    if(bad.length) errors.push(fxOn('noTraits')[0].srcName+': особенности (марки) недоступны — '+bad.join(', ')+'.'); }
   // AVA (доступность): базовая фракция — 1 запись юнита; подфракция даёт Ava 2 «своим»
   Object.keys(dupMap).forEach(id=>{
     const u=findUnit(id); if(!u) return;
@@ -4880,7 +5176,7 @@ function renderSetup(){
   if(f.lore) html+='<div style="color:var(--muted);font-size:12.5px;margin-top:4px;line-height:1.5">'+esc(f.lore)+'</div>';
   html+='<div style="color:var(--faint);font-size:11.5px;margin-top:3px"><b style="color:var(--muted)">Стиль:</b> '+esc(f.description)+'</div>';
   if(f.factionRules.length){
-    html+='<div style="margin-top:8px">'+f.factionRules.map(r=>`<div class="r"><b>${esc(r.name)}:</b> ${esc(r.text)}</div>`).join('')+'</div>';
+    html+='<div style="margin-top:8px">'+f.factionRules.map((r,i)=>`<div class="r"><b>${esc(r.name)}:</b> ${esc(r.text)}${fxPartsHtml((FACTION_FX[f.id]||[])[i])}</div>`).join('')+'</div>';
   }
   const sub=f.subfactions.find(s=>s.id===state.subfactionId);
   if(sub){
@@ -4888,7 +5184,9 @@ function renderSetup(){
     html+='<div class="r" style="margin-top:8px;border-left:2px solid '+st[1]+';padding-left:8px">'
       +'<div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:'+st[1]+';border:1px solid '+st[1]+';padding:0 6px;border-radius:9px">'+st[0]+'</span><b style="color:var(--gold2)">'+esc(sub.name)+'</b></div>';
     if(sub.lore) html+='<div style="color:var(--muted);font-size:12.5px;margin-top:4px;line-height:1.5">'+esc(sub.lore)+'</div>';
-    if(sub.description) html+='<div style="color:var(--faint);font-size:11.5px;margin-top:4px"><b style="color:var(--muted)">Эффект:</b> '+esc(sub.description)+'</div>';
+    if(sub.description) html+='<div style="color:var(--faint);font-size:11.5px;margin-top:4px"><b style="color:var(--muted)">Описание:</b> '+esc(sub.description)+'</div>';
+    const sfx=SUB_FX[f.id+':'+sub.id];
+    if(sfx) html+='<div style="color:var(--faint);font-size:11.5px;margin-top:4px"><b style="color:var(--muted)">Правила:</b>'+fxPartsHtml(sfx)+'</div>';
     const av2=(AVA2[f.id]||{})[sub.id];
     if(av2&&av2.length){
       const names=av2.map(id=>{const u2=f.units.find(x=>x.id===id);return u2?u2.name:id;});
@@ -5245,7 +5543,7 @@ function openRebuyModal(uidv){
   const gearPerModel=(ru.weapons||[]).reduce((s,id)=>s+(WEAPONS[id]?WEAPONS[id].c:0),0)
                     +(ru.armour||[]).reduce((s,id)=>s+(ARMOURS[id]?ARMOURS[id].c:0),0)
                     +(ru.equip||[]).reduce((s,id)=>s+(EQUIPMENT[id]?EQUIPMENT[id].c:0),0);
-  const piR=priceInfo(u); const perModel=piR.model+gearPrice(gearPerModel,piR.gearPct);
+  const piR=priceInfo(u,ru); const perModel=piR.model+gearPrice(gearPerModel,piR.gearPct);
   const maxBuy=u.maxModels-ru.modelCount;
   const baseB=Math.max(1,(u.stats.meleeB||1)+((ru.statMods||{}).meleeB||0));
   openModal(`
@@ -5328,6 +5626,8 @@ function openPickModal(uidv,cat){
     items=RENOWNS.filter(r=>!(ru.renowns||[]).includes(r[1])).map(r=>({id:r[1],dis:false,why:'',name:r[1],prof:'За что даётся: '+r[2],cost:''}));
   } else if(cat==='trait'){
     const cfg=traitsFor(); if(!cfg) return;
+    const nt=fxOn('noTraits')[0];
+    if(nt){ toast('★ '+nt.srcName+': '+cfg.title.toLowerCase()+' в этой подфракции недоступны'); return; }
     title='★ '+cfg.title;
     const atLimit=(ru.traits||[]).length>=cfg.max;
     items=cfg.items.filter(t=>!(ru.traits||[]).includes(t[0])).map(t=>{
@@ -5718,15 +6018,17 @@ function renderPatronCamp(){
   const box=$('#patronPanel'); if(!box) return;
   const pat=currentPatron();
   const debts=(state.debts||[]).filter(d=>d.left>0);
-  if(!pat&&!debts.length){ box.innerHTML=''; return; }
-  const fx=activeFx().filter(p=>p.src==='patron'||p.src==='skill');
+  // счета, пленники и одноразовые права — от любого источника: патрон, навык, подфракция, фракция, бог
+  const fx=activeFx();
+  const hasRows=debts.length||fx.some(p=>p.k==='counter'||p.k==='token'||p.k==='tribute'||p.k==='captiveSale'||p.per==='captives');
+  if(!pat&&!hasRows){ box.innerHTML=''; return; }
   const rows=[];
   debts.forEach(d=>rows.push(`<div class="grow"><div class="gtxt">📜 Долг: <b>${esc(d.name)}</b> — осталось <b>${d.left}</b> зол., возврат ${d.rate}% добычи каждой игры (в окне «После игры»)</div><button class="btn sm" data-act="debtpay" data-cr="${esc(d.creditor)}" title="Погасить из казны">из казны</button></div>`));
-  fx.filter(p=>p.k==='counter').forEach(p=>{ const n=(state.counters||{})[p.id]||0; rows.push(`<div class="grow"><div class="gtxt">✦ ${esc(p.label)}: <b>${n} / ${p.goal}</b>${n>=p.goal?' — повышение готово, кнопка «Левелап» у героя бесплатна':''}</div></div>`); });
+  fx.filter(p=>p.k==='counter').forEach(p=>{ const n=(state.counters||{})[p.id]||0; rows.push(`<div class="grow"><div class="gtxt">✦ ${esc(p.srcName)} — ${esc(p.label)}: <b>${n} / ${p.goal}</b>${n>=p.goal?' — повышение готово: «Левелап» у '+esc(unitNames(p.units))+' бесплатен':' · пополняется в окне «После игры»'}</div></div>`); });
   if(fx.some(p=>p.k==='tribute'||p.k==='captiveSale'||p.per==='captives')) rows.push(`<div class="grow"><div class="gtxt">⛓ Пленников в загоне: <b>${state.captives||0}</b></div></div>`);
   fx.filter(p=>p.k==='token').forEach(p=>rows.push(`<div class="grow ${tokFree(p)?'':'settled'}"><div class="gtxt">${tokFree(p)?'◆':'◇'} ${esc(p.srcName)}: ${esc(FX_TOKEN_TXT[p.use]||p.use)} — ${esc(FX_SCOPE_TXT[p.scope]||'')}${tokFree(p)?'':' (использовано)'}${p.use==='grabnikSale'?' · в окне «После игры»':' · кнопка у бойца'}</div></div>`));
   box.innerHTML=`<div class="panel grudgebook">
-    <div class="gbhead"><b>✦ Патрон</b> <span style="color:var(--gold2);font-weight:600">${pat?esc(pat[1]):'— нет —'}</span><span style="color:var(--faint);font-size:10.5px">(сменить — во вкладке «Сборка ростера»)</span></div>
+    <div class="gbhead"><b>✦ Патрон и права банды</b> <span style="color:var(--gold2);font-weight:600">${pat?esc(pat[1]):'— без патрона —'}</span><span style="color:var(--faint);font-size:10.5px">(сменить — во вкладке «Сборка ростера»)</span></div>
     ${pat?`<div class="gbrule">${esc(pat[2])}${fxPartsHtml(PATRON_FX[pat[0]])}</div>`:''}
     ${rows.join('')||'<div class="empty" style="padding:6px 4px;font-size:11.5px">Долгов, счетов и одноразовых прав сейчас нет.</div>'}
   </div>`;
@@ -6809,12 +7111,15 @@ function openAddModal(grp){
     return !hero && u.category!=='merc';
   });
   const rows=units.map(u=>{
-    const ava=avaOf(u), have=rosterCountOf(u.id), atCap=have>=ava;
+    const ava=avaOf(u), have=rosterCountOf(u.id);
+    // запрет правилом подфракции или фракции (потолок 0 в этом формате) — виден сразу, а не только ошибкой проверки
+    const ban=fxOn('cap',p=>(p.fmt?p.fmt[state.formatId]:p.max)===0&&fxSel(p.sel,u))[0];
+    const atCap=have>=ava||!!ban;
     return `<div class="addunit-row ${atCap?'dis':''}" data-selrow="${u.id}">
       <img class="uicon sm" src="icons/${u.id}.jpg" alt="" onerror="this.style.visibility='hidden'">
       <div class="aumain">
         <b>${esc(u.name)}</b> <span style="color:var(--faint);font-size:11px">${esc(u.role)}</span><br>
-        <span style="color:var(--muted);font-size:11px">${atCap?`Лимит достигнут (${have}/${ava})`:`Взято: ${have} / Ava: ${ava}`}${u.maxModels>1?' · 1–'+u.maxModels+' мод.':''}</span>
+        <span style="color:var(--muted);font-size:11px">${ban?`Запрещено правилом «${esc(ban.srcName)}»`:have>=ava?`Лимит достигнут (${have}/${ava})`:`Взято: ${have} / Ava: ${ava}`}${u.maxModels>1?' · 1–'+u.maxModels+' мод.':''}</span>
         ${statStrip(u.stats,u.unitType,u)}
       </div>
       <span class="trcost">${priceHtml(u)}${u.maxModels>1?'/мод':''}</span>
