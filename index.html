@@ -3467,9 +3467,9 @@ function mountsForUnit(u,ru){
 function mountChip(mt){
   const bits=[`M ${mt.move}"`,`атака ${mt.mN}+×${mt.mB}`,`+${mt.w} Ран`];
   if(mt.armourFloor) bits.push('Бр '+mt.armourFloor+'+');
-  if(mt.big) bits.push('крупная цель');
+  if(mt.big) bits.push('Крупная цель');
   if(mt.fly) bits.push('Полёт');
-  if(mt.fear) bits.push('FEAR');
+  if(mt.fear) bits.push('Страх');
   if(mt.special) bits.push(mt.special);
   return bits.join(' · ');
 }
@@ -4970,7 +4970,7 @@ function openGearModal(kind,id,uidv){
     title=m.name;
     rows=[['Класс',m.clsRu],['Движение',m.move+'"'],['Атака маунта',m.mN+'+ ×'+m.mB],['Общий пул Ран','+'+m.w+' к Ранам всадника'],
       ['Броня («пол»)',m.armourFloor?m.armourFloor+'+':'—'],['Цена',m.cost]];
-    kws=[m.fly?'Полёт':null,m.fear?'FEAR':null,m.big?'Крупная цель':null,m.special||null].filter(Boolean);
+    kws=[m.fly?'Полёт':null,m.fear?'Страх':null,m.big?'Крупная цель':null,m.special||null].filter(Boolean);
   } else if(kind==='skill'){
     const s=skillById(id); if(!s) return;
     const sk=skillKind(s);
