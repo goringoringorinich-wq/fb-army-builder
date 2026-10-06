@@ -3832,10 +3832,73 @@ function injById(x){ return INJURIES_LIST.find(i=>i[0]===x||i[1]===x)||null; }
 function injName(x){ const i=injById(x); return i?i[1]:x; }
 function hasInj(ru,id){ return (ru.injuries||[]).includes(id); }
 // поправки к профилю юнита: развитие (statMods) + травмы
+/* ---------- Черты фракций в профиле (блок 3, 06.10.2026) ----------
+   Что из черты считает билдер: поправки профиля (st), броня (sv — +N к спасу при броне; hide — «без брони Бр 6+, с бронёй
+   +1»), M не меньше (minMove), свойства (kw), свойства атак (atk), AP оружия (ap — всему, apGun — пороховому), лишнее
+   заклинание (spells), запрет магии (noMagic), поправки верхом на летающем маунте (fly), Страх или Ужас по размеру (terror),
+   бросок при найме (onAdd). t — у черты есть правило стола: билдер его не считает, текст черты виден в карточке.
+   Ключ — id черты; у одинаковых id разных фракций с разным текстом — «фракция:id». */
+const TRAIT_FX={
+ 'warriors_chaos:mark_khorne':{st:{meleeB:1},kw:['Оберег 6+ против заклинаний'],noMagic:1},
+ 'norsca:mark_khorne':{st:{meleeB:1},noMagic:1},
+ mark_nurgle:{st:{wounds:1,move:-1}},
+ 'warriors_chaos:mark_tzeentch':{kw:['Оберег 6+'],t:1},
+ 'norsca:mark_tzeentch':{kw:['Оберег 6+']},
+ mark_slaanesh:{st:{move:1},kw:['Иммунитет к психологии']},
+ mut_claw:{st:{meleeB:1}}, mut_tentacle:{t:1}, mut_hooves:{st:{move:1},t:1}, mut_scales:{hide:1}, mut_horns:{t:1}, mut_third_eye:{t:1},
+ rune_cleaving:{atk:['+1 автохит']}, rune_cutting:{ap:1}, rune_striking:{st:{meleeN:-1}}, rune_fury:{st:{meleeB:1}}, rune_speed:{st:{move:1},t:1},
+ rune_daunting:{kw:['Страх']}, rune_fire:{atk:['Огонь'],t:1}, rune_grudge:{t:1}, rune_gromril:{sv:1}, rune_iron:{st:{wounds:1},t:1},
+ rune_shielding:{t:1}, rune_stone:{t:1}, rune_luck:{t:1}, rune_spellbreak:{t:1}, rune_courage:{t:1}, master_slayer:{t:1}, master_alaric:{atk:['без спаса Брони']},
+ hashut_flame:{atk:['Огонь']}, hashut_armour:{sv:1}, hashut_bull:{t:1},
+ vp_carstein:{t:1}, vp_carstein2:{t:1}, vp_blood_dragon:{t:1}, vp_blood_dragon2:{t:1}, vp_lahmian:{t:1}, vp_lahmian2:{t:1},
+ vp_necrarch:{t:1}, vp_necrarch2:{spells:1}, vp_strigoi:{kw:['Регенерация 9+']}, vp_strigoi2:{t:1},
+ deep_regen:{kw:['Регенерация 9+']}, deep_gaze:{t:1}, vco_broadside:{apGun:1}, vco_powder_reek:{t:1}, vco_grappling_hook:{t:1}, vco_undying_crew:{t:1},
+ virtue_valour:{t:1}, virtue_discipline:{t:1}, virtue_impetuous:{t:1}, virtue_purity:{kw:['Оберег 6+ (5+ против юнитов Хаоса)']}, virtue_temper:{t:1},
+ hon_pure:{t:1}, hon_sword:{st:{meleeN:-1}}, hon_dragon:{fly:{meleeB:1,rangedB:1}}, hepg_aenarion:{kw:['Иммунитет к Страху и Ужасу'],t:1}, hepg_dream:{t:1},
+ hepg_obsession:{t:1}, hepg_yenlui_light:{t:1}, hepg_yenlui_dark:{st:{meleeB:1},t:1}, hepg_elder:{st:{move:-1},t:1},
+ kin_wild:{t:1}, kin_eternal:{t:1}, kin_alter:{st:{move:2},t:1}, kin_waywatcher:{kw:['Скрытность: Засада'],t:1}, kin_scout:{t:1}, kin_glamour:{t:1},
+ spawn_sotek:{st:{move:1},atk:['Яд']}, spawn_tepok:{kw:['Оберег 6+ против заклинаний']}, spawn_quetzl:{sv:1}, spawn_tlazcotl:{kw:['Иммунитет к психологии']},
+ name_deathcheater:{t:1}, name_giantbreaker:{t:1}, name_longstrider:{st:{move:1}}, name_wallcrusher:{t:1},
+ aug_warpeye:{st:{rangedN:-1}}, aug_arm:{st:{meleeB:1}}, aug_moulder:{st:{wounds:1},onAdd:'moulder'}, aug_skryre_prototype:{ap:1,t:1}, aug_eshin_brand:{t:1},
+ boss_hat:{t:1}, boss_trophy:{kw:['Страх']}, boss_fast:{st:{move:1}},
+ vow_sigmar:{t:1}, vow_steel:{t:1}, vow_duty:{t:1}, vow_silence:{kw:['Иммунитет к Страху']}, vow_wrath:{t:1}, vow_wolf:{t:1},
+ kh_collar:{kw:['Оберег 5+ против заклинаний']}, kh_axe:{t:1}, kh_rage:{t:1}, kh_hellblade:{t:1}, kh_bloodstone:{t:1},
+ nu_bloat:{st:{wounds:1}}, nu_flies:{t:1}, nu_stream:{t:1},
+ tz_flames:{atk:['Огонь']}, tz_ward:{kw:['Оберег 6+']}, tz_wings:{kw:['Полёт'],minMove:10},
+ sl_grace:{t:1}, sl_musk:{t:1}, sl_speed:{st:{move:2}},
+ dg_ironhide:{hide:1}, dg_soul:{t:1}, dg_terror:{terror:1}, dg_wings:{kw:['Полёт'],minMove:10},
+ rite_golden:{kw:['Страх'],t:1}, rite_asaph:{t:1}, rite_scarabs:{t:1},
+ gok_cry:{t:1}, gok_dagger:{t:1}, gok_torment:{t:1}, gok_hidden:{t:1}, gok_sting:{t:1}, gok_touch:{t:1}, pact_hekarti:{t:1}, pact_slaanesh:{t:1}, pact_tzeentch:{t:1},
+ cat_yang_fire:{t:1}, cat_yang_dragon:{st:{rangedB:1},t:1}, cat_yang_bastion:{kw:['Оберег 6+']}, cat_yin_mirror:{t:1}, cat_yin_wind:{t:1}, cat_yin_jade:{hide:1},
+ ursun_claw:{t:1}, ursun_hide:{t:1}, ursun_heart:{kw:['Иммунитет к Страху'],t:1}, dazh_hearth:{t:1}, tor_thunder:{t:1}, salyak_mercy:{t:1}
+};
+function traitFx(id,fid){ return TRAIT_FX[(fid||state.factionId)+':'+id]||TRAIT_FX[id]||null; }
+// черты юнита: всё, что из них считает билдер
+function traitMods(ru){
+  const out={st:{},sv:0,hide:false,minMove:0,kw:[],atk:[],ap:0,apGun:0,spells:0,noMagic:false,fly:{}};
+  const add=(arr,w)=>{ if(!arr.includes(w)) arr.push(w); };
+  (ru.traits||[]).forEach(id=>{ const f=traitFx(id); if(!f) return;
+    for(const k in f.st||{}) out.st[k]=(out.st[k]||0)+f.st[k];
+    for(const k in f.fly||{}) out.fly[k]=(out.fly[k]||0)+f.fly[k];
+    out.sv+=f.sv||0; out.hide=out.hide||!!f.hide; out.minMove=Math.max(out.minMove,f.minMove||0);
+    (f.kw||[]).forEach(w=>add(out.kw,w)); (f.atk||[]).forEach(w=>add(out.atk,w));
+    if(f.terror) add(out.kw,isLargeTargetRu(ru)?'Ужас':'Страх');
+    out.ap+=f.ap||0; out.apGun+=f.apGun||0; out.spells+=f.spells||0; out.noMagic=out.noMagic||!!f.noMagic;
+  });
+  return out;
+}
+// пороховое оружие: в свойствах «пороховое» или по названию — пистолеты, ружья, мушкетоны, пушки
+const GUN_RE=/порох|пистол|пистоль|аркебуз|мушкет|ружь|пушк|бомбард|перечниц|пищал|Pistol|Handgun|Blunderbuss|Musket|Gun\b|Rifle|Jezzail|Ratling|Warplock/i;
+function isGunWeapon(w){ return !!w&&w.t==='r'&&GUN_RE.test((w.n||'')+' '+(w.tr||'')); }
+// AP оружия в руках юнита: база + Дар Ваула + черты
+function wpnAp(ru,id){ const w=WEAPONS[id]; if(!w) return 0; const tm=traitMods(ru); return (w.ap||0)+((ru.weaponAp||{})[id]||0)+tm.ap+(isGunWeapon(w)?tm.apGun:0); }
 function ruMods(ru){
   const m={...(ru.statMods||{})};
   (ru.injuries||[]).forEach(x=>{ const i=injById(x); if(i&&i[3]) for(const k in i[3]) m[k]=(m[k]||0)+i[3][k]; });
   if(ru.hunger>0&&campaignOn()){ m.meleeN=(m.meleeN||0)+1; m.resolve=(m.resolve||0)+1; }   // голод: −1 к броскам Бой и Воли в следующей битве
+  const tm=traitMods(ru), mt=mountOf(ru);   // черты: поправки профиля; «верхом на летающем маунте» — только с ним
+  for(const k in tm.st) m[k]=(m[k]||0)+tm.st[k];
+  if(mt&&mt.fly) for(const k in tm.fly) m[k]=(m[k]||0)+tm.fly[k];
   return m;
 }
 const RENOWNS=[
@@ -4961,7 +5024,7 @@ function openGearModal(kind,id,uidv){
       ['Руки',w.h===2?'2 (двуручное)':'1'],
       ['Модиф. попадания',w.hit?((w.hit>0?'+':'')+w.hit+' к n+'):'—'],
       ['Доп. кубы',w.b?('+'+w.b):'—'],
-      ['Бронебойность (AP)',w.ap||'—'],
+      ['Бронебойность (AP)',ru&&wpnAp(ru,id)!==(w.ap||0)?(w.ap||0)+' → '+wpnAp(ru,id)+' у этого юнита (Дар Ваула, черты)':(w.ap||'—')],
       ['Цена',w.c+(mult>1?' × '+mult+' моделей = '+(w.c*mult):'')]];
     kws=wTr(w).split(/[,;:] /).filter(Boolean); if(w.uniq) kws.unshift('★ '+w.uniq);
     if(w.long) rows.push(['Длинное','атаки ближнего боя по врагу в пределах 1", не только база-к-базе']);
@@ -5092,6 +5155,36 @@ function headG(icon,label,cat,uid){
 const glistG=rows=>rows?`<div class="gearlist">${rows}</div>`:'';
 // имя выбранного оружия у бойца; ⚒ — навсегда добавленный Дар Ваула (+AP)
 function wpnName(ru,id){ const w=WEAPONS[id]; if(!w) return null; const ap=(ru.weaponAp||{})[id]||0; return w.n.split(' (')[0]+(ap?' ⚒+'+ap+' AP':''); }
+// подпись оружия в карточке: AP с Даром Ваула и чертами
+function wpnLabel(ru,id){ const w=WEAPONS[id]; if(!w) return null; const ap=wpnAp(ru,id); return w.n.split(' (')[0]+(ap?' · AP '+ap:'')+(((ru.weaponAp||{})[id])?' ⚒':''); }
+// строка «От черт»: свойства, свойства атак и AP, которые дают черты
+function traitRulesHtml(ru){
+  const tm=traitMods(ru), bits=[...tm.kw,...tm.atk.map(a=>'атаки: '+a)];
+  if(tm.ap) bits.push('оружие +'+tm.ap+' AP'); if(tm.apGun) bits.push('пороховое +'+tm.apGun+' AP'); if(tm.spells) bits.push('+'+tm.spells+' заклинание');
+  if(tm.noMagic) bits.push('без магии');
+  const mt=mountOf(ru), fly=Object.keys(tm.fly).length&&mt&&mt.fly;
+  if(fly) bits.push('верхом на летающем: '+Object.entries(tm.fly).map(([k,v])=>'+'+v+' куб '+(k==='meleeB'?'Бой':'Стрел')).join(', '));
+  if(!bits.length) return '';
+  return '<div class="dt-sub" style="margin-top:4px">От черт: '+bits.map(b=>kwify(esc(b))).join(' · ')+'</div>';
+}
+// персонаж в отряде: группа ходит по меньшему M, Волю берёт лучшую, Выносливость — большую (свод, «Персонажи и маунты»)
+function groupOf(ru){ const u=findUnit(ru.unitId); if(!u) return null;
+  if(LEADER_CATS.includes(u.category)){ const sq=ru.attachId&&state.units.find(r=>r.uid===ru.attachId); return sq?[ru,sq]:null; }
+  const hs=state.units.filter(r=>r.attachId===ru.uid); return hs.length?hs.concat([ru]):null; }
+function groupProfile(ru){
+  const g=groupOf(ru); if(!g) return null; const st=g.map(r=>effStats(r)).filter(Boolean); if(st.length<2) return null;
+  const res=st.map(s=>s.resolve).filter(v=>v>0);
+  return {units:g,move:Math.min(...st.map(s=>s.move)),resolve:res.length?Math.min(...res):0,endurance:Math.max(...st.map(s=>s.endurance||0))};
+}
+function groupProfileHtml(ru){
+  const p=groupProfile(ru); if(!p) return '';
+  return `<div class="dt-sub" style="margin-top:6px;color:var(--muted)">👥 Группа ${p.units.map(r=>esc(nameOf(r))).join(' + ')}: M ${p.move}" · Воля ${p.resolve?p.resolve+'+':'—'} · Вын ${p.endurance}. Бой и Стрел у каждого свои, лидер группы — персонаж.</div>`;
+}
+// черты с правилом стола — памятка в карточке
+function traitTableHtml(ru){
+  const rows=(ru.traits||[]).map(id=>({f:traitFx(id),t:traitById(id)})).filter(x=>x.t&&x.f&&x.f.t);
+  return rows.length?`<div style="color:var(--faint);font-size:11.5px;margin:2px 0 6px">${rows.map(x=>'<div>🎲 <b>'+esc(x.t[1])+'</b> — '+kwify(esc(x.t[2]))+'</div>').join('')}</div>`:'';
+}
 function wpnProfile(w){
   const p=[];
   if(w.t==='r') p.push(w.rng+'"');
@@ -5107,7 +5200,7 @@ function armProfile(a){
   if(a.shield) p.push('спас лучше на 1');
   return p.join(' · ')+(a.tr?' · '+a.tr:'');
 }
-function spellsLimitOf(ru){ return 1+(ru.wizLevel||1)+fxLimit('spells',findUnit(ru.unitId),ru); }
+function spellsLimitOf(ru){ return 1+(ru.wizLevel||1)+fxLimit('spells',findUnit(ru.unitId),ru)+traitMods(ru).spells; }
 const WIZ_LEVEL_COST={1:0,2:20,3:45,4:80};
 function loresFor(u,ru){ return (FACTION_LORE_IDS[state.factionId]||[]).filter(id=>!u||godAllows(u,id,ru)); }
 function unitCost(ru){
@@ -5154,6 +5247,11 @@ function effStats(ru){
     if(a.mountOnly && !mt) return;
     base.armour = base.armour ? Math.max(2, base.armour-1) : 6;
   });
+  // черты: броня (+N к спасу при броне; «без брони — Бр 6+, с бронёй +1») и M не меньше заданного (крылья)
+  const tmx=traitMods(ru);
+  if(tmx.sv&&base.armour) base.armour=Math.max(2,base.armour-tmx.sv);
+  if(tmx.hide) base.armour=base.armour?Math.max(2,base.armour-1):6;
+  if(tmx.minMove) base.move=Math.max(base.move,tmx.minMove);
   // атака по числу живых моделей: 1 куб на модель, без порогов
   base.meleeB = burstFor(u, base.meleeB, ru.modelCount);
   if(base.rangedB) base.rangedB = burstFor(u, base.rangedB, ru.modelCount);
@@ -5216,6 +5314,7 @@ function validate(){
     if(asel.some(x=>x.mountOnly)&&!ru.mountId) errors.push(u.name+': конский бард — только верхом.');
     if((ru.weapons||[]).includes('lance')&&!(u.tags.includes('cavalry')||ru.mountId)) errors.push(u.name+': рыцарское копьё — только кавалерии/верхом.');
     if(u.tags.includes('wizard')&&(ru.spells||[]).length>spellsLimitOf(ru)) errors.push(u.name+': заклинаний '+(ru.spells||[]).length+' (макс '+spellsLimitOf(ru)+').');
+    if(traitMods(ru).noMagic&&(u.tags.includes('wizard')||(ru.spells||[]).length)) errors.push(u.name+': черта запрещает персонажу магию, а он маг.');
     const tcfg=TRAITS_FACTION[state.factionId];
     if(tcfg&&(ru.traits||[]).length>tcfg.max) errors.push(u.name+': особенностей '+(ru.traits||[]).length+' (макс '+tcfg.max+(tcfg.excl?', только одна':'')+').');
     if(ru.attachId){
@@ -6082,7 +6181,7 @@ function renderUnitDetail(){
     <div style="flex:1;min-width:0">
       <h3 class="dt-name">${ru.veteranTitle?'<span style="color:var(--gold2)">Ветеран</span> ':''}${esc(ru.customName||u.name)}${renownStr?` <span class="dt-renown">— ${esc(renownStr)}</span>`:''}</h3>
       <div class="dt-sub">${esc(u.name)} · ${esc(unitTypeLabel(u))} · ${catLabel[u.category]} · Ava ${avaOf(u)}${u.role?' · '+esc(u.role):''}</div>
-      ${tagRulesHtml(u)}
+      ${tagRulesHtml(u)}${traitRulesHtml(ru)}
       ${unitLoreFor(u)?`<div style="color:var(--muted);font-size:12px;line-height:1.5;margin-top:6px;max-width:640px">${esc(unitLoreFor(u))}</div>`:''}
       <div class="dt-sub" style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap">
         ${u.maxModels>1?`<span>В строю: <b style="color:var(--ink);font-size:14px">${ru.modelCount}</b> из ${u.maxModels}</span>
@@ -6101,6 +6200,7 @@ function renderUnitDetail(){
     if(u.stats.rangedB) disp.rangedB=Math.max(1,(u.stats.rangedB||0)+(ruMods(ru).rangedB||0));
     return statStrip(disp,u.unitType,u);
   })()}
+  ${groupProfileHtml(ru)}
   ${(function(){const m=mountOf(ru);return m?mountStatStrip(m):'';})()}
   <div class="dt-sec"><h4>Снаряжение</h4>${gearSectionsHtml(ru,u)}</div>
   ${optHtml?`<div class="dt-sec"><h4>Опции отряда</h4>${optHtml}</div>`:''}
@@ -6135,7 +6235,7 @@ function renderUnitDetail(){
       ${headG('','Скиллы','skill',ru.uid)}${glistG(skillRows)}
       ${headG('🩸','Травмы','injury',ru.uid)}${glistG(injRows)}
       ${headG('⚜','Реноуны','renown',ru.uid)}${glistG(renRows)}
-      ${tcfg?headG('★',tcfg.title+' — '+tcfg.src,'trait',ru.uid)+glistG(traitRows):''}
+      ${tcfg?headG('★',tcfg.title+' — '+tcfg.src,'trait',ru.uid)+glistG(traitRows)+traitTableHtml(ru):''}
       <div class="gearline" style="margin-top:10px"><span class="glab">Шрамы:</span>${scarRows||'<span style="color:var(--faint);font-size:11px">нет</span>'}
         <button class="btn ghost sm" data-act="addlist" data-uid="${ru.uid}" data-key="scars">+</button>
         ${(ru.scars||[]).length?'<span class="ctag" title="Шрамы закаляют: +1 к броскам Воли против Страха и Ужаса за каждый шрам, не больше +2">Воля против Страха и Ужаса +'+Math.min(2,ru.scars.length)+'</span>':''}</div>
@@ -6281,7 +6381,8 @@ function openPickModal(uidv,cat,opt){
     const atLimit=(ru.traits||[]).length>=cfg.max;
     items=cfg.items.filter(t=>!(ru.traits||[]).includes(t[0])).map(t=>{
       const alien=!godAllows(u,t[0],ru,true);   // марка или договор чужого бога
-      return {id:t[0],dis:atLimit||alien,why:atLimit?(cfg.excl?'только одна':'лимит '+cfg.max):alien?'чужой бог':'',name:t[1],prof:t[2],cost:opt?'бесплатно':'+'+t[3]};
+      const nomagic=!!(traitFx(t[0])||{}).noMagic&&u.tags.includes('wizard');   // марка Кхорна запрещает магию — магу её не взять
+      return {id:t[0],dis:atLimit||alien||nomagic,why:atLimit?(cfg.excl?'только одна':'лимит '+cfg.max):alien?'чужой бог':nomagic?'маг: черта запрещает магию':'',name:t[1],prof:t[2],cost:opt?'бесплатно':'+'+t[3]};
     });
   } else if(cat==='mountpool'){
     title='🐎 Завести маунта';
@@ -6407,11 +6508,11 @@ function gearSectionsHtml(ru,u){
 
   let html='';
   if(ar.m.length){
-    const rows=(ru.weapons||[]).filter(id=>WEAPONS[id]&&WEAPONS[id].t==='m').map(id=>gearRow('weapon','weapons',id,wpnName(ru,id),'+'+(WEAPONS[id].c*mult))).join('');
+    const rows=(ru.weapons||[]).filter(id=>WEAPONS[id]&&WEAPONS[id].t==='m').map(id=>gearRow('weapon','weapons',id,wpnLabel(ru,id),'+'+(WEAPONS[id].c*mult))).join('');
     html+=head('⚔','Ближний бой','melee')+glist(rows);
   }
   if(ar.r.length){
-    const rows=(ru.weapons||[]).filter(id=>WEAPONS[id]&&WEAPONS[id].t==='r').map(id=>gearRow('weapon','weapons',id,wpnName(ru,id),'+'+(WEAPONS[id].c*mult))).join('');
+    const rows=(ru.weapons||[]).filter(id=>WEAPONS[id]&&WEAPONS[id].t==='r').map(id=>gearRow('weapon','weapons',id,wpnLabel(ru,id),'+'+(WEAPONS[id].c*mult))).join('');
     html+=head('🏹','Стрелковое','ranged')+glist(rows);
   }
   if(ar.a.length){
@@ -8793,7 +8894,9 @@ function bind(){
         else if(cat==='skill'){ (ru.skills=ru.skills||[]).push(id); }
         else if(cat==='injury'){ (ru.injuries=ru.injuries||[]).push(id); }
         else if(cat==='renown'){ (ru.renowns=ru.renowns||[]).push(id); }
-        else if(cat==='trait'){ (ru.traits=ru.traits||[]).push(id); if(pi.dataset.pickadv!==undefined) (ru.freeTraits=ru.freeTraits||[]).push(id); }
+        else if(cat==='trait'){ (ru.traits=ru.traits||[]).push(id); if(pi.dataset.pickadv!==undefined) (ru.freeTraits=ru.freeTraits||[]).push(id);
+          if((traitFx(id)||{}).onAdd==='moulder'){ const d=rolld10();   // прививка Молдера: при найме d10, на 1–3 — −1 к броскам Воли навсегда
+            if(d<=3){ ru.statMods=ru.statMods||{}; ru.statMods.resolve=(ru.statMods.resolve||0)+1; toast('🎲 '+d+': прививка Молдера — −1 к броскам Воли навсегда'); } else toast('🎲 '+d+': прививка Молдера прижилась'); } }
         if(pi.dataset.pickadv!==undefined) (ru.advPicks||[]).splice(+pi.dataset.pickadv,1);
         renderRoster(); renderCampaign(); autosave();
       }
