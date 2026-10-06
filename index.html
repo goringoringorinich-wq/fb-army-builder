@@ -735,7 +735,7 @@ const COMMON_OPTIONS = {
 const WEAPONS = {
  /* — ближний бой, общие — */
  hand_weapon:{n:'Ручное оружие (Hand Weapon)',t:'m',h:1,c:0,tr:'база: меч/топор/булава'},
- dagger:{n:'Кинжал (Dagger)',t:'m',h:1,c:1,hit:1,tr:'скрытный'},
+ dagger:{n:'Кинжал (Dagger)',t:'m',h:1,c:1,hit:1,tr:''},
  extra_hand:{n:'Парное оружие (Additional Hand Weapon)',t:'m',h:1,c:4,b:1,tr:''},
  spear:{n:'Копьё (Spear)',t:'m',h:1,c:3,tr:'Против крупных — только в Контратаке'},
  halberd:{n:'Алебарда (Halberd)',t:'m',h:2,c:6,ap:1,tr:'Против крупных'},
@@ -743,7 +743,7 @@ const WEAPONS = {
  flail:{n:'Цеп (Flail)',t:'m',h:2,c:6,b:1,hit:1,ap:1,tr:'+1 куб только в первой Схватке после вступления в контакт'},
  morning_star:{n:'Моргенштерн (Morning Star)',t:'m',h:1,c:5,b:1,hit:1,tr:''},
  lance:{n:'Рыцарское копьё (Lance)',t:'m',h:1,c:8,ap:2,tr:'только кавалерия, только в Чардже'},
- pike:{n:'Пика (Pike)',t:'m',h:2,c:5,tr:'против Чарджа; только в строю'},
+ pike:{n:'Пика (Pike)',t:'m',h:2,c:5,tr:'Чардж на носителя в лоб не даёт переброса промахов'},
  rapier:{n:'Рапира (Rapier)',t:'m',h:1,c:6,hit:-1,tr:''},
  /* — стрелковое, общие — */
  sling:{n:'Праща (Sling)',t:'r',h:1,rng:12,c:2,tr:''},
@@ -755,7 +755,7 @@ const WEAPONS = {
  pistol:{n:'Пистолет (Pistol)',t:'r',h:1,rng:8,c:5,ap:1,tr:'Пистолет'},
  brace_pistols:{n:'Пара пистолетов (Brace of Pistols)',t:'r',h:2,rng:8,c:9,b:1,ap:1,tr:'Пистолет'},
  blunderbuss:{n:'Мушкетон (Blunderbuss)',t:'r',h:2,rng:8,c:8,b:2,hit:1,tr:'Взрыв 3"'},
- throwing_knives:{n:'Метательные ножи (Throwing Weapons)',t:'r',h:1,rng:8,c:3,tr:'скрытно'},
+ throwing_knives:{n:'Метательные ножи (Throwing Weapons)',t:'r',h:1,rng:8,c:3,tr:'Пистолет'},
  javelin:{n:'Дротики (Javelins)',t:'r',h:1,rng:10,c:3,tr:''},
  /* — фракционно-уникальное — */
  runic_weapon:{n:'Рунное оружие (Runic Weapon)',t:'m',h:1,c:12,hit:-1,ap:1,tr:'не ломается',uniq:'Dwarfs'},
@@ -774,15 +774,15 @@ const WEAPONS = {
  ducksfoot_pistol:{n:'Пистоль-утколап (Ducksfoot Pistol)',t:'r',h:1,rng:8,c:8,tr:'Взрыв 2"',uniq:'Skaven'},
  /* — скейвенское из WFRP 4e «The Horned Rat Companion» — */
  weeping_blade:{n:'Плачущий клинок (Weeping Blade)',t:'m',h:1,c:8,ap:1,tr:'Яд',uniq:'Skaven'},
- plague_censer:{n:'Чумное кадило (Plague Censer)',t:'m',h:2,c:8,tr:'вражеские юниты в контакте получают порчу; распространяет заразу',uniq:'Skaven'},
+ plague_censer:{n:'Чумное кадило (Plague Censer)',t:'m',h:2,c:8,tr:'в конце активации носителя каждый вражеский юнит в контакте с ним получает 1 автохит с Ядом',uniq:'Skaven'},
  poison_wind_globe:{n:'Шар ядовитого ветра (Poisoned Wind Globe)',t:'r',h:1,rng:8,c:7,tr:'Взрыв 3"; облако газа держится d10 раундов — каждая модель в нём бросает Волю и при провале получает рану без спаса Брони',uniq:'Skaven'},
  doomrocket:{n:'Рок-ракета (Doomrocket)',t:'r',h:2,rng:20,c:9,ap:1,tr:'Взрыв; на 1 летит мимо или рвётся в руках',uniq:'Skaven'},
  hochland_rifle:{n:'Хохландская винтовка (Hochland Long Rifle)',t:'r',h:2,rng:30,c:12,ap:1,tr:'Снайпер',uniq:'Empire'},
  repeater_handgun:{n:'Многоствольная аркебуза (Repeater Handgun)',t:'r',h:2,rng:16,c:10,b:1,ap:1,tr:'пороховое',uniq:'Empire'},
- blessed_lance:{n:'Благословлённое копьё (Blessed Lance)',t:'m',h:1,c:10,ap:2,tr:'только кавалерия, только в Чардже; святое',uniq:'Bretonnia'},
+ blessed_lance:{n:'Благословлённое копьё (Blessed Lance)',t:'m',h:1,c:10,ap:2,tr:'только кавалерия, только в Чардже; против Нежити и Демонов +1 AP',uniq:'Bretonnia'},
  ithilmar_blade:{n:'Итильмарский клинок (Ithilmar Blade)',t:'m',h:1,c:8,hit:-1,tr:'',uniq:'High Elves'},
  reaver_bow:{n:'Лук Эллирийского Скитальца (Reaver Bow)',t:'r',h:2,rng:20,c:10,b:1,tr:'',uniq:'High Elves'},
- asrai_longbow:{n:'Лук асраи (Asrai Longbow)',t:'r',h:2,rng:26,c:9,hit:-1,tr:'стреляет после Движения без штрафа',uniq:'Wood Elves'},
+ asrai_longbow:{n:'Лук асраи (Asrai Longbow)',t:'r',h:2,rng:26,c:9,hit:-1,tr:'',uniq:'Wood Elves'},
  asrai_spear:{n:'Копьё асраи (Asrai Spear)',t:'m',h:1,c:4,tr:'Против крупных',uniq:'Wood Elves'},
  repeater_crossbow:{n:'Многозарядный арбалет (Repeater Crossbow)',t:'r',h:2,rng:16,c:8,b:1,tr:'',uniq:'Dark Elves'},
  poisoned_blades:{n:'Отравленные клинки (Poisoned Blades)',t:'m',h:1,c:6,tr:'Яд',uniq:'Dark Elves'},
@@ -793,7 +793,7 @@ const WEAPONS = {
  wight_blade:{n:'Клинок вихта (Wight Blade)',t:'m',h:1,c:9,tr:'крит — модель цели сразу выбывает',uniq:'Vampire Counts'},
  khopesh:{n:'Хопеш (Khopesh)',t:'m',h:1,c:4,ap:1,tr:'',uniq:'Tomb Kings'},
  chaos_blade:{n:'Клинок Хаоса (Chaos Blade)',t:'m',h:1,c:9,hit:-1,ap:1,tr:'',uniq:'Chaos'},
- hellblade:{n:'Адский клинок (Hellblade)',t:'m',h:1,c:7,ap:1,tr:'демоническое',uniq:'Daemons'},
+ hellblade:{n:'Адский клинок (Hellblade)',t:'m',h:1,c:7,ap:1,tr:'Оберег не отменяет его ран',uniq:'Daemons'},
  plague_blade:{n:'Чумной клинок (Plague Blade)',t:'m',h:1,c:6,tr:'Яд',uniq:'Nurgle'},
  dao_sabre:{n:'Сабля-дао (Dao)',t:'m',h:1,c:5,hit:-1,tr:'',uniq:'Cathay'},
  fire_lance:{n:'Огненная пика (Fire Lance)',t:'r',h:2,rng:10,c:7,tr:'Огонь — только в первой Стрельбе за битву',uniq:'Cathay'},
@@ -829,8 +829,8 @@ const WEAPONS = {
  repeater_handbow:{n:'Репитер-хендбоу (Repeater Handbow)',t:'r',h:1,rng:10,c:8,b:1,tr:'Пистолет',uniq:'Dark Elves'},
  ravager_harpoon:{n:'Гарпун «Опустошитель» (Ravager Harpoon)',t:'r',h:2,rng:14,c:9,ap:1,tr:'раненая цель получает Истощение и сдвигается на d10" к стрелку',uniq:'Dark Elves'},
  /* — из материалов WFRP4 (папка Roleplay): Стрелковое/Метательное оружие + гомбрю-арсенал Педомарины — */
- ungol_bow:{n:'Унгольский лук (Ungol Bow)',t:'r',h:2,rng:16,c:5,tr:'кавалерийское; стреляет после Движения без штрафа',uniq:'Kislev'},
- wrist_crossbow:{n:'Наручный арбалет (Wrist Crossbow)',t:'r',h:1,rng:8,c:6,tr:'скрытное',uniq:'Dark Elves'},
+ ungol_bow:{n:'Унгольский лук (Ungol Bow)',t:'r',h:2,rng:16,c:5,tr:'кавалерийское',uniq:'Kislev'},
+ wrist_crossbow:{n:'Наручный арбалет (Wrist Crossbow)',t:'r',h:1,rng:8,c:6,tr:'Пистолет',uniq:'Dark Elves'},
  gun_axe:{n:'Ружьё-топор (Gun-axe)',t:'m',h:1,c:9,ap:1,tr:'раз за битву в Чардже — дополнительный выстрел в упор; натуральная 1 на нём — 1 рана владельцу',uniq:'Empire/Dwarfs'},
  griffonsfoot_pistol:{n:'Грифонья лапа (Griffonsfoot Pistol)',t:'r',h:1,rng:8,c:10,b:1,tr:'Пистолет, Взрыв 2"',uniq:'Empire'},
  mancatcher:{n:'Ловчая рогатина (Mancatcher)',t:'m',h:2,c:6,tr:'хит не ранит, а делает цель Обездвиженной',uniq:'Skaven/Chaos Dwarfs'},
@@ -851,9 +851,9 @@ const WEAPONS = {
  /* — из Lords of Stone and Steel / Archives of the Empire I (дворфы) — */
  axe_of_grimnir:{n:'Топор Гримнира (Axe of Grimnir)',t:'m',h:2,c:16,hit:1,ap:3,tr:'',uniq:'Dwarfs'},
  barrakul:{n:'Барракул, «Надежда гор» (Barrakul)',t:'m',h:1,c:12,ap:2,tr:'',uniq:'Dwarfs'},
- gnoldron:{n:'Гнолдрон, «Старый Гром» (Gnoldron)',t:'m',h:1,c:12,hit:1,tr:'защищает владельца от вражеских заклинаний',uniq:'Dwarfs'},
- grimmaz:{n:'Гриммаз, «Суровый хозяин» (Grimmaz)',t:'m',h:2,c:13,ap:2,tr:'ускоряет владельца; ломает даже магическое оружие врага',uniq:'Dwarfs'},
- bearded_axe:{n:'Бородатый топор (Bearded Axe)',t:'m',h:1,c:5,tr:'вырывает оружие из рук врага',uniq:'Dwarfs'},
+ gnoldron:{n:'Гнолдрон, «Старый Гром» (Gnoldron)',t:'m',h:1,c:12,hit:1,tr:'Оберег 8+ против заклинаний',uniq:'Dwarfs'},
+ grimmaz:{n:'Гриммаз, «Суровый хозяин» (Grimmaz)',t:'m',h:2,c:13,ap:2,tr:'+1" к M; крит ломает оружие цели, даже магическое',uniq:'Dwarfs'},
+ bearded_axe:{n:'Бородатый топор (Bearded Axe)',t:'m',h:1,c:5,tr:'крит обезоруживает цель: вернуть оружие — одно простое действие',uniq:'Dwarfs'},
  slayers_axe:{n:'Топор Истребителя (Slayer’s Axe)',t:'m',h:2,c:10,ap:1,tr:'',uniq:'Dwarfs'},
  /* — из Archives of the Empire I (эонир, лесные эльфы) — */
  wildwood_sword:{n:'Меч дикого леса (Wildwood Sword)',t:'m',h:2,c:9,hit:1,tr:'',uniq:'Wood Elves'},
@@ -883,11 +883,11 @@ const WEAPONS = {
  cavalry_sabre:{n:'Кавалерийская сабля (Cavalry Sabre)',t:'m',h:1,c:6,tr:'',uniq:'Kislev'},
  chakram:{n:'Чакрам (Chakram)',t:'r',h:1,rng:8,c:4,tr:'',uniq:'Cathay'},
  /* — из The Horned Rat Companion (скавены) — */
- tail_weapon:{n:'Хвостовое оружие (Tail Weapon)',t:'m',h:1,c:6,b:1,tr:'нужен навык хвостового боя',uniq:'Skaven'},
+ tail_weapon:{n:'Хвостовое оружие (Tail Weapon)',t:'m',h:1,c:6,b:1,tr:'',uniq:'Skaven'},
  electro_whip:{n:'Электрокнут (Electro-Whip)',t:'m',h:1,c:8,ap:1,tr:'хит — цель Обездвижена',uniq:'Skaven'},
  things_catcher:{n:'Ловчая вилка (Things-Catcher)',t:'m',h:2,c:7,tr:'хит — цель Обездвижена (даже Крупная цель)',uniq:'Skaven'},
  beast_prod:{n:'Стрекало для скота (Beast-Prod)',t:'m',h:2,c:8,ap:2,tr:'',uniq:'Skaven'},
- rat_claws:{n:'Крысиные когти (Rat Claws)',t:'m',h:1,c:5,hit:1,tr:'годится для лазания',uniq:'Skaven'},
+ rat_claws:{n:'Крысиные когти (Rat Claws)',t:'m',h:1,c:5,hit:1,tr:'',uniq:'Skaven'},
  ratling_gun:{n:'Ратлинг-пушка (Ratling Gun)',t:'r',h:2,rng:14,c:11,b:1,tr:'',uniq:'Skaven'},
  warpfire_thrower:{n:'Варпогнемёт (Warpfire Thrower)',t:'r',h:2,rng:8,c:11,tr:'Огонь, Взрыв 3"',uniq:'Skaven'},
  warp_grinder:{n:'Варп-бур (Warp-grinder)',t:'m',h:1,c:8,ap:1,tr:'',uniq:'Skaven'},
@@ -920,10 +920,10 @@ const WEAPONS = {
  garrote:{n:'Гаррота (Garrote)',t:'m',h:1,c:5,tr:''},
  /* — из Up in Arms / WFRP4e Core Rulebook, второй проход (юниты/скиллы/оружие) — */
  demi_lance:{n:'Полукопьё (Demi-Lance)',t:'m',h:1,c:5,ap:1,tr:'только кавалерия, только в Чардже'},
- bill:{n:'Совня (Bill)',t:'m',h:2,c:4,tr:'стаскивает всадника с коня'},
+ bill:{n:'Совня (Bill)',t:'m',h:2,c:4,tr:'против кавалерии +1 к броскам Бой'},
  great_axe:{n:'Большой топор (Great Axe)',t:'m',h:2,c:7,hit:1,ap:1,tr:'',uniq:'Norsca'},
  pollaxe:{n:'Полэкс (Pollaxe)',t:'m',h:2,c:9,ap:2,tr:'',uniq:'Empire/Bretonnia'},
- arquebus:{n:'Пищаль (Arquebus)',t:'r',h:2,rng:12,c:4,tr:'пороховое; неточное'},
+ arquebus:{n:'Пищаль (Arquebus)',t:'r',h:2,rng:12,c:4,tr:'пороховое; −1 к броскам Стрел'},
  gun_halberd:{n:'Ружьё-алебарда (Gun Halberd)',t:'m',h:2,c:10,ap:1,tr:'раз за битву в Чардже — дополнительный выстрел в упор; натуральная 1 на нём — 1 рана модели позади владельца',uniq:'Empire/Dwarfs'},
  silvered_sword:{n:'Посеребрённый клинок (Silvered Sword)',t:'m',h:1,c:7,tr:'+1 автохит против Нежити и Демонов',uniq:'Empire'},
  miners_mattock:{n:'Шахтёрское кайло (Miner\'s Mattock)',t:'m',h:2,c:6,ap:1,tr:'',uniq:'Empire/Dwarfs'}
@@ -947,7 +947,7 @@ const ARMOURS = {
  ithilmar_armour:{n:'Итильмарская броня (Ithilmar Armour)',sv:5,c:10,tr:'без штрафа тяжёлой брони к сотворению',uniq:'High Elves'},
  chaos_armour:{n:'Доспех Хаоса (Chaos Armour)',sv:4,c:15,tr:'',uniq:'Chaos'},
  sea_dragon_cloak:{n:'Плащ морского дракона (Sea Dragon Cloak)',sv:6,c:7,tr:'+1 к спасу Брони против стрельбы',uniq:'Dark Elves'},
- scaly_hide:{n:'Чешуйчатый панцирь (Scaly Hide)',sv:5,c:9,tr:'природная броня',uniq:'Lizardmen'},
+ scaly_hide:{n:'Чешуйчатый панцирь (Scaly Hide)',sv:5,c:9,tr:'не считается тяжёлой бронёй при сотворении',uniq:'Lizardmen'},
  warpstone_armour:{n:'Варп-панцирь (Warpstone Armour)',sv:5,c:9,tr:'',uniq:'Skaven'},
  /* — из коллекции WFRP/Mordheim — */
  tower_shield:{n:'Большой щит (Tower Shield)',sv:0,shield:1,c:7,tr:'+1 к спасу Брони; −1 к броскам Стрел по носителю; −1" к M'},
@@ -980,7 +980,7 @@ const ARMOURS = {
  /* — из The Imperial Zoo (трофейное снаряжение) — */
  wightseer:{n:'«Провидец Иссохших» (Wightseer)',sv:0,shield:1,c:9,tr:'+1 к спасу Брони; Страх и Ужас Нежити на носителя не действуют'},
  leviathan_plate:{n:'Панцирь левиафана (Leviathan Plate)',sv:4,c:13,tr:'без штрафа к M'},
- throttlers_gloves:{n:'Перчатки душителя (Throttler’s Gloves)',sv:0,c:6,tr:'+1 куб к броскам Бой в захвате и борьбе'}
+ throttlers_gloves:{n:'Перчатки душителя (Throttler’s Gloves)',sv:0,c:6,tr:'+1 куб к броскам Бой против персонажа или соло'}
 };
 const EQUIPMENT = {
  healing_draught:{n:'Целебный настой',c:6,tr:'раз за битву: снимает 1 рану'},
@@ -988,7 +988,7 @@ const EQUIPMENT = {
  dispel_scroll:{n:'Свиток развеивания',c:10,wiz:1,tr:'раз за битву: вражеское заклинание развеяно без броска'},
  power_stone:{n:'Камень силы',c:10,wiz:1,tr:'раз за битву: +2 куба к одной попытке сотворения'},
  poison_vial:{n:'Флакон яда',c:6,tr:'раз за битву: оружие получает Яд до конца битвы'},
- trophy_rack:{n:'Трофейная стойка',c:5,tr:'Страх против более слабых отрядов'},
+ trophy_rack:{n:'Трофейная стойка',c:5,tr:'Страх против отрядов, которые дешевле юнита носителя'},
  warbanner:{n:'Боевой штандарт героя',c:10,solo:1,tr:'Пока союзный юнит в пределах 6" от носителя, +1 к его броскам Воли'},
  spyglass:{n:'Подзорная труба',c:4,tr:'+2" к дальности стрелкового оружия носителя'},
  /* — из коллекции WFRP/Mordheim — */
@@ -1019,13 +1019,13 @@ const EQUIPMENT = {
  wizards_robes:{n:'Мантия мага',c:8,wiz:1,tr:'+1 куб к сотворению'},
  ingredient_ward:{n:'Обережный ингредиент',c:7,wiz:1,tr:'одноразовый: при Прорыве Тлена мага результат сдвигается на строку вниз'},
  /* — из High Elf Player's Guide (высокие эльфы) — */
- staff_of_nightelm:{n:'Посох Найтелма',c:10,wiz:1,tr:'защищает от Тёмной магии, Некромантии, Хаоса и Демонологии'},
+ staff_of_nightelm:{n:'Посох Найтелма',c:10,wiz:1,tr:'Оберег 7+ против заклинаний школ Тёмной магии, Некромантии, Демонологии и школ богов Хаоса'},
  viridescent_palliative:{n:'Успокоительное зелье',c:6,tr:'на одну битву: носитель теряет Ярость и Ненависть и иммунен к Страху'},
  /* — из Temple of Spite (яды и напитки) — */
- barvalk:{n:'Барвальк, гретый напиток',c:5,tr:'в холод носитель игнорирует Истощение'},
- hushalta:{n:'Хушальта, «молоко матери»',c:7,tr:'лечит раны ценой кошмаров и провалов памяти'},
+ barvalk:{n:'Барвальк, гретый напиток',c:5,tr:'раз за битву: носитель снимает Истощение'},
+ hushalta:{n:'Хушальта, «молоко матери»',c:7,tr:'раз за битву: снимает 2 раны; после битвы носитель теряет 1 опыт'},
  /* — из Dwarf Player's Guide — */
- shield_platform:{n:'Щитовой помост',c:14,solo:1,tr:'двое носильщиков поднимают персонажа вровень с конными противниками'},
+ shield_platform:{n:'Щитовой помост',c:14,solo:1,tr:'+1 Рана и +1 куб к броскам Бой (носильщики)'},
  rune_of_spellbinding:{n:'Руна Оков Заклинания',c:12,solo:1,tr:'Пока вражеский маг в пределах 8" от носителя, Сложность его заклинаний +1'},
  /* — из Lords of Naggaroth (тёмные эльфы) — */
  keikalla:{n:'Кейкалла, духоотгонные колокольцы',c:4,tr:'Демоны и Нежить в контакте с носителем получают −1 к броскам Бой'},
@@ -1042,31 +1042,31 @@ const EQUIPMENT = {
  spider_venom_arrows:{n:'Стрелы с ядом паука',c:6,tr:'к луку: хит не ранит, а вызывает у цели Истощение'},
  effigy_of_gork:{n:'Идол Горка',c:6,tr:'раз за битву: +1 куб к броскам Бой юнита носителя до конца раунда'},
  effigy_of_mork:{n:'Идол Морка',c:6,tr:'раз за битву: юнит носителя перебрасывает проваленный бросок Воли'},
- glowy_green_amulet:{n:'Мерцающий зелёный амулет',c:8,tr:'защищает от вражеских заклинаний, но может взорваться'},
- shaman_staff:{n:'Посох шамана',c:9,wiz:1,tr:'считает соседних орков «своими» для магии Вааагх!, даже если шаман один'},
+ glowy_green_amulet:{n:'Мерцающий зелёный амулет',c:8,tr:'Оберег 6+ против заклинаний; натуральная 1 на этом броске — носитель получает 1 рану'},
+ shaman_staff:{n:'Посох шамана',c:9,wiz:1,tr:'+1 куб к сотворению, пока в пределах 6" есть союзный отряд орков или гоблинов'},
  /* — из Enemy Within Campaign Vol.4 (скавены) — */
  man_trap:{n:'Капкан',c:6,tr:'при расстановке игрок ставит маркер капкана в пределах 6" от носителя; первый вражеский юнит, вошедший в пределах 1" от маркера, становится Обездвиженным, маркер убирают'},
- warpsmoke_generator:{n:'Варп-дымовой генератор',c:9,uniq:'Skaven',tr:'травит ядовитым газом всех не-скавенов вокруг'},
+ warpsmoke_generator:{n:'Варп-дымовой генератор',c:9,uniq:'Skaven',tr:'в конце активации носителя каждый юнит не-скавенов в пределах 3" получает 1 автохит с Ядом'},
  /* — из The Horned Rat Companion (скавены) — */
  gas_mask:{n:'Противогаз',c:6,uniq:'Skaven',tr:'защита от Яда'},
- skalm:{n:'Скальм, целительная мазь',c:7,uniq:'Skaven',tr:'мгновенно лечит рану ценой порчи'},
+ skalm:{n:'Скальм, целительная мазь',c:7,uniq:'Skaven',tr:'раз за битву: снимает 1 рану; носитель получает 1 Стресс'},
  warlock_optics:{n:'Варлок-оптика',c:8,uniq:'Skaven',tr:'Стрельба носителя не учитывает укрытие цели'},
- warp_power_accumulator:{n:'Варп-аккумулятор мощности',c:9,uniq:'Skaven',wiz:1,tr:'усиливает колдовство ценой риска взрыва'},
+ warp_power_accumulator:{n:'Варп-аккумулятор мощности',c:9,uniq:'Skaven',wiz:1,tr:'+1 куб к сотворению; натуральная 1 на этом кубе — 1 кость Тлена'},
  warpstone_token:{n:'Варп-жетон',c:5,uniq:'Skaven',tr:'раз за битву: +1 куб к одной попытке сотворения; этот куб даёт кость Тлена на 8, 9 и 10'},
  /* — из Up in Arms / Sea of Claws (общее снаряжение) — */
- sealskin_coat:{n:'Тюлений плащ',c:5,tr:'не броня; защищает от холода'},
+ sealskin_coat:{n:'Тюлений плащ',c:5,tr:'Оберег 7+ против заклинаний школы Льда'},
  rotgut_rum:{n:'Ядрёный ром',c:5,tr:'раз за битву: юнит носителя снимает 2 Стресса, затем бросок d10: на 1 — Истощение'},
- runic_farseeing_lens:{n:'Рунная линза дальновидения',c:8,tr:'носитель видит сквозь туман и морок'},
+ runic_farseeing_lens:{n:'Рунная линза дальновидения',c:8,tr:'Зоны заклинаний не закрывают носителю обзор'},
  bodkin_arrow:{n:'Стрела-бодкин',c:5,tr:'к луку или арбалету: +1 AP'},
  aqshy_infused_powder:{n:'Порох, заряженный Ашем',c:7,tr:'к пороховому оружию: +1 AP и Огонь; натуральная 1 или 2 на броске Стрел — стрелок получает 1 рану'},
  /* — из Archives of the Empire I (эонир, дворфы) — */
- precision_shot_powder:{n:'Точный порох и пули',c:6,tr:'к любому пороховому оружию'},
+ precision_shot_powder:{n:'Точный порох и пули',c:6,tr:'+1 к броскам Стрел пороховым оружием носителя'},
  swiftshiver_shafts:{n:'Стрелы-скороносцы',c:6,tr:'к луку: +1 куб к броскам Стрел по отряду из 5 моделей и больше'},
- drakefire_shot:{n:'Драконий заряд',c:6,tr:'к пороховому оружию гномов; жжёт сильнее, но может разорвать ствол'},
+ drakefire_shot:{n:'Драконий заряд',c:6,tr:'к пороховому оружию гномов: Огонь; натуральная 1 на броске Стрел — стрелок получает 1 рану'},
  /* — из Archives of the Empire II («Магические предметы и артифика») — */
  crown_of_command:{n:'Венец Командования',c:10,solo:1,tr:'+1 Командное очко в начале битвы'},
  bellicose_cup:{n:'Чаша Войны',c:7,tr:'перед битвой: юнит носителя получает Ненависть к одному вражескому юниту по выбору игрока'},
- obsidian_lodestone:{n:'Обсидиановый магнит',c:9,tr:'развеивает вражеские заклинания, направленные на носителя'},
+ obsidian_lodestone:{n:'Обсидиановый магнит',c:9,tr:'заклинание, нацеленное на носителя или его отряд, развеивается на d10 6+'},
  dawnstone:{n:'Камень Зари',c:7,tr:'один раз: вместо выбытия носитель остаётся с 1 раной, а камень ломается'},
  opal_amulet:{n:'Опаловый амулет',c:6,tr:'первая рана носителя за битву сразу снимается'},
  seed_of_rebirth:{n:'Семя Возрождения',c:12,tr:'Регенерация 8+'},
@@ -1083,7 +1083,7 @@ const EQUIPMENT = {
  beast_forged_ammunition:{n:'Боеприпас из частей монстров',c:6,tr:'к луку или арбалету: +1 AP против Крупной цели'},
  /* — шлемы и плащи (выделены из брони: отдельные слоты, максимум по одному) — */
  helmet:{n:'Шлем (Helmet)',helm:1,c:4,tr:'когда носитель получает Истощение или становится Оглушённым — на 5+ это не действует'},
- miners_helm:{n:'Шахтёрский шлем (Miner\'s Helm)',helm:1,c:3,tr:'носитель не получает штрафов от темноты и тумана',uniq:'Dwarfs'},
+ miners_helm:{n:'Шахтёрский шлем (Miner\'s Helm)',helm:1,c:3,tr:'Зоны заклинаний не закрывают носителю обзор',uniq:'Dwarfs'},
  tall_helm_ithiltaen:{n:'Высокий шлем «Итильтаэн» (Tall Helm)',helm:1,c:6,tr:'как Шлем; +1 к броскам Воли носителя',uniq:'High Elves'},
  nagarythe_full_helm:{n:'Нагаритский закрытый шлем (Nagarythe Full Helm)',helm:1,c:6,tr:'как Шлем; Страх; −1 к броскам Стрел носителя',uniq:'High Elves'},
  wolfcloak:{n:'Волчий плащ (Wolfcloak)',cloak:1,c:6,tr:'+1 к спасу Брони против стрельбы',uniq:'Empire/Kislev'},
@@ -3049,71 +3049,71 @@ const MOUNTS_RAW = {
  empire:[ // research
   ['mt_warhorse','Латный боевой конь (Barded Warhorse)','steed',1,1,0,0,['emp_captain','emp_battle_wizard','emp_warrior_priest','emp_general','emp_wizard_lord','emp_arch_lector','emp_master_engineer'],''],
   ['mt_pegasus','Имперский пегас (Imperial Pegasus)','flying_light',2,1,0,0,['emp_captain','emp_battle_wizard','emp_general','emp_wizard_lord'],''],
-  ['mt_griffon','Имперский грифон (Imperial Griffon)','flying_monster',4,0,0,1,['emp_general','emp_wizard_lord'],'когти-бронебои; маг — только школа Зверей'],
-  ['mt_war_altar','Алтарь Войны Сигмара (War Altar)','platform',3,1,0,0,['emp_warrior_priest','emp_arch_lector'],'аура веры, связанные заклинания']
+  ['mt_griffon','Имперский грифон (Imperial Griffon)','flying_monster',4,0,0,1,['emp_general','emp_wizard_lord'],'атаки маунта с AP 1; маг на грифоне творит только из школы Зверей'],
+  ['mt_war_altar','Алтарь Войны Сигмара (War Altar)','platform',3,1,0,0,['emp_warrior_priest','emp_arch_lector'],'Пока союзный юнит в пределах 6" от алтаря, +1 к его броскам Воли; раз за битву алтарь отменяет вражеское заклинание, нацеленное на юнит в пределах 6"']
  ],
  dwarfs:[ // TWW3: верховых нет (✓); Щит-платформа — WFRP 4e Dwarf Player’s Guide
-  ['mt_shield_platform','Щит-платформа (Shield Platform)','platform',2,1,0,0,['dw_lord','dw_thane'],'двое носильщиков-гвардейцев; руны персонажа защищают и носильщиков']
+  ['mt_shield_platform','Щит-платформа (Shield Platform)','platform',2,1,0,0,['dw_lord','dw_thane'],'носильщики: +1 куб к броскам Бой маунта']
  ],
  bretonnia:[ // ✓ верифицировано
   ['mt_warhorse','Латный боевой конь (Barded Warhorse)','steed',1,1,0,0,['brt_paladin','brt_damsel','brt_prophetess'],''],
   ['mt_pegasus','Королевский пегас (Royal Pegasus)','flying_light',2,0,0,0,['brt_paladin','brt_prophetess','brt_lord'],''],
-  ['mt_unicorn','Единорог (Unicorn)','steed',2,0,0,0,['brt_damsel'],'сопротивление магии'],
+  ['mt_unicorn','Единорог (Unicorn)','steed',2,0,0,0,['brt_damsel'],'Оберег 8+ против заклинаний'],
   ['mt_hippogryph','Гиппогриф (Hippogryph)','flying_monster',4,0,0,1,['brt_lord'],'Ужас']
  ],
  cathay:[ // research
   ['mt_warhorse','Боевой конь (Warhorse)','steed',1,0,0,0,['cat_lord_magistrate','cat_dragon_blooded','cat_alchemist','cat_astromancer','cat_jade_captain'],''],
-  ['mt_sky_lantern','Небесный фонарь (Sky Lantern)','platform',2,1,1,0,['cat_lord_magistrate','cat_alchemist'],'экипаж «журавлиной» пушки; всегда в воздухе'],
-  ['mt_longma','Нефритовый лунма (Jade Longma)','flying_light',2,0,0,1,['cat_dragon_blooded'],'быстрый летун'],
-  ['mt_compass','Боевой компас У-Син (War Compass)','platform',3,1,0,0,['cat_astromancer'],'аура Ветров магии, связанные кометы/молнии'],
-  ['mt_moon_bird','Великая лунная птица (Great Moon Bird)','flying_monster',4,0,0,1,['cat_astromancer'],'лунный огонь, бомба-вспышка']
+  ['mt_sky_lantern','Небесный фонарь (Sky Lantern)','platform',2,1,1,0,['cat_lord_magistrate','cat_alchemist'],'раз за битву: Взрыв 3" с центром под фонарём, без броска; каждая задетая модель получает 1 хит'],
+  ['mt_longma','Нефритовый лунма (Jade Longma)','flying_light',2,0,0,1,['cat_dragon_blooded'],'+2" к M'],
+  ['mt_compass','Боевой компас У-Син (War Compass)','platform',3,1,0,0,['cat_astromancer'],'маг на компасе: +1 куб к сотворению; раз за битву — Взрыв 3" с центром в пределах 18", без броска (комета)'],
+  ['mt_moon_bird','Великая лунная птица (Great Moon Bird)','flying_monster',4,0,0,1,['cat_astromancer'],'Дыхание с Огнём']
  ],
  kislev:[ // research
   ['mt_warhorse','Боевой конь (Warhorse)','steed',1,0,0,0,['kis_boyar','kis_ice_witch','kis_patriarch','kis_frost_maiden','kis_druzhina'],''],
   ['mt_war_bear','Боевой медведь (War Bear)','heavy_beast',3,0,0,1,['kis_boyar','kis_ice_witch','kis_patriarch'],''],
-  ['mt_frost_wyrm','Морозный змей (Frost Wyrm)','monster',5,2,0,1,['kis_ice_witch'],'ледяное дыхание, замедление; не летает'],
+  ['mt_frost_wyrm','Морозный змей (Frost Wyrm)','monster',5,2,0,1,['kis_ice_witch'],'Дыхание: задетые юниты получают −2" к M до конца раунда'],
   ['mt_sled','Сани Ледяного Двора (Ice Court Sled)','chariot',3,1,0,0,['kis_ice_witch'],'']
  ],
  high_elves:[ // ✓ верифицировано
   ['mt_steed','Итильмарский скакун (Barded Ithilmar Steed)','steed',1,1,0,0,['helf_noble','helf_mage','helf_prince','helf_archmage','helf_loremaster','helf_handmaiden'],''],
   ['mt_chariot','Итильмарская колесница (Ithilmar Chariot)','chariot',3,1,0,0,['helf_noble','helf_mage','helf_archmage'],''],
-  ['mt_eagle','Великий орёл (Great Eagle)','flying_light',2,0,0,0,['helf_noble','helf_mage','helf_prince','helf_archmage'],'пикирующий удар'],
-  ['mt_griffon','Грифон (Griffon)','flying_monster',4,0,0,1,['helf_noble','helf_prince','helf_yvresse_warden'],'когти-бронебои'],
-  ['mt_sun_dragon','Солнечный дракон (Sun Dragon)','flying_monster',4,1,0,1,['helf_prince'],'дыхание с Огнём'],
-  ['mt_moon_dragon','Лунный дракон (Moon Dragon)','flying_monster',5,1,0,1,['helf_mage','helf_archmage'],'дыхание с Огнём'],
-  ['mt_star_dragon','Звёздный дракон (Star Dragon)','flying_monster',5,2,0,1,['helf_prince'],'дыхание с Огнём'],
+  ['mt_eagle','Великий орёл (Great Eagle)','flying_light',2,0,0,0,['helf_noble','helf_mage','helf_prince','helf_archmage'],'в Чардже +1 куб к броскам Бой маунта'],
+  ['mt_griffon','Грифон (Griffon)','flying_monster',4,0,0,1,['helf_noble','helf_prince','helf_yvresse_warden'],'атаки маунта с AP 1'],
+  ['mt_sun_dragon','Солнечный дракон (Sun Dragon)','flying_monster',4,1,0,1,['helf_prince'],'Дыхание с Огнём'],
+  ['mt_moon_dragon','Лунный дракон (Moon Dragon)','flying_monster',5,1,0,1,['helf_mage','helf_archmage'],'Дыхание с Огнём'],
+  ['mt_star_dragon','Звёздный дракон (Star Dragon)','flying_monster',5,2,0,1,['helf_prince'],'Дыхание с Огнём'],
   ['mt_flamespyre','Феникс Пламенных Шпилей (Flamespyre Phoenix)','flying_monster',4,0,0,1,['helf_mage','helf_archmage'],'атаки с Огнём; при гибели маунта d10, на 8+ он возрождается с 1 раной'],
   ['mt_frostheart','Морозный феникс (Frostheart Phoenix)','flying_monster',4,1,0,1,['helf_prince','helf_archmage'],'Пока вражеский юнит в контакте с ним, −1 к его броскам Бой']
  ],
  wood_elves:[ // ✓ верифицировано
-  ['mt_steed','Эльфийский скакун (Elven Steed)','steed',1,0,0,0,['wel_chief','wel_spellsinger','wel_glade_lord','wel_spellweaver','wel_waystalker'],'Скрытность в лесу'],
-  ['mt_unicorn','Единорог (Unicorn)','steed',2,0,0,0,['wel_spellsinger','wel_spellweaver'],'сопротивление магии'],
+  ['mt_steed','Эльфийский скакун (Elven Steed)','steed',1,0,0,0,['wel_chief','wel_spellsinger','wel_glade_lord','wel_spellweaver','wel_waystalker'],'Скрытность: Засада, если всадник расставлен в лесу'],
+  ['mt_unicorn','Единорог (Unicorn)','steed',2,0,0,0,['wel_spellsinger','wel_spellweaver'],'Оберег 8+ против заклинаний'],
   ['mt_stag','Великий олень (Great Stag)','heavy_beast',3,0,0,1,['wel_chief','wel_glade_lord'],'лесной дух; Оберег 9+ против немагических атак'],
-  ['mt_eagle','Гигантский орёл (Giant Eagle)','flying_monster',3,0,0,1,['wel_chief','wel_spellsinger','wel_glade_lord','wel_spellweaver'],'удар-и-отход'],
-  ['mt_forest_dragon','Лесной дракон (Forest Dragon)','flying_monster',5,1,0,1,['wel_glade_lord'],'усыпляющее дыхание с Ядом']
+  ['mt_eagle','Гигантский орёл (Giant Eagle)','flying_monster',3,0,0,1,['wel_chief','wel_spellsinger','wel_glade_lord','wel_spellweaver'],'выиграв Схватку, может сразу отойти на 6" (это не действие)'],
+  ['mt_forest_dragon','Лесной дракон (Forest Dragon)','flying_monster',5,1,0,1,['wel_glade_lord'],'Дыхание с Ядом; задетые юниты получают Истощение']
  ],
  lizardmen:[ // research
   ['mt_cold_one','Холоднокровный (Cold One)','heavy_beast',3,1,0,1,['liz_saurus_oldblood'],''],
   ['mt_carnosaur','Карнозавр (Carnosaur)','monster',4,1,0,1,['liz_saurus_oldblood'],'Ярость, Против крупных'],
-  ['mt_horned_one','Рогатый ящер (Horned One)','heavy_beast',3,1,0,1,['liz_skink_chief'],'очень быстр'],
-  ['mt_terradon','Террадон (Terradon)','flying_light',2,0,0,1,['liz_skink_chief','liz_skink_priest'],'сброс камней'],
-  ['mt_ripper','Риппердактиль (Ripperdactyl)','flying_light',2,0,0,1,['liz_skink_chief'],'Ярость; сильнее против пехоты'],
-  ['mt_stegadon','Стегадон (Stegadon)','monster',4,1,0,1,['liz_skink_chief','liz_skink_priest'],'гигантский лук, экипаж в хауде'],
-  ['mt_anc_stegadon','Древний стегадон (Ancient Stegadon)','monster',4,2,0,1,['liz_skink_chief','liz_skink_priest'],'духовые трубки с Ядом'],
-  ['mt_engine','Стегадон — Машина Богов (Engine of the Gods)','monster',4,2,0,1,['liz_skink_priest'],'Пылающее выравнивание, аура Оберега']
+  ['mt_horned_one','Рогатый ящер (Horned One)','heavy_beast',3,1,0,1,['liz_skink_chief'],'+2" к M'],
+  ['mt_terradon','Террадон (Terradon)','flying_light',2,0,0,1,['liz_skink_chief','liz_skink_priest'],'раз за битву: 2 автохита по вражескому юниту, над которым маунт пролетел в этой активации'],
+  ['mt_ripper','Риппердактиль (Ripperdactyl)','flying_light',2,0,0,1,['liz_skink_chief'],'Ярость; +1 к броскам Бой маунта против пехоты'],
+  ['mt_stegadon','Стегадон (Stegadon)','monster',4,1,0,1,['liz_skink_chief','liz_skink_priest'],'экипаж: Стрельба из гигантского лука — 24", 1 куб Стрел 5+, AP 3'],
+  ['mt_anc_stegadon','Древний стегадон (Ancient Stegadon)','monster',4,2,0,1,['liz_skink_chief','liz_skink_priest'],'экипаж: Стрельба духовыми трубками — 12", 2 куба Стрел 5+, Яд'],
+  ['mt_engine','Стегадон — Машина Богов (Engine of the Gods)','monster',4,2,0,1,['liz_skink_priest'],'Пока союзный юнит в пределах 6" от маунта, у него Оберег 8+']
  ],
  vampire_counts:[ // research
   ['mt_nightmare','Латный кошмар (Barded Nightmare)','steed',1,1,0,1,['vc_vampire','vc_necromancer'],''],
   ['mt_hellsteed','Адский скакун (Hellsteed)','flying_light',2,0,0,1,['vc_vampire','vc_necromancer'],''],
   ['mt_skel_steed','Латный скелет-конь (Barded Skeletal Steed)','steed',1,1,0,1,['vc_wight_king'],''],
-  ['mt_corpse_cart','Трупная телега (Corpse Cart)','chariot',3,0,0,1,['vc_necromancer'],'аура «Бодрость мертвецов» (Vigour Mortis), Регенерация 8+'],
-  ['mt_zombie_dragon','Зомби-дракон (Zombie Dragon)','flying_monster',5,1,0,1,['vc_vampire'],'чумное дыхание'],
-  ['mt_terrorgheist','Терроргейст (Terrorgheist)','flying_monster',5,0,0,1,['vc_vampire'],'крик смерти']
+  ['mt_corpse_cart','Трупная телега (Corpse Cart)','chariot',3,0,0,1,['vc_necromancer'],'Пока союзный юнит Нежити в пределах 6" от телеги, +1 к его броскам Бой; Регенерация 8+'],
+  ['mt_zombie_dragon','Зомби-дракон (Zombie Dragon)','flying_monster',5,1,0,1,['vc_vampire'],'Дыхание с Ядом'],
+  ['mt_terrorgheist','Терроргейст (Terrorgheist)','flying_monster',5,0,0,1,['vc_vampire'],'Крик смерти (раз за битву): каждый вражеский юнит в пределах 8" бросает Волю; провал — 1 рана']
  ],
  tomb_kings:[ // ✓ верифицировано
   ['mt_steed','Скелетный скакун (Skeletal Steed)','steed',1,0,0,0,['tk_tomb_prince','tk_liche_priest','tk_tomb_king','tk_tomb_herald'],''],
-  ['mt_chariot','Колесница скелетов (Skeleton Chariot)','chariot',3,1,0,0,['tk_tomb_prince','tk_necrotect','tk_tomb_king'],'циклический Чардж'],
-  ['mt_warsphinx','Кхемрийский боевой сфинкс (Warsphinx)','monster',4,2,0,1,['tk_tomb_prince','tk_tomb_king'],'Ужас; хауда с Гробничной стражей']
+  ['mt_chariot','Колесница скелетов (Skeleton Chariot)','chariot',3,1,0,0,['tk_tomb_prince','tk_necrotect','tk_tomb_king'],'выиграв Схватку, может сразу отойти на 6" (это не действие)'],
+  ['mt_warsphinx','Кхемрийский боевой сфинкс (Warsphinx)','monster',4,2,0,1,['tk_tomb_prince','tk_tomb_king'],'Ужас; хауда со стражей: +1 куб к броскам Бой маунта']
  ],
  vampire_coast:[ // research
   ['mt_promethean','Гниющий прометеан (Rotting Promethean)','heavy_beast',3,2,0,1,['vco_vampire_admiral','vco_gunnery_wight'],''],
@@ -3122,85 +3122,85 @@ const MOUNTS_RAW = {
  ],
  warriors_chaos:[ // research
   ['mt_steed','Скакун Хаоса (Chaos Steed)','steed',1,1,0,0,['woc_chaos_lord','woc_sorcerer','woc_exalted_hero','woc_sorcerer_hero'],''],
-  ['mt_dae_steed','Демонический скакун (Daemonic Steed)','steed',2,0,0,0,['woc_chaos_lord','woc_sorcerer','woc_exalted_hero','woc_sorcerer_hero'],'марка Слаанеша'],
+  ['mt_dae_steed','Демонический скакун (Daemonic Steed)','steed',2,0,0,0,['woc_chaos_lord','woc_sorcerer','woc_exalted_hero','woc_sorcerer_hero'],'только последователям Слаанеша; вражеский юнит в контакте получает −1 к броскам Бой'],
   ['mt_chariot','Колесница Хаоса (Chaos Chariot)','chariot',3,1,0,0,['woc_chaos_lord','woc_exalted_hero'],''],
-  ['mt_gorebeast','Колесница горзверя (Gorebeast Chariot)','chariot',3,1,0,1,['woc_chaos_lord','woc_exalted_hero'],'марка Кхорна'],
-  ['mt_juggernaut','Джаггернаут Кхорна (Juggernaut)','heavy_beast',3,2,0,1,['woc_chaos_lord','woc_exalted_hero'],'марка Кхорна, латунная шкура'],
-  ['mt_rot_beast','Гниль-зверь (Rot Beast)','heavy_beast',3,0,0,1,['woc_chaos_lord','woc_sorcerer','woc_exalted_hero','woc_sorcerer_hero'],'марка Нургла, Яд'],
-  ['mt_disc','Диск Тзинча (Disc of Tzeentch)','flying_light',2,0,0,0,['woc_chaos_lord','woc_sorcerer','woc_exalted_hero','woc_sorcerer_hero'],'марка Тзинча'],
-  ['mt_warshrine','Осквернённое святилище (Chaos Warshrine)','platform',3,1,0,1,['woc_sorcerer','woc_sorcerer_hero'],'аура благосклонности Тёмных богов'],
+  ['mt_gorebeast','Колесница горзверя (Gorebeast Chariot)','chariot',3,1,0,1,['woc_chaos_lord','woc_exalted_hero'],'только последователям Кхорна'],
+  ['mt_juggernaut','Джаггернаут Кхорна (Juggernaut)','heavy_beast',3,2,0,1,['woc_chaos_lord','woc_exalted_hero'],'только последователям Кхорна; Ярость; в Чардже +1 куб к броскам Бой маунта; Оберег 8+ против заклинаний'],
+  ['mt_rot_beast','Гниль-зверь (Rot Beast)','heavy_beast',3,0,0,1,['woc_chaos_lord','woc_sorcerer','woc_exalted_hero','woc_sorcerer_hero'],'только последователям Нургла; атаки маунта с Ядом'],
+  ['mt_disc','Диск Тзинча (Disc of Tzeentch)','flying_light',2,0,0,0,['woc_chaos_lord','woc_sorcerer','woc_exalted_hero','woc_sorcerer_hero'],'только последователям Тзинча; маг на диске: +1 куб к сотворению'],
+  ['mt_warshrine','Осквернённое святилище (Chaos Warshrine)','platform',3,1,0,1,['woc_sorcerer','woc_sorcerer_hero'],'Пока союзный юнит Хаоса в пределах 6" от святилища, +1 к его броскам Воли'],
   ['mt_manticore','Мантикора (Manticore)','flying_monster',4,0,0,1,['woc_chaos_lord','woc_sorcerer','woc_exalted_hero','woc_sorcerer_hero'],'Ужас, Ярость'],
-  ['mt_dragon','Дракон Хаоса (Chaos Dragon)','flying_monster',5,1,0,1,['woc_chaos_lord','woc_sorcerer'],'двухголовый, тёмное пламя']
+  ['mt_dragon','Дракон Хаоса (Chaos Dragon)','flying_monster',5,1,0,1,['woc_chaos_lord','woc_sorcerer'],'Дыхание с Огнём, дважды за битву (две головы)']
  ],
  khorne:[ // ✓ верифицировано
-  ['mt_juggernaut','Джаггернаут Кхорна (Juggernaut)','heavy_beast',3,2,0,1,['kho_herald','kho_bloodreaper'],'Ярость, сокрушающий Чардж'],
-  ['mt_blood_throne','Кровавый трон (Blood Throne)','chariot',3,2,0,1,['kho_herald','kho_bloodreaper'],'Пир крови — лечится в ближнем бою; аура, усиливающая Бой']
+  ['mt_juggernaut','Джаггернаут Кхорна (Juggernaut)','heavy_beast',3,2,0,1,['kho_herald','kho_bloodreaper'],'Ярость; в Чардже +1 куб к броскам Бой маунта; Оберег 8+ против заклинаний'],
+  ['mt_blood_throne','Кровавый трон (Blood Throne)','chariot',3,2,0,1,['kho_herald','kho_bloodreaper'],'выбив вражескую модель в ближнем бою, снимает 1 рану; пока союзный юнит Кхорна в пределах 6", +1 к его броскам Бой']
  ],
  nurgle:[ // вручную: аналогия Daemons of Chaos (герольды Нургла) + WoC (смертный чемпион)
-  ['mt_palanquin','Паланкин нурглингов (Nurgling Palanquin)','platform',2,0,0,1,['nur_herald'],'рой нурглингов'],
-  ['mt_rot_fly','Гнилостная муха (Rot Fly)','flying_monster',3,0,0,1,['nur_herald'],'Яд'],
-  ['mt_rot_beast','Гниль-зверь (Rot Beast)','heavy_beast',3,0,0,1,['nur_exalted_hero'],'Яд']
+  ['mt_palanquin','Паланкин нурглингов (Nurgling Palanquin)','platform',2,0,0,1,['nur_herald'],'рой нурглингов: +1 куб к броскам Бой маунта'],
+  ['mt_rot_fly','Гнилостная муха (Rot Fly)','flying_monster',3,0,0,1,['nur_herald'],'атаки маунта с Ядом'],
+  ['mt_rot_beast','Гниль-зверь (Rot Beast)','heavy_beast',3,0,0,1,['nur_exalted_hero'],'атаки маунта с Ядом']
  ],
  tzeentch:[ // research
-  ['mt_disc','Диск Тзинча (Disc of Tzeentch)','flying_light',2,0,0,1,['tze_herald'],'колдует и стреляет на лету'],
+  ['mt_disc','Диск Тзинча (Disc of Tzeentch)','flying_light',2,0,0,1,['tze_herald'],'маг на диске: +1 куб к сотворению'],
   ['mt_burning_chariot','Пылающая колесница (Burning Chariot)','chariot',3,0,1,1,['tze_herald'],''],
   ['mt_steed','Скакун Хаоса (Chaos Steed)','steed',1,1,0,0,['tze_grafted_sorcerer'],'']
  ],
  slaanesh:[ // research
-  ['mt_steed','Скакун Слаанеша (Steed of Slaanesh)','steed',2,0,0,1,['sla_herald','sla_alluress'],'Яд, очень быстр'],
-  ['mt_dae_steed','Демонический скакун (Daemonic Steed)','heavy_beast',3,0,0,1,['sla_herald','sla_alluress'],'гипнотический взгляд'],
-  ['mt_seeker_chariot','Колесница искателей (Seeker Chariot)','chariot',3,0,0,1,['sla_herald','sla_alluress'],'Яд, серповидные колёса'],
-  ['mt_exalted_chariot','Возвышенная колесница (Exalted Seeker Chariot)','chariot',4,0,0,1,['sla_herald','sla_alluress'],'Яд; не получает Истощения']
+  ['mt_steed','Скакун Слаанеша (Steed of Slaanesh)','steed',2,0,0,1,['sla_herald','sla_alluress'],'атаки маунта с Ядом; +2" к M'],
+  ['mt_dae_steed','Демонический скакун (Daemonic Steed)','heavy_beast',3,0,0,1,['sla_herald','sla_alluress'],'вражеский юнит в контакте получает −1 к броскам Бой'],
+  ['mt_seeker_chariot','Колесница искателей (Seeker Chariot)','chariot',3,0,0,1,['sla_herald','sla_alluress'],'атаки маунта с Ядом; в Чардже +1 куб к броскам Бой маунта'],
+  ['mt_exalted_chariot','Возвышенная колесница (Exalted Seeker Chariot)','chariot',4,0,0,1,['sla_herald','sla_alluress'],'атаки маунта с Ядом; модель не получает Истощения']
  ],
  beastmen:[ // research; Горбык — сам монстр, без маунтов
-  ['mt_tuskgor','Колесница тускгоров (Tuskgor Chariot)','chariot',3,0,0,0,['bst_wargor','bst_bray_shaman','bst_beastlord'],'разрушительный Чардж'],
-  ['mt_razorgor','Колесница разоргоров (Razorgor Chariot)','chariot',3,0,0,1,['bst_wargor','bst_bray_shaman','bst_beastlord'],'едва управляема']
+  ['mt_tuskgor','Колесница тускгоров (Tuskgor Chariot)','chariot',3,0,0,0,['bst_wargor','bst_bray_shaman','bst_beastlord'],'в Чардже +1 куб к броскам Бой маунта'],
+  ['mt_razorgor','Колесница разоргоров (Razorgor Chariot)','chariot',3,0,0,1,['bst_wargor','bst_bray_shaman','bst_beastlord'],'Ярость']
  ],
  skaven:[ // research; ассасин — без маунтов
   ['mt_bonebreaker','Костолом (Bonebreaker)','heavy_beast',3,1,0,1,['skv_warlord'],'Ярость'],
-  ['mt_brood_horror','Выводковый ужас (Brood Horror)','heavy_beast',3,0,0,1,['skv_warlord'],'Регенерация 8+, Яд, очень быстр'],
-  ['mt_doomflayer','Рок-крошитель (Doom-Flayer)','chariot',3,1,0,0,['skv_warlock'],'вращающиеся варп-лезвия'],
-  ['mt_doomwheel','Колесо Рока (Doomwheel)','chariot',4,1,0,1,['skv_warlock'],'варп-молнии, перемалывающий ход']
+  ['mt_brood_horror','Выводковый ужас (Brood Horror)','heavy_beast',3,0,0,1,['skv_warlord'],'Регенерация 8+; атаки маунта с Ядом; +2" к M'],
+  ['mt_doomflayer','Рок-крошитель (Doom-Flayer)','chariot',3,1,0,0,['skv_warlock'],'атаки маунта с AP 1; в Чардже +1 куб к броскам Бой маунта'],
+  ['mt_doomwheel','Колесо Рока (Doomwheel)','chariot',4,1,0,1,['skv_warlock'],'раз за раунд: варп-молния — 1 автохит с AP 2 по вражескому юниту в пределах 12"; в Чардже +1 куб к броскам Бой маунта']
  ],
  chaos_dwarfs:[ // research
-  ['mt_great_taurus','Великий Таурус (Great Taurus)','flying_monster',4,1,0,1,['cdw_castellan','cdw_sorcerer_prophet','cdw_daemonsmith','cdw_overseer'],'атаки с Огнём'],
-  ['mt_lammasu','Ламмасу (Lammasu)','flying_monster',3,0,0,1,['cdw_castellan','cdw_sorcerer_prophet','cdw_daemonsmith','cdw_overseer'],'анти-магическая миазма'],
-  ['mt_bale_taurus','Бейл-Таурус (Bale Taurus)','flying_monster',5,1,0,1,['cdw_sorcerer_prophet','cdw_daemonsmith'],'дыхание с Огнём, пылающее тело']
+  ['mt_great_taurus','Великий Таурус (Great Taurus)','flying_monster',4,1,0,1,['cdw_castellan','cdw_sorcerer_prophet','cdw_daemonsmith','cdw_overseer'],'атаки маунта с Огнём'],
+  ['mt_lammasu','Ламмасу (Lammasu)','flying_monster',3,0,0,1,['cdw_castellan','cdw_sorcerer_prophet','cdw_daemonsmith','cdw_overseer'],'вражеские маги в пределах 12" получают −1 куб к сотворению'],
+  ['mt_bale_taurus','Бейл-Таурус (Bale Taurus)','flying_monster',5,1,0,1,['cdw_sorcerer_prophet','cdw_daemonsmith'],'Дыхание с Огнём; враги в контакте в конце своей активации получают 1 автохит с Огнём']
  ],
  norsca:[ // research; оборотень — без маунтов
   ['mt_warhorse','Норскский боевой конь (Norscan Warhorse)','steed',1,0,0,0,['nor_chieftain','nor_shaman'],''],
   ['mt_chariot','Колесница мародёров (Marauder Chariot)','chariot',3,0,0,0,['nor_chieftain','nor_shaman'],''],
-  ['mt_mammoth','Боевой мамонт (War Mammoth)','monster',5,1,0,1,['nor_chieftain'],'топчет, ломает ворота']
+  ['mt_mammoth','Боевой мамонт (War Mammoth)','monster',5,1,0,1,['nor_chieftain'],'в Чардже +1 куб к броскам Бой маунта']
  ],
  daemons:[ // research; Принц Демонов летает сам — маунты только у Герольда (по марке бога)
-  ['mt_juggernaut','Джаггернаут Кхорна (Juggernaut)','heavy_beast',3,2,0,1,['doc_herald_any','doc_exalted_herald'],'марка Кхорна'],
-  ['mt_blood_throne','Кровавый трон (Blood Throne)','chariot',3,2,0,1,['doc_herald_any','doc_exalted_herald'],'марка Кхорна'],
-  ['mt_palanquin','Паланкин нурглингов (Nurgling Palanquin)','platform',2,0,0,1,['doc_herald_any','doc_exalted_herald'],'марка Нургла'],
-  ['mt_rot_fly','Гнилостная муха (Rot Fly)','flying_monster',3,0,0,1,['doc_herald_any','doc_exalted_herald'],'марка Нургла, Яд'],
-  ['mt_disc','Диск Тзинча (Disc of Tzeentch)','flying_light',2,0,0,1,['doc_herald_any','doc_exalted_herald'],'марка Тзинча'],
-  ['mt_burning_chariot','Пылающая колесница (Burning Chariot)','chariot',3,0,1,1,['doc_herald_any','doc_exalted_herald'],'марка Тзинча'],
-  ['mt_sla_steed','Скакун Слаанеша (Steed of Slaanesh)','steed',1,0,0,1,['doc_herald_any','doc_exalted_herald'],'марка Слаанеша'],
-  ['mt_seeker_chariot','Колесница искателей (Seeker Chariot)','chariot',3,0,0,1,['doc_herald_any','doc_exalted_herald'],'марка Слаанеша, Яд']
+  ['mt_juggernaut','Джаггернаут Кхорна (Juggernaut)','heavy_beast',3,2,0,1,['doc_herald_any','doc_exalted_herald'],'только последователям Кхорна; Ярость; в Чардже +1 куб к броскам Бой маунта; Оберег 8+ против заклинаний'],
+  ['mt_blood_throne','Кровавый трон (Blood Throne)','chariot',3,2,0,1,['doc_herald_any','doc_exalted_herald'],'только последователям Кхорна; выбив вражескую модель в ближнем бою, снимает 1 рану; пока союзный юнит Кхорна в пределах 6", +1 к его броскам Бой'],
+  ['mt_palanquin','Паланкин нурглингов (Nurgling Palanquin)','platform',2,0,0,1,['doc_herald_any','doc_exalted_herald'],'только последователям Нургла; рой нурглингов: +1 куб к броскам Бой маунта'],
+  ['mt_rot_fly','Гнилостная муха (Rot Fly)','flying_monster',3,0,0,1,['doc_herald_any','doc_exalted_herald'],'только последователям Нургла; атаки маунта с Ядом'],
+  ['mt_disc','Диск Тзинча (Disc of Tzeentch)','flying_light',2,0,0,1,['doc_herald_any','doc_exalted_herald'],'только последователям Тзинча; маг на диске: +1 куб к сотворению'],
+  ['mt_burning_chariot','Пылающая колесница (Burning Chariot)','chariot',3,0,1,1,['doc_herald_any','doc_exalted_herald'],'только последователям Тзинча'],
+  ['mt_sla_steed','Скакун Слаанеша (Steed of Slaanesh)','steed',1,0,0,1,['doc_herald_any','doc_exalted_herald'],'только последователям Слаанеша; атаки маунта с Ядом; +2" к M'],
+  ['mt_seeker_chariot','Колесница искателей (Seeker Chariot)','chariot',3,0,0,1,['doc_herald_any','doc_exalted_herald'],'только последователям Слаанеша; атаки маунта с Ядом; в Чардже +1 куб к броскам Бой маунта']
  ],
  greenskins:[ // research
-  ['mt_war_boar','Боевой кабан (War Boar)','steed',2,0,0,0,['grn_orc_boss','grn_shaman'],'клыкастый Чардж'],
+  ['mt_war_boar','Боевой кабан (War Boar)','steed',2,0,0,0,['grn_orc_boss','grn_shaman'],'в Чардже +1 куб к броскам Бой маунта'],
   ['mt_boar_chariot','Кабанья колесница (War Boar Chariot)','chariot',3,1,0,0,['grn_orc_boss'],''],
-  ['mt_wyvern','Виверна (Wyvern)','flying_monster',4,1,0,1,['grn_orc_boss'],'Яд, Ужас'],
-  ['mt_wolf','Гигантский волк (Giant Wolf)','steed',1,0,0,0,['grn_goblin_boss','grn_shaman','grn_great_shaman'],'быстрый'],
-  ['mt_spider','Гигантский паук (Giant Spider)','steed',2,0,0,0,['grn_goblin_boss'],'Яд'],
-  ['mt_wolf_chariot','Волчья колесница (Wolf Chariot)','chariot',3,0,0,0,['grn_goblin_boss','grn_shaman'],'быстрая, хлипкая'],
-  ['mt_arachnarok','Арахнарок с святилищем (Arachnarok Spidershrine)','monster',4,1,0,1,['grn_shaman','grn_great_shaman'],'Яд; паучье святилище усиливает магию']
+  ['mt_wyvern','Виверна (Wyvern)','flying_monster',4,1,0,1,['grn_orc_boss'],'атаки маунта с Ядом; Ужас'],
+  ['mt_wolf','Гигантский волк (Giant Wolf)','steed',1,0,0,0,['grn_goblin_boss','grn_shaman','grn_great_shaman'],'+2" к M'],
+  ['mt_spider','Гигантский паук (Giant Spider)','steed',2,0,0,0,['grn_goblin_boss'],'атаки маунта с Ядом'],
+  ['mt_wolf_chariot','Волчья колесница (Wolf Chariot)','chariot',3,0,0,0,['grn_goblin_boss','grn_shaman'],'+2" к M'],
+  ['mt_arachnarok','Арахнарок с святилищем (Arachnarok Spidershrine)','monster',4,1,0,1,['grn_shaman','grn_great_shaman'],'атаки маунта с Ядом; маг на нём: +1 куб к сотворению']
  ],
  ogres:[ // research; Тиран и Мясник в TWW3 — пешие
-  ['mt_stonehorn','Стоунхорн (Stonehorn)','monster',4,2,0,1,['ogr_hunter'],'стрельба на ходу, каменная шкура']
+  ['mt_stonehorn','Стоунхорн (Stonehorn)','monster',4,2,0,1,['ogr_hunter'],'Оберег 8+']
  ],
  dark_elves:[ // research
   ['mt_dark_steed','Тёмный скакун (Dark Steed)','steed',1,0,0,0,['del_dreadlord','del_sorceress','del_master'],''],
   ['mt_dark_pegasus','Тёмный пегас (Dark Pegasus)','flying_light',2,0,0,0,['del_dreadlord','del_sorceress'],''],
-  ['mt_cold_one','Холоднокровный (Cold One)','heavy_beast',3,1,0,1,['del_dreadlord','del_sorceress','del_master'],'природная броня'],
+  ['mt_cold_one','Холоднокровный (Cold One)','heavy_beast',3,1,0,1,['del_dreadlord','del_sorceress','del_master'],''],
   ['mt_manticore','Мантикора (Manticore)','flying_monster',4,0,0,1,['del_sorceress'],'Ужас'],
-  ['mt_black_dragon','Чёрный дракон (Black Dragon)','flying_monster',5,1,0,1,['del_dreadlord','del_sorceress'],'дыхание с Ядом'],
-  ['mt_cauldron','Котёл Крови (Cauldron of Blood)','platform',3,1,0,1,['del_death_hag'],'аура Оберега Кхейна'],
+  ['mt_black_dragon','Чёрный дракон (Black Dragon)','flying_monster',5,1,0,1,['del_dreadlord','del_sorceress'],'Дыхание с Ядом'],
+  ['mt_cauldron','Котёл Крови (Cauldron of Blood)','platform',3,1,0,1,['del_death_hag'],'Пока союзный юнит в пределах 6" от котла, у него Оберег 8+'],
   ['mt_co_chariot','Колесница на холоднокровных (Cold One Chariot)','chariot',3,1,0,1,['del_dreadlord'],'']
  ]
 };
@@ -6641,6 +6641,7 @@ const RULE_TERMS=[
  {t:'Крупная цель',g:'kw',d:'Юнит с меткой «monstrous»: монстры, монструозная кавалерия, огры, тролли; а также колесницы и персонажи на монстрах. Мишень для эффектов «Против крупных».'},
  {t:'Против крупных',g:'kw',d:'+1 к броскам Бой против Крупной цели.'},
  {t:'Осечка',g:'kw',f:['Осечка','Осечку','Осечки'],d:'Осечка на 1: натуральная 1 на броске Стрел — все кубы этого броска промахи; «на двух 1» — если таких единиц две, «на 1–2» — натуральная 1 или 2.'},
+ {t:'Дыхание',g:'kw',f:['Дыхание','Дыхания','Дыханием'],d:'Раз за битву, простое действие: Взрыв 3" с центром в пределах 8" от модели, без броска Стрел; каждая задетая модель получает 1 хит со свойством, указанным у маунта.'},
  {t:'Регенерация',g:'kw',en:'Regeneration',f:['Регенерация','Регенерации','Регенерацию'],d:'В конце каждой своей активации юнит бросает d10: на N+ снимает 1 рану; без числа — 8+.'},
  {t:'Нежить',g:'kw',en:'Undead',d:'Не становится Деморализованной: при проваленной проверке Деморализации получает по 1 хиту без спаса Брони за каждый куб, не давший хита.'},
  {t:'Демон',g:'kw',en:'Daemon',f:['Демон','Демоны','Демонов'],d:'Не становится Деморализованным: при проваленной проверке Деморализации получает по 1 хиту без спаса Брони за каждый куб, не давший хита.'},
@@ -6971,6 +6972,7 @@ function renderCompendium(){
       <li>Активация общая. Воля — лучшая из двух, Выносливость — большая. Страх маунта даёт Страх всей модели.</li>
       <li>Монстры, колесницы и платформы — ${K('Крупная цель')}.</li>
       <li>Стрельба с маунта — без штрафа; ${K('Тяжёлое')} оружие с маунта не стреляет.</li>
+      <li>Дыхание маунта — раз за битву, простое действие: Взрыв 3" с центром в пределах 8", без броска Стрел; каждая задетая модель получает 1 хит со свойством, указанным у маунта (Огонь, Яд и т. п.).</li>
       <li>Травмы после битвы бросают за модель целиком. Результат «потерял снаряжение» может означать гибель маунта: он снимается, очки не возвращаются.</li>
     </ul>
     <p class="note">Цена маунта = класс + мощь + броня + Страх. Юнитам, которые уже верхом, лёгкий скакун не предлагается. Маунты по фракциям — в части VII.</p>`);
@@ -7128,6 +7130,7 @@ function renderCompendium(){
     <p>У каждого предмета свой профиль. Отряд покупает предмет на всех моделей — цена указана за модель; соло платит один раз. ★ — предмет только для своей фракции.</p>
     <p><b>Слоты:</b> 2 руки (двуручное оружие занимает обе, щит — одну), 1 стрелковое оружие, 1 броня на тело, 1 щит, 1 шлем, 1 плащ. Шлемы и плащи доступны и отрядам, и соло; остальное снаряжение — только персонажам, аркан-предметы — только магам. Билдер затемняет недоступное и ловит нарушения.</p>
     <p class="note">Свойства оружия — ключевые слова: наведите на слово, чтобы увидеть правило; все определения — в «Глоссарии». «К броску» — модификатор броска атаки этим оружием.</p>
+    <p><b>Сломанное оружие</b> до конца битвы бьёт как ручное — без своих бонусов и свойств. Оружие, которое «не ломается», эффекты, ломающие оружие, не берут. <b>Магическое оружие</b> — с пометкой «магическое» и всё рунное: Оберег «против немагических атак» от него не спасает.</p>
     <h3>Оружие ближнего боя</h3>
     <table class="ref"><thead><tr>${WCOLS}</tr></thead><tbody>${mel}</tbody></table>
     <h3>Стрелковое оружие</h3>
