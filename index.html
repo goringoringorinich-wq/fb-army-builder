@@ -1871,7 +1871,7 @@ F('empire','The Empire','order','Гибрид людей, пороха, дисц
   U("emp_outriders","Outriders","rare",70,3,8,["cavalry", "ranged", "gunpowder", "human", "empire", "aoi_nuln_train"],"Наездники и инструкторы пистолькора, чьё оружие оплачено самой артиллерийской школой Нульна — они несут более дальнобойные и пробивные ружья, чем обычные стрелки. Аутрайдеры кружат вокруг вражеского строя, выкашивая цели издалека и ускользая прежде, чем подойдёт подмога."),
   U("emp_great_cannon","Great Cannon Battery of Nuln","rare",85,1,4,["artillery", "gunpowder", "human", "empire", "aoi_nuln_train"],"Батарея из одной–четырёх Великих пушек Нульна: за ствол дешевле одиночного орудия, но берётся только в Артиллерийском обозе. Гордость Оружейной школы Нульна: чугунные ядра этих орудий пробивают броню и прорезают кровавые борозды в плотном строю врага. Легенда гласит, что при осаде Мидденхайма мастер-канонир Пумхарт фон Штайр одним выстрелом снёс голову разъярённому дракону."),
   U("emp_blazing_sun","Knights of the Blazing Sun","special",55,3,8,["cavalry", "armored", "flame", "human", "empire", "aoi_knightly_orders"],"Орден основан после чудесного знамения под Магриттой, когда бронзовая статуя Мирмидии рухнула на застигнутых врасплох арабийских захватчиков. С тех пор рыцари Пылающего Солнца несут благословенное пламя богини войны — особенно беспощадное к нежити и другой не знающей огня нечисти."),
-  /* — DLC «Lords of the End Times» (Empire/Middenland, лорд Boris Todbringer, раскрыто 30.04.2026, выходит 24.09.2026): статы TBA, профиль — черновой генератор движка. Именной лорд намеренно переведён в генерик-роль — сам персонаж указан в тексте как пример, а не как единственная доступная единица (см. также правку vc_grave_warden/vc_blood_dragon_scholar, бывшие vc_dieter_helsnicht/vc_walach_harkon). Отдельного юнита-лидера под Бориса не заводили: у Middenland уже есть требуемый командир emp_elector_griffon (SUBFACTION_LEADER) — Борис в него и переехал (см. правку ниже), это ближе к лору: канонiчный маунт Бориса — грифон Beastslayer. — */
+  /* — DLC «Lords of the End Times» (Empire/Middenland, лорд — курфюрст Мидденланда, раскрыто 30.04.2026, выходит 24.09.2026): статы TBA, профиль — черновой генератор движка. Именных юнитов в билдере нет (правило 07.10.2026): лорд дополнения сведён к родовой роли без имени, как vc_grave_warden и vc_blood_dragon_scholar. Отдельного юнита-лидера под него не заводили: у Middenland уже есть требуемый командир emp_elector_griffon (SUBFACTION_LEADER) — лорд в него и переехал (см. правку ниже), это ближе к лору: в книгах он воюет верхом на грифоне. — */
   U("emp_seneschal","Seneschal","hero",70,1,1,["infantry","officer","human","empire","middenland"],"Наместник электора, которому доверено вести провинциальное ополчение, пока сам курфюрст занят делами более срочными. Категория намеренно hero, а не leader — Middenland уже требует конкретного командира (emp_elector_griffon), и hero под этот запрет не подпадает. Из дополнения Lords of the End Times."),
   U("emp_ulric_champion","Ulric's Champion","hero",65,1,1,["infantry","holy","elite","officer","human","empire","middenland"],"Старший жрец-воин Ульрика из Мидденхайма: в одной вере объединяет всех воинов города, кем бы они ни были выучены. Несмотря на годы, свиреп в бою, как мало кто из жрецов, — с молотом-топором и в волчьей шкуре (Lords of the End Times)."),
   U("emp_priest_ulric","Priest of Ulric","hero",58,1,1,["infantry","holy","human","empire","middenland"],"Жрец Бога-Волка благословляет ратников перед зимним походом и первым выходит на мороз. Из дополнения Lords of the End Times."),
@@ -2336,7 +2336,7 @@ F('warriors_chaos','Warriors of Chaos','chaos','Элитные брониров�
   U("woc_firstborn_warlord","Firstborn Warlord","leader",140,1,1,["monstrous", "armored", "chaos", "elite", "flame", "the_wastes", "monster", "firstborn_wastes"],"Древнейший из выживших драконоогров помнит клятву, принесённую Тёмным Богам ещё до того, как Хаос раскололся на четыре пути, и не носит ничьей метки, кроме собственной чешуи. Его орда невелика и почти не берёт с собой рядовой пехоты — в поход идут лишь те, кто способен выдержать долгий переход через раскалённые пустоши. Там, где он проходит, латная конница и исполинские твари одинаково быстро находят смерть под ударами его молний."),
   U("woc_skullreapers","Skullreapers","rare",90,15,60,["infantry", "chaos", "frenzy", "elite", "human", "the_wastes", "khorne_marked"],"Северное племя Скарамор веками воюет лишь с себе подобными, ведь мягкотелые южные народы не могут предложить им достойного вызова. Черепорезы — воинская элита этого племени, кровожадная даже по меркам самих северян, живущая единственной целью: снести голову сильнейшему врагу и возложить её к Трону Черепов. Немногие способны выстоять против них в бою."),
   U("woc_wrathmongers","Wrathmongers","rare",110,8,32,["infantry", "chaos", "frenzy", "elite", "human", "the_wastes", "khorne_marked"],"Из Черепорезов лишь немногие удостаиваются более страшной судьбы: с юности их стравливают друг с другом, пока выживший не отправится паломником к Медной Клетке на краю Королевства Хаоса. Там претендент бьётся насмерть с призванными даэмонами, ставя на кон собственную душу, и лишь уцелевшие возвращаются оттуда, пропитанные нечеловеческой яростью. С тех пор их цепные молоты не ведают ни жалости, ни усталости."),
-  /* — DLC «Lords of the End Times» (лорд The Glottkin, «Host of the Triplets», раскрыто 30.06.2026): статы TBA, черновой генератор движка. Три сросшихся брата и их свита переведены в генерик-роли — конкретные имена даны в тексте примером. Массовые юниты этого же лорда (Blightkings, Flayerkin и т.д.) вынесены во фракцию Nurgle — см. её блок ниже, зеркально по духу тому, как это разведено в самой TWW3 между расой-владельцем и кросс-грантом. — */
+  /* — DLC «Lords of the End Times» (лорд — сросшаяся тройня Нургла, «Host of the Triplets», раскрыто 30.06.2026): статы TBA, черновой генератор движка. Три сросшихся брата и их свита переведены в родовые роли без имён (правило 07.10.2026). Массовые юниты этого же лорда (Blightkings, Flayerkin и т.д.) вынесены во фракцию Nurgle — см. её блок ниже, зеркально по духу тому, как это разведено в самой TWW3 между расой-владельцем и кросс-грантом. — */
   U("woc_fused_triplet","Fused Triplet Champion","leader",160,1,1,["monstrous","chaos","armored","elite","officer","nurgle_marked"],"Три брата, рождённые в Норске у мирных переселенцев из Империи: их мать, раненную ржавым ножом завистливой ведьмы, спас Нургл, и братья стали его избранниками, сросшись в одно исполинское тело. Один стал колдуном, другой косит врагов, как когда-то косил урожай с отцом, а исполин-третий несёт братьев в бой на себе (Lords of the End Times)."),
   U("woc_fly_swarm_sorcerer","Fly-Swarm Sorcerer","hero",130,1,1,["monstrous","wizard","chaos","nurgle_marked"],"Повелитель мэгготов: вокруг него вьётся рой мух — но рой и есть он сам. Некогда рослый воин, мучивший мелких тварей, он прогневал Нургла: мухи-демоны отложили в нём яйца, и теперь его тело — кожаный мешок, полный личинок. В бой едет на звере-мэгготе (Lords of the End Times)."),
   U("woc_poxrider_champion","Poxrider Champion","hero",120,1,1,["monstrous","chaos","officer","nurgle_marked"],"Чемпион верхом на разросшемся гнилостном звере из болотных топей — таранит строй раньше, чем враг успевает понять, что перед ним не просто раздутая туша."),
@@ -2403,7 +2403,7 @@ F('nurgle','Nurgle','chaos','Медленные, вязкие, живучие, �
   U("nur_pestigors","Pestigors","special",90,1,1,["infantry", "beast", "nurgle", "beastman", "the_wastes", "maggot_host"],"Зверолюди, чья плоть однажды была отмечена благословением Нургла и с тех пор медленно превращается в раздутую, сочащуюся массу гнили. Они бросаются в бой со звериной яростью, разнося заразу одним лишь прикосновением рогов и копыт. Смешение звериного инстинкта и демонической порчи делает их непредсказуемыми даже для собственных командиров."),
   U("nur_rot_knights","Rot Knights","rare",155,1,1,["cavalry", "daemon", "monstrous", "the_wastes", "maggot_host"],"Демонические всадники на раздувшихся чумных скакунах, чья поступь оставляет за собой дымящуюся слизь и рой мух. Закованные в ржавые, растрескавшиеся латы, они таранят вражеский строй с неумолимой, деловитой методичностью. Владыка Личинок особенно охотно пополняет ими ряды своих любимых военачальников."),
   U("nur_toad_dragon","Toad Dragon","merc",225,1,1,["monstrous", "beast", "nurgle", "the_wastes", "monster", "maggot_host"],"Исполинская помесь дракона и чумной жабы, взращённая в зловонных трясинах по воле Дедушки. Раздутое тело вмещает столько гнили и болотных газов, что каждый его шаг сотрясает землю, а дыхание валит с ног непривычных к вони врагов. Вожди из свиты Владыки Личинок почитают за честь однажды оседлать эту тварь в бою."),
-  /* — DLC «Lords of the End Times», кросс-грант от лорда The Glottkin (Warriors of Chaos): массовые юниты его свиты раздаются и в Nurgle напрямую — см. официальный список вики. Статы TBA, черновой генератор движка. — */
+  /* — DLC «Lords of the End Times», кросс-грант от лорда-тройни Нургла (Warriors of Chaos): массовые юниты его свиты раздаются и в Nurgle напрямую — см. официальный список вики. Статы TBA, черновой генератор движка. — */
   U("nur_flayerkin","Flayerkin","special",70,3,6,["infantry","chaos","frenzy","the_wastes","maggot_host"],"Мутанты со свежёванной, вечно сочащейся кожей — бросаются в рукопашную, не чувствуя боли, которая свалила бы обычного воина. Из дополнения Lords of the End Times."),
   U("nur_putrid_blightkings","Putrid Blightkings","special",95,3,6,["infantry","chaos","armored","elite","disease","the_wastes","maggot_host"],"Элитная гниющая пехота Нургла в проржавевших латах — держит строй куда дольше, чем позволяет состояние собственной плоти. Из дополнения Lords of the End Times."),
   U("nur_putrid_blightkings_axes","Putrid Blightkings (Dual Axes)","special",100,3,6,["infantry","chaos","armored","elite","disease","frenzy","the_wastes","maggot_host"],"Вариант Гнилостных Царей с парными топорами — жертвует стойкостью строя ради большего числа атак. Из дополнения Lords of the End Times."),
@@ -2505,7 +2505,7 @@ F('beastmen','Beastmen','chaos','Засады, стада, монстры, ра�
   U("bst_crow_shaman","Crow-Shaman","leader",115,1,1,["wizard", "chaos", "flying", "officer", "beastman", "harbingers"],"Не всякому шаману чаща позволяет коснуться настоящих тайн — иным взамен она дарует крылья, проросшие прямо из спины, и глаз, различающий грядущее на день вперёд. Такой провидец больше не бредёт со стадом по земле — он кружит над ним, читая по полёту воронья и рваным облакам знаки будущей резни. Его пророчества редко звучат обнадёживающе, но стадо, идущее за таким знамением, верит в неотвратимость победы не меньше, чем в собственный голод."),
   U("bst_razorgor_chariot","Razorgor Chariot","special",130,1,3,["chariot", "chaos", "fast", "frenzy", "beastman", "warherd"],"Разоргоры — гигантские собратья тускгоров, горы мутировавших мышц, клыков и щетины с волчьим аппетитом к свежему мясу. Раз в поколение находится вожак, способный впрячь этих тварей в колесницу, хотя направлять её по-настоящему невозможно — экипаж лишь держится, пока разоргор несётся на врага слепой яростью. Там, где такая колесница врезается в строй, от шеренги остаётся месиво, но и сама она долго боя не выдержит."),
   U("bst_feral_manticore","Feral Manticore","rare",150,1,1,["flying", "monstrous", "chaos", "harbingers"],"Мантикоры — крылатые львиноподобные хищники северных горных круч, и порча Хаоса уродует каждую особь по-своему: у одних грива из шевелящихся змей, у других шкура из чешуи. Все они одержимы первобытной яростью и убивают без счёта, паря в небе рядом с летающими прорицателями стад. Именно такие твари сопровождают крылатого шамана-прорицателя в его полётах над полем боя."),
-  /* — DLC «Lords of the End Times», мелкий кросс-грант от лорда The Glottkin: официальный список вики отдаёт Beastmen те же 2 монстра + RoR, что и Nurgle. Статы TBA, черновой генератор движка. — */
+  /* — DLC «Lords of the End Times», мелкий кросс-грант от лорда-тройни Нургла: официальный список вики отдаёт Beastmen те же 2 монстра + RoR, что и Nurgle. Статы TBA, черновой генератор движка. — */
   U("bst_giant_spined_beast","Giant Spined Chaos Beast","rare",150,1,1,["monstrous","chaos","beast","armor_piercing","monster"],"Шипастая тварь неопределённого мутационного происхождения — то же чудовище, что и в ростере Nurgle, здесь пасётся вместе со стадом. Из дополнения Lords of the End Times."),
   U("bst_basilisk","Basilisk","rare",140,1,1,["monstrous","beast","poison","monster","petrifying_gaze"],"Ядовитая рептилия исполинских размеров — стада порой отбивают такую тварь у нургловских орд и берут в свой зверинец. Из дополнения Lords of the End Times."),
   U("bst_ror_bane_wittengast","Elder Spined Beast","rare",160,1,1,["monstrous","chaos","beast","armor_piercing","monster"],"Матёрый вариант Giant Spined Chaos Beast — тварь, разорившая не одно поселение. Из дополнения Lords of the End Times.")]),
@@ -2557,7 +2557,7 @@ F('skaven','Skaven','chaos','Численность, трусость, яды, �
   U("skv_brood_horror","Brood Horror","rare",118,1,1,["monstrous", "regen", "poison", "skavenblight", "monster", "clan_moulder"],"Когда в помёте гигантских порождённых крыс один вдруг сжирает остальных собратьев, из этого выходит раздувшийся Ужас Помёта — в его плоти ещё различимы недоеденные сородичи. Мастера-Мутаторы ценят таких тварей выше прочего товара и обменивают знатным военачальникам на верховых зверей. Регенерация и звериная прыть делают его отличным сборщиком урона на фланге — ударил и убежал зализывать раны."),
   U("skv_mutant_rat_ogre","Mutant Rat Ogre","rare",108,1,1,["monstrous", "elite", "mutation", "skavenblight", "monster", "clan_moulder"],"Вершина ремесла Клана Молдер — не стая крысоогров, а один исполин, вобравший рост и злобу целого выводка. Иногда в его черепе приживляют чужой разум, послушнее звериного. Ломает построения одной лишь массой, но без прикрытия быстро вязнет в окружении многочисленного строя."),
   U("skv_death_runners","Death Runners","special",66,1,1,["infantry", "stealth", "anti_large", "skaven", "skavenblight", "clan_eshin", "wallcrawler"],"Старшая смена Гуттер-Раннеров: те, кто выжил достаточно долго, чтобы довести восточные боевые стили Эшина до полного отказа от доспехов. Увернуться проще, чем блокировать удар — так учат Death Runners, и почти всякое таинственное убийство в Крысиной Империи молва спишет именно на них. Разящий по сочленениям клинок вскрывает даже панцирь боевых машин, но в лобовой сшибке эти дуэлянты бесполезны."),
-  /* — DLC «Lords of the End Times» (лорд Thanquol, Clan Scruten, раскрыто 13.08.2026, выходит 24.09.2026): статы TBA, черновой генератор движка. Верминлорды — уже родовой ранг демонов-скавенов (не личные имена), генерик-ить не пришлось; Стормфинды — классика Clan Skryre, легли рядом с Warp Lightning Cannon. — */
+  /* — DLC «Lords of the End Times» (лорд — серый провидец Clan Scruten, раскрыто 13.08.2026, выходит 24.09.2026): статы TBA, черновой генератор движка. Верминлорды — уже родовой ранг демонов-скавенов (не личные имена), генерик-ить не пришлось; Стормфинды — классика Clan Skryre, легли рядом с Warp Lightning Cannon. — */
   U("skv_clan_familiar","Clan Familiar","hero",75,1,1,["infantry","stealth","officer","skaven","skavenblight","clan_scruten"],"Говорящая рогатая крыса на привязи у провидца — советует, предаёт и снова советует, если выгодно."),
   U("skv_verminlord_corruptor","Verminlord Corruptor","rare",280,1,1,["monstrous","daemon","poison","wizard","flying","skaven","clan_scruten"],"Демон-крыса чумного аспекта — несёт заразу самого Рогатого Крыса на поле боя. Из дополнения Lords of the End Times."),
   U("skv_verminlord_deceiver","Verminlord Deceiver","rare",270,1,1,["monstrous","daemon","stealth","poison","skaven","clan_scruten"],"Демон-крыса аспекта убийств и теней — является из-под земли там, где его меньше всего ждут. Из дополнения Lords of the End Times."),
@@ -2607,7 +2607,7 @@ F('chaos_dwarfs','Chaos Dwarfs','chaos','Элитные злые гномы, п�
   U("cdw_hobgoblin_khan","Hobgoblin Khan","leader",95,1,1,["infantry", "officer", "skirmish", "hobgoblin", "zharr_naggrund", "khanate"],"Хобгоблин, которому позволили подняться над своими лишь потому, что он гонит соплеменников в бой охотнее, чем это делал бы надсмотрщик-гном. Держит орду в кулаке не выучкой, а смесью страха, посулов добычи и доносов — любой заметный соперник среди своих быстро и тихо исчезает. Гномы терпят его ровно до тех пор, пока вассалы под его началом продолжают исправно умирать по расписанию."),
   U("cdw_artillery_marshal","Artillery Marshal","leader",135,1,1,["infantry", "armored", "officer", "gunpowder", "chaos_dwarf", "gorgoth"],"Комендант осадных верфей Tower of Gorgoth — не колдун и не пророк, а надсмотрщик и артиллерист, вышедший из самих цехов. Держит рабский труд заводов в кулаке жёстче любого другого ханства и первым выводит на поле каждое новое орудие, сошедшее со стапелей башни. Для него война — это в первую очередь вопрос логистики: сколько стволов удастся дотащить до позиции раньше, чем враг успеет сблизиться."),
   U("cdw_bale_taurus","Bale Taurus","rare",300,1,1,["monstrous", "flying", "flame", "daemon", "zharr_naggrund", "azgorh"],"Крылатый бык Хашута с более выраженной мутацией пламени, чем у рядовых Великих Тельцов, — тварь именно такой породы верховный пророк-колдун Азгора держит как личного ездового зверя. Обожжённая дочерна чешуйчатая шкура почти не пропускает удар, а огненное дыхание испепеляет строй ещё до того, как в ход идут когти и рога. Простому военачальнику Чёрная Крепость такого зверя не доверит."),
-  /* — DLC «Lords of the End Times», мелкий кросс-грант от лорда The Glottkin. Статы TBA, черновой генератор движка. — */
+  /* — DLC «Lords of the End Times», мелкий кросс-грант от лорда-тройни Нургла. Статы TBA, черновой генератор движка. — */
   U("cdw_chaos_siege_giant","Chaos Siege Giant","rare",190,1,1,["monstrous","chaos","armor_piercing","zharr_naggrund"],"Исполин, закованный в осадную броню и вооружённый таранным приспособлением — Хашутитам такая рабочая сила пригождается не хуже, чем нургловским ордам. Из дополнения Lords of the End Times.")]),
 
 F('norsca','Norsca','chaos','Рейдеры, чудовища, охоты, поклонение тёмным богам.',
@@ -2650,7 +2650,7 @@ F('norsca','Norsca','chaos','Рейдеры, чудовища, охоты, по�
   U("nor_kurgan_horsemen","Kurgan Horsemen","special",48,2,6,["cavalry", "chaos", "human", "norsca", "dolgan"],"Курганные всадники родом из восточных степей за Тёмными землями и в бою рубят двумя клинками разом, предпочитая яростную сшибку в седле любому иному способу воевать. Долганские вожди-колдуны особенно жалуют этих наездников, вплетая в их оружие толику собственной порчи, отчего даже неглубокая царапина от такого клинка потом долго не заживает. Быстрые и беспощадные, они охотнее всего бьют во фланг, пока пехота противника связана боем спереди."),
   U("nor_marauder_bearmen","Marauder Bearmen","core",32,3,10,["infantry", "chaos", "human", "norsca", "dolgan"],"Эти мародёры проходят обряд посвящения Медведю ещё в родном становище и с тех пор не снимают шкуру убитого зверя, веря, что вместе с ней перенимают его ярость и выносливость. В свалке они сходятся раньше и держатся в ней дольше, чем большинство соплеменников, а оскаленная медвежья пасть на плечах пугает не хуже живого зверя. Долганские кланы охотно ставят таких воинов в первую линию, зная, что те не побегут, пока жив хоть один в шкуре."),
   U("nor_chaos_warriors","Chaos Warriors","special",68,2,6,["infantry", "armored", "chaos", "human", "norsca", "dolgan"],"В отличие от лёгких мародёров, составляющих большинство северных орд, эти воины закованы в тяжёлые доспехи, дарованные Разрушительными Силами за долгую и верную службу. Долганские вожди — единственные в этих краях, кому такие латники присягают напрямую, а не через посредство южных орд. В их армиях они служат костяком, о который разбивается натиск противника, пока чудовища и колдовство довершают разгром."),
-  /* — DLC «Lords of the End Times», мелкий кросс-грант от лорда The Glottkin. Статы TBA, черновой генератор движка. — */
+  /* — DLC «Lords of the End Times», мелкий кросс-грант от лорда-тройни Нургла. Статы TBA, черновой генератор движка. — */
   U("nor_poxrider_champion","Poxrider Champion","hero",120,1,1,["monstrous","chaos","officer"],"Чемпион верхом на разросшемся гнилостном звере — тот же архетип, что и в ростере Warriors of Chaos, здесь пришедший через торговлю с нургловскими мореходами."),
   U("nor_flayerkin","Flayerkin","special",70,3,6,["infantry","chaos","frenzy"],"Мутанты со свежёванной кожей — редкие гости в дружинах Норски, но долганские вожди не откажутся от лишних клинков. Из дополнения Lords of the End Times.")]),
 
@@ -2676,7 +2676,7 @@ F('daemons','Daemons of Chaos','chaos','Конструктор демониче�
   U('doc_merc_furies','Chaos Furies','merc',45,2,4,['flying','beast', "daemon"],'фурии — бесхозные демоны-стервятники (WFB)'),
   U('doc_merc_cult_coven','Mortal Cult Coven','merc',30,2,5,['infantry', "human", "the_wastes"],'смертные культисты-прислужники'),
   U("doc_shadow_prince","Shadow Prince","leader",200,1,1,["daemon", "flying", "monstrous", "unique", "undivided_prince"],"Задолго до Сигмара, когда Четверо Тёмных Богов ещё возвышали избранников сообща, первым смертным, вознесённым в Принцы Демонов, стал этот повелитель — и с тех пор он не признаёт ничьей единоличной власти над собой. Он не носит печати ни одного из Четверых, но вбирает силу сразу от каждого дара, оставаясь пленником зыбкой тени между мирами яви и Хаоса. Полководцы, идущие под его крылом, знают: этот повелитель служит лишь собственной гордыне, а его демоническая мощь — от Хаоса в целом, а не от милости одного-единственного бога.")]),
-/* — TODO после 24.09.2026: DLC «Lords of the End Times» отдаёт Daemons of Chaos кросс-грант от лорда The Glottkin, но на момент отчёта (13.09.2026) вики держит его как «???» — конкретные юниты ещё не раскрыты. Проверить вики (totalwarwarhammer.fandom.com/wiki/Lords_of_the_End_Times) после релиза и дозавести сюда. — */
+/* — TODO после 24.09.2026: DLC «Lords of the End Times» отдаёт Daemons of Chaos кросс-грант от лорда-тройни Нургла, но на момент отчёта (13.09.2026) вики держит его как «???» — конкретные юниты ещё не раскрыты. Проверить вики (totalwarwarhammer.fandom.com/wiki/Lords_of_the_End_Times) после релиза и дозавести сюда. — */
 
 /* ===== DESTRUCTION / NEUTRAL ===== */
 F('greenskins','Greenskins','destruction','Орки, гоблины, тролли, массовый ближний бой, ВААГХ!',
@@ -5195,6 +5195,20 @@ function postGameNext(){ const nx=postGameAfter; postGameAfter=null; if(nx) nx()
 
 function patronsFor(){ return PATRONS_FACTION[state.factionId]||[]; }
 function currentPatron(){ return patronsFor().find(p=>p[0]===state.patronId)||null; }
+// 07.10.2026 выдуманных патронов вампиров и Кхорна сменили книжные. Сейв со снятым патроном переходит к ближайшему
+// по духу новому (adopt), а долг перед снятым патроном называет его этим титулом
+const PATRON_GONE={
+  vc_pat_bloodlender:{to:'vc_pat_neferata',title:'Сильванский барон-ростовщик'},
+  vc_pat_bone_tower:{to:'vc_pat_melkhior',title:'Хранитель Костяной Башни'},
+  vc_pat_steward:{to:'vc_pat_mannfred',title:'Бургомистр Волчьей Балки'},
+  kho_pat_krull_unbowed:{to:'kho_pat_engra',title:'Несгибаемый чемпион Кхорна'},
+  kho_pat_kharneth_herald:{to:'kho_pat_sven',title:'Глашатай Медного Черепа'},
+  kho_pat_vekh_skulljudge:{to:'kho_pat_engra',title:'Судья Черепных Арен'}};
+// нынешнее имя патрона по id в любой фракции: долг помнит кредитора по id, а патронов переименовывают
+function patronTitle(id){
+  for(const l of Object.values(PATRONS_FACTION)){ const p=l.find(x=>x[0]===id); if(p) return p[1]; }
+  return (PATRON_GONE[id]||{}).title||null;
+}
 function godsFor(){
   const own=bandChaosGod();   // банда, посвящённая одному из Четверых, другим трём не молится
   const ids=[...(FACTION_GODS[state.factionId]||[])];
@@ -5499,7 +5513,7 @@ function validate(){
       if(reqLeader.includes(u.id)) catForCounts='leader';
       else if(u.category==='leader'){ catForCounts='hero'; mismatchedLeaders.push(u.name); }
     }
-    // наёмник «сверх лимита» (права патронов ван Хаутена и Голдтуса) места наёмника не занимает, но очки считаются
+    // наёмник «сверх лимита» (права патронов — барона-маклера из Мариенбурга и Верховного тирана огров) места наёмника не занимает, но очки считаются
     if(catForCounts==='merc'&&ru.mercSlotFree) catForCounts='mercFree';
     counts[catForCounts]=(counts[catForCounts]||0)+1;
     total+=unitCost(ru);
@@ -5553,7 +5567,7 @@ function validate(){
   }
   if(mismatchedLeaders.length) errors.push('Не годится в лидеры для этой подфракции: '+mismatchedLeaders.join(', ')+' — нужен: '+reqLeader.map(id=>(findUnit(id)||{}).name||id).join(' / ')+'.');
   if(total>fmt.points) errors.push('Превышен лимит очков: '+total+' / '+fmt.points+'.');
-  // слоты формата: база + прибавки правил и патрона; «only» — места только для названных юнитов (Яруна, Мернеб)
+  // слоты формата: база + прибавки правил и патрона; «only» — места только для названных юнитов (у духовидицы унголов и у принца-изгнанника Нехекары)
   const slot=(what,base)=>{ const only=fxOn('limit',p=>p.what===what&&p.only).reduce((s,p)=>s+Math.min(p.add,gu.filter(r=>p.only.includes(r.unitId)).length),0);
     const cap=(base||0)+fxLimit(what); return {cap,only,max:cap+only,plus:cap!==(base||0)||only>0}; };
   const hs=slot('hero',fmt.heroMax), rs=slot('rare',fmt.rareMax), ms=slot('merc',fmt.mercMax);
@@ -8597,7 +8611,15 @@ function loadAutosave(){
   try{ const s=localStorage.getItem(LS_CUR); if(s){ adopt(JSON.parse(s)); return true; } }catch(e){}
   return false;
 }
+let adoptNotes=[];   // что перевод старого сейва поменял заметного для игрока — окно после загрузки (showAdoptNotes)
+function showAdoptNotes(){
+  if(!adoptNotes.length) return;
+  openModal(adoptNotes.map(n=>'<h3>'+esc(n.h)+'</h3>'+n.p.map(t=>'<p>'+esc(t)+'</p>').join('')).join('')
+    +'<div class="row"><button class="btn gold" data-close>Понятно</button></div>');
+  adoptNotes=[];
+}
 function adopt(obj){
+  adoptNotes=[];
   state=Object.assign(blankState(),obj);
   state.filters=Object.assign({search:'',cat:'all',tag:'all',sort:'cat'},obj.filters||{});
   // защита: фракция существует
@@ -8627,6 +8649,25 @@ function adopt(obj){
     const un=fUnits.find(x=>x.id===r.unitId);
     if(un) r.modelCount=Math.max(un.minModels,Math.min(un.maxModels,r.modelCount||1));
   });
+  // 07.10.2026: снятый патрон (PATRON_GONE) — банда переходит к ближайшему новому, навык патрона у героев тоже.
+  // До этого такой сейв молча оставался без патрона, а навык пропадал из карточки героя
+  const gone=PATRON_GONE[state.patronId];
+  if(gone){
+    const was=state.patronId, nw=patronsFor().find(p=>p[0]===gone.to);
+    let heroes=0;
+    if(nw) (state.units||[]).forEach(r=>{ const i=r.skills.indexOf('pat_'+was); if(i<0) return;
+      if(r.status!=='dead') heroes++;
+      if(r.skills.includes('pat_'+nw[0])) r.skills.splice(i,1); else r.skills[i]='pat_'+nw[0]; });
+    state.patronId=nw?nw[0]:null;
+    const sk=nw&&(PATRON_SKILLS[nw[0]]||[])[0], owe=(state.debts||[]).some(d=>d.creditor===was&&d.left>0);
+    adoptNotes.push({h:nw?'Патрон сменился':'Патрон снят',p:[
+      'Патрона «'+gone.title+'» в билдере больше нет. '+(nw?'Банда перешла к ближайшему по духу — «'+nw[1]+'».':'Банда осталась без патрона.'),
+      ...(heroes&&sk?['У героев с навыком прежнего патрона ('+heroes+') он заменён навыком нового: «'+sk+'» ✦.']:[]),
+      ...(owe?['Долг перед прежним патроном остался за бандой.']:[]),
+      'Другого патрона можно выбрать в поле «Патрон-покровитель» на вкладке «Сборка ростера».']});
+  }
+  // долг называет кредитора нынешним именем: 07.10.2026 патронов переименовали в титулы
+  (state.debts||[]).forEach(d=>{ const t=patronTitle(d.creditor); if(t) d.name=t; });
 }
 function getSaves(){ try{ return JSON.parse(localStorage.getItem(LS_SAVES)||'{}'); }catch(e){ return {}; } }
 function setSaves(o){ localStorage.setItem(LS_SAVES, JSON.stringify(o)); }
@@ -8652,7 +8693,7 @@ function openLoad(){
   body+='<div class="row"><button class="btn" data-close>Закрыть</button></div>';
   openModal(body);
 }
-function loadSave(name){ const saves=getSaves(); if(saves[name]){ adopt(saves[name].state); renderAll(); switchView(state.view||'build'); closeModal(); toast('Загружено: '+name); autosave(); } }
+function loadSave(name){ const saves=getSaves(); if(saves[name]){ adopt(saves[name].state); renderAll(); switchView(state.view||'build'); closeModal(); toast('Загружено: '+name); autosave(); showAdoptNotes(); } }
 function delSave(name){ const saves=getSaves(); delete saves[name]; setSaves(saves); openLoad(); }
 
 function newRoster(){
@@ -8944,7 +8985,7 @@ function bind(){
     else if(e.target.closest('[data-copy]')){ navigator.clipboard.writeText(window.__exportData||'').then(()=>toast('Скопировано')); }
     else if(e.target.closest('[data-download]')){ download(e.target.closest('[data-download]').dataset.download); }
     else if(e.target.closest('[data-import]')){
-      try{ adopt(JSON.parse($('#impArea').value)); renderAll(); switchView('build'); closeModal(); autosave(); toast('Импортировано'); }
+      try{ adopt(JSON.parse($('#impArea').value)); renderAll(); switchView('build'); closeModal(); autosave(); toast('Импортировано'); showAdoptNotes(); }
       catch(err){ toast('Ошибка JSON: '+err.message); }
     }
     else if(e.target.closest('[data-gadd]')){
@@ -9935,6 +9976,7 @@ loadAutosave();
 bind();
 renderAll();
 switchView(state.view||'build');
+showAdoptNotes();   // старый сейв с переведённым патроном: что поменялось
 </script>
 </body>
 </html>
