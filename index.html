@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>FB Campaign — Army Builder v0.1</title>
+<title>FB Campaign — Army Builder v4.0</title>
 <style>
   :root{
     /* холодная грифельно-стальная гамма; имена --gold* исторические (акцент) */
@@ -384,7 +384,7 @@
   <div class="brand">
     <span class="mark">⚔</span>
     <h1>FB Campaign Builder</h1>
-    <span class="ver">v0.1</span>
+    <span class="ver">v4.0</span>
   </div>
   <div class="spacer"></div>
   <div class="pts-readout" id="ptsReadout">
@@ -553,7 +553,7 @@
 
 <script>
 /* =========================================================================
-   FB CAMPAIGN WARGAME — HTML ARMY BUILDER v0.1
+   FB CAMPAIGN WARGAME — HTML ARMY BUILDER v4.0
    Один файл, без зависимостей. Данные из спецификации.
    ========================================================================= */
 
@@ -570,66 +570,6 @@ function F(id,name,alignment,description,rules,subs,units){
   };
 }
 
-/* ---------- Генератор черновых статов (по роли/тегам/цене) ----------
-   Это намеренно грубый baseline, чтобы карточки не были пустыми.
-   Перебалансить просто: меняешь формулу — данные регенерируются при загрузке. */
-function genStats(u){
-  const t=u.tags, has=x=>t.includes(x);
-  let move=4, melee=3, ranged=0, defense=3, strength=3, wounds=1, nerve=6;
-
-  // База по категории
-  if(u.category==='leader'){melee=5;defense=5;strength=4;wounds=3;nerve=9;}
-  else if(u.category==='hero'){melee=4;defense=4;strength=4;wounds=2;nerve=8;}
-  else if(u.category==='special'){melee=4;defense=3;strength=3;wounds=1;nerve=7;}
-  else if(u.category==='rare'){melee=4;defense=4;strength=4;wounds=2;nerve=7;}
-
-  // Движение
-  if(has('infantry')) move=4;
-  if(has('cavalry')) move=8;
-  if(has('chariot')) move=7;
-  if(has('beast')) move=7;
-  if(has('monstrous')) move=6;
-  if(has('flying')) move=10;
-  if(has('fast')) move+=1;
-  if(has('swarm')) move=5;
-
-  // Стрельба
-  if(has('sniper')) ranged=Math.max(ranged,5);
-  else if(has('gunpowder')||has('artillery')) ranged=Math.max(ranged,4);
-  else if(has('ranged')||has('magic')) ranged=Math.max(ranged,3);
-
-  // Модификаторы тегов
-  if(has('elite')){melee+=1;defense+=1;nerve+=1;}
-  if(has('veteran')){melee+=1;nerve+=1;}
-  if(has('armored')) defense+=1;
-  if(has('armor_piercing')) strength+=1;
-  if(has('frenzy')){melee+=1;nerve+=1;}
-  if(has('dodge')) defense+=1;
-  if(has('duelist')||has('officer')) melee+=1;
-  if(has('expendable')){nerve=Math.max(3,nerve-1); melee=Math.max(2,melee-1);}
-  if(has('unbreakable')) nerve=Math.max(nerve,9);
-  if(has('warded')) defense+=1;
-  if(has('regen')) wounds+=1;
-  if(has('spirit')||has('forest_spirit')) {wounds+=1; defense+=1;}
-  if(has('construct')){wounds+=2; defense+=1; nerve=Math.max(nerve,8);}
-  if(has('undead')) nerve=Math.max(nerve,7);
-  if(has('ogre')){strength+=1; wounds+=1;}
-  if(has('monstrous')){strength+=2; wounds+=3; melee+=1; defense+=1; nerve+=1;}
-  if(has('huge')){strength+=2; wounds+=3;}
-  if(has('dragon')){strength+=2; wounds+=2; melee+=1;}
-  if(has('wizard')) melee=Math.max(2,melee-2);
-
-  // Лёгкая поправка на цену
-  if(u.baseCost>=150){wounds+=1; strength+=1;}
-
-  // Клампы
-  const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
-  return {
-    move:cl(move,3,12), melee:cl(melee,2,8), ranged:cl(ranged,0,6),
-    defense:cl(defense,2,8), strength:cl(strength,2,8),
-    wounds:cl(wounds,1,10), nerve:cl(nerve,3,10)
-  };
-}
 /* ---------- Тип юнита (Соло / Отряд / Кавалерия / Монстр / Машина) ---------- */
 function unitTypeOf(u){
   const t=u.tags, has=x=>t.includes(x);
@@ -2410,7 +2350,7 @@ F('nurgle','Nurgle','chaos','Медленные, вязкие, живучие, �
   U("nur_putrid_blightkings_gw","Putrid Blightkings (Great Weapons)","special",105,3,6,["infantry","chaos","armored","elite","disease","armor_piercing","the_wastes","maggot_host"],"Вариант Гнилостных Царей с двуручным оружием — медленнее, но пробивает даже самую крепкую броню. Из дополнения Lords of the End Times."),
   U("nur_basilisk","Basilisk","rare",140,1,1,["monstrous","beast","poison","the_wastes","monster","maggot_host","petrifying_gaze"],"Ядовитая рептилия исполинских размеров, чей взгляд обращает в камень, а укус несёт медленную гниющую смерть — Нургл давно взял такую живность под свою опеку. Из дополнения Lords of the End Times."),
   U("nur_giant_spined_beast","Giant Spined Chaos Beast","rare",150,1,1,["monstrous","chaos","beast","armor_piercing","the_wastes","monster","maggot_host"],"Шипастая тварь неопределённого мутационного происхождения — редко встречается дважды в одинаковом обличье. Из дополнения Lords of the End Times."),
-  U("nur_ror_sons_last_plague","Sons of the Last Plague","special",115,3,6,["infantry","chaos","armored","elite","disease","armor_piercing","the_wastes","maggot_host"],"Regiment of Renown — именной вариант Putrid Blightkings (Great Weapons). Из дополнения Lords of the End Times."),
+  U("nur_ror_sons_last_plague","Sons of the Last Plague","special",115,3,6,["infantry","chaos","armored","elite","disease","armor_piercing","human","the_wastes","maggot_host"],"Regiment of Renown — именной вариант Chosen of Nurgle (Great Weapons). Из дополнения Lords of the End Times."),
   U("nur_ror_repugnauts","The Repugnauts of Brass Keep","special",110,3,6,["infantry","chaos","armored","elite","disease","frenzy","the_wastes","maggot_host"],"Regiment of Renown — именной вариант Putrid Blightkings (Dual Axes). Из дополнения Lords of the End Times."),
   U("nur_ror_bane_wittengast","Elder Spined Beast","rare",160,1,1,["monstrous","chaos","beast","armor_piercing","the_wastes","monster","maggot_host"],"Матёрый вариант Giant Spined Chaos Beast — тварь, разорившая не одно поселение. Из дополнения Lords of the End Times.")]),
 
@@ -2675,8 +2615,10 @@ F('daemons','Daemons of Chaos','chaos','Конструктор демониче�
   U('doc_greater_daemon','Greater Daemon','rare',220,1,1,['daemon','monstrous','unique', "monster"],'поздний босс'),
   U('doc_merc_furies','Chaos Furies','merc',45,2,4,['flying','beast', "daemon"],'фурии — бесхозные демоны-стервятники (WFB)'),
   U('doc_merc_cult_coven','Mortal Cult Coven','merc',30,2,5,['infantry', "human", "the_wastes"],'смертные культисты-прислужники'),
-  U("doc_shadow_prince","Shadow Prince","leader",200,1,1,["daemon", "flying", "monstrous", "unique", "undivided_prince"],"Задолго до Сигмара, когда Четверо Тёмных Богов ещё возвышали избранников сообща, первым смертным, вознесённым в Принцы Демонов, стал этот повелитель — и с тех пор он не признаёт ничьей единоличной власти над собой. Он не носит печати ни одного из Четверых, но вбирает силу сразу от каждого дара, оставаясь пленником зыбкой тени между мирами яви и Хаоса. Полководцы, идущие под его крылом, знают: этот повелитель служит лишь собственной гордыне, а его демоническая мощь — от Хаоса в целом, а не от милости одного-единственного бога.")]),
-/* — TODO после 24.09.2026: DLC «Lords of the End Times» отдаёт Daemons of Chaos кросс-грант от лорда-тройни Нургла, но на момент отчёта (13.09.2026) вики держит его как «???» — конкретные юниты ещё не раскрыты. Проверить вики (totalwarwarhammer.fandom.com/wiki/Lords_of_the_End_Times) после релиза и дозавести сюда. — */
+  U("doc_shadow_prince","Shadow Prince","leader",200,1,1,["daemon", "flying", "monstrous", "unique", "undivided_prince"],"Задолго до Сигмара, когда Четверо Тёмных Богов ещё возвышали избранников сообща, первым смертным, вознесённым в Принцы Демонов, стал этот повелитель — и с тех пор он не признаёт ничьей единоличной власти над собой. Он не носит печати ни одного из Четверых, но вбирает силу сразу от каждого дара, оставаясь пленником зыбкой тени между мирами яви и Хаоса. Полководцы, идущие под его крылом, знают: этот повелитель служит лишь собственной гордыне, а его демоническая мощь — от Хаоса в целом, а не от милости одного-единственного бога."),
+  U("doc_ror_sons_last_plague","Sons of the Last Plague","special",115,3,6,["infantry","chaos","armored","elite","disease","armor_piercing","human","nurgle","nurgle_ascendant"],"Regiment of Renown — именной вариант Chosen of Nurgle (Great Weapons). Из дополнения Lords of the End Times."),
+  U("doc_ror_repugnauts","The Repugnauts of Brass Keep","special",110,3,6,["infantry","chaos","armored","elite","disease","frenzy","nurgle","nurgle_ascendant"],"Regiment of Renown — именной вариант Putrid Blightkings (Dual Axes). Из дополнения Lords of the End Times.")]),
+/* — DLC «Lords of the End Times» отдаёт Daemons of Chaos два полка славы Нургла — те же, что у фракции Nurgle (doc_ror_*). Сверено с вики после релиза 07.10.2026. — */
 
 /* ===== DESTRUCTION / NEUTRAL ===== */
 F('greenskins','Greenskins','destruction','Орки, гоблины, тролли, массовый ближний бой, ВААГХ!',
@@ -3507,7 +3449,6 @@ function generateName(u){
 let _uid = 1;
 function uid(){ return 'u'+(_uid++); }
 
-const STAT_LABELS = [['move','M'],['meleeN','Бой'],['meleeB','Куб.бой'],['rangedN','Стрел'],['rangedB','Куб.стр'],['armour','Бр'],['wounds','Раны'],['resolve','Воля'],['endurance','Вын']];
 const UTYPE_LABEL={solo:'Соло',squad:'Отряд',cavalry:'Кавалерия',monster:'Монстр',machine:'Машина'};
 // класс кавалерии задаёт дугу поворота (свод, «Кавалерия: разгон и манёвр»); колесница пользуется теми же правилами
 function cavClass(u){ if(!u) return null; const t=u.tags||[];
@@ -4325,7 +4266,7 @@ const PATRON_SKILLS = {"emp_pat_von_volk":["Тень Пустоты","Персо
    бывает: checks/audit_runtime.js роняет батарею на патроне или боге без разметки.
    Скидки найма — в очках ростера; золото, займы и доля с добычи — в казне.
    ========================================================================= */
-const FX_KINDS={cost:1,limit:1,stat:1,ava2off:1,grant:1,income:1,cut:1,favor:1,injury:1,token:1,counter:1,freeModel:1,tribute:1,captiveSale:1,noReturn:1,oath:1,duelXp:1,bet:1,debtPer:1,trophyStat:1,table:1,manual:1,
+const FX_KINDS={cost:1,limit:1,stat:1,ava2off:1,grant:1,income:1,cut:1,favor:1,injury:1,token:1,counter:1,freeModel:1,tribute:1,captiveSale:1,noReturn:1,oath:1,duelXp:1,trophyStat:1,table:1,manual:1,
   // блок 2 (правила фракций и подфракций): категория для слотов, потолок и обязательный юнит, опыт после игры,
   // своя система билдера (Книга обид, особенности, контракт), запрет особенностей
   cat:1,cap:1,require:1,xp:1,system:1,noTraits:1,
@@ -4693,7 +4634,7 @@ const SUB_FX={
  // ---------- Демоны Хаоса ----------
  'daemons:undivided_prince':[{k:'cost',sel:{units:['doc_greater_daemon']},pct:-10}],
  'daemons:khorne_ascendant':[{k:'cost',sel:{tags:['khorne']},pct:-10},{k:'duelXp',xp:1}],
- 'daemons:nurgle_ascendant':[{k:'stat',sel:{tags:['nurgle']},endurance:1}],
+ 'daemons:nurgle_ascendant':[{k:'stat',sel:{tags:['nurgle'],hasTags:['daemon']},endurance:1}],
  'daemons:tzeentch_ascendant':[{k:'stat',sel:{tags:['tzeentch'],hasTags:['ranged']},rangedN:-1},{k:'cost',sel:{tags:['tzeentch']},pct:-5}],
  'daemons:slaanesh_ascendant':[{k:'stat',sel:{tags:['slaanesh']},move:1}],
  // ---------- Зеленокожие ----------
@@ -4946,8 +4887,6 @@ function fxLabel(p){
     case 'noReturn': return '«Убит» окончателен — возвраты не действуют';
     case 'oath': return 'герой, нарушивший слово: '+p.xp+' XP';
     case 'duelXp': return (p.holdersOnly?'герой с навыком':'герой банды')+', выигравший единоборство: +'+p.xp+' XP';
-    case 'bet': return 'объявленная ставка: победа +'+fxDiceTxt(p.gold)+' в казну';
-    case 'debtPer': return 'каждый раз: +'+p.gold+' к долгу';
     case 'trophyStat': return 'добивший монстра: Воля '+p.resolve+' навсегда';
     case 'upkeep': return p.free?('не требует содержания: один (первый в ростере) — '+fxSelTxt(p.sel)):('содержание банды в провизии ×'+p.mult);
     case 'wage': return 'жалованье '+fxSelTxt(p.sel)+': '+(p.pct>0?'+':'')+p.pct+'%';
@@ -5063,7 +5002,7 @@ function openVaulPick(ru,p){
   openModal(`<div class="gmhead" style="background:#6b4e1f">⚒ Дар Ваула — какому оружию +1 AP навсегда?<button class="x" data-close>✕</button></div><div style="padding:8px 2px">${rows||'<div class="empty">У юнита нет оружия.</div>'}</div>`);
 }
 // окно «После игры»: доход и доли патрона, долги, пленники, заветы бога, события навыков
-function postGameNeeded(){ return activeFx().some(p=>['income','cut','favor','counter','freeModel','tribute','captiveSale','oath','duelXp','bet','debtPer','trophyStat','xp'].includes(p.k)||(p.k==='token'&&p.use==='grabnikSale'&&tokFree(p))||(p.k==='injury'&&p.deathTo))||(state.debts||[]).some(d=>d.left>0)||!!currentGodId(); }
+function postGameNeeded(){ return activeFx().some(p=>['income','cut','favor','counter','freeModel','tribute','captiveSale','oath','duelXp','trophyStat','xp'].includes(p.k)||(p.k==='token'&&p.use==='grabnikSale'&&tokFree(p))||(p.k==='injury'&&p.deathTo))||(state.debts||[]).some(d=>d.left>0)||!!currentGodId(); }
 function openPostGame(gi){
   const g=state.log[gi]; if(!g) return;
   const fx=activeFx(); const gid=currentGodId(); const god=gid?PANTHEON[gid]:null;
@@ -5082,8 +5021,6 @@ function openPostGame(gi){
     if(p.k==='income'&&p.per&&p.per!=='captives') rowsH.push(`<div class="gearline">${src}: ${esc(p.per)} <input id="pgN${i}" type="number" min="0" value="0" style="width:60px"></div>`);
     if(p.k==='counter') rowsH.push(`<div class="gearline">${src}: ${esc(p.label)} <input id="pgN${i}" type="number" min="0" value="0" style="width:60px"> <span style="color:var(--faint);font-size:11px">счёт ${((state.counters||{})[p.id]||0)} / ${p.goal}</span></div>`);
     if(p.k==='captiveSale') rowsH.push(`<div class="gearline">${src}: продать пленников <input id="pgSell" type="number" min="0" value="0" style="width:60px"> по ${esc(fxDiceTxt(p.gold))}</div>`);
-    if(p.k==='bet') rowsH.push(`<label class="gearline"><input type="checkbox" id="pgC${i}"> ${src}: перед боем была объявлена ставка</label>`);
-    if(p.k==='debtPer') rowsH.push(`<div class="gearline">${src}: ${esc(p.label)} <input id="pgN${i}" type="number" min="0" value="0" style="width:60px"></div>`);
     if(p.k==='duelXp') heroes.filter(r=>!p.holders||p.holders.includes(r.uid)).forEach(r=>rowsH.push(`<label class="gearline"><input type="checkbox" id="pgD${i}_${r.uid}"> ${src}: ${esc(r.customName||findUnit(r.unitId).name)} выиграл единоборство</label>`));
     if(p.k==='oath') heroes.forEach(r=>rowsH.push(`<label class="gearline"><input type="checkbox" id="pgO${i}_${r.uid}"> ${src}: ${esc(r.customName||findUnit(r.unitId).name)} нарушил данное слово (−1 XP)</label>`));
     if(p.k==='trophyStat') rowsH.push(`<div class="gearline">${src}: ${esc(p.label)} <select id="pgT${i}"><option value="">— никто —</option>${state.units.filter(r=>r.status!=='dead').map(r=>`<option value="${r.uid}">${esc(r.customName||findUnit(r.unitId).name)}</option>`).join('')}</select></div>`);
@@ -5147,9 +5084,7 @@ function applyPostGame(gi){
         state.units.filter(r=>r.status!=='dead'&&r.forGame!==false&&fxSel(p.sel,findUnit(r.unitId))).forEach(r=>{ r.xp=(r.xp||0)+n; lines.push((r.customName||findUnit(r.unitId).name)+': +'+n+' XP ('+p.srcName+')'); }); }
     }
     if(p.k==='favor'&&p.on==='win'&&g.result==='win'&&currentGodId()&&(!p.god||currentGodId()===p.god)){ state.favor=(state.favor||0)+p.d; lines.push(p.srcName+': победа, милость '+(p.d>0?'+':'')+p.d); }
-    if(p.k==='bet'&&chk('pgC'+i)&&g.result==='win'){ const r=fxDice(p.gold); gold+=r.v; lines.push(p.srcName+': ставка сыграла, +'+r.v+' ('+r.txt+')'); }
     if(p.k==='token'&&p.use==='grabnikSale'&&chk('pgC'+i)&&tokFree(p)){ const r=fxDice(p.gold); gold+=r.v; tokUse(p); lines.push(p.srcName+': +'+r.v+' ('+r.txt+')'); }
-    if(p.k==='debtPer'){ const n=num('pgN'+i); if(n>0){ addDebt(p.creditor,(patronsFor().find(x=>x[0]===p.creditor)||[,p.srcName])[1],n*p.gold,20); lines.push(p.srcName+': +'+(n*p.gold)+' к долгу'); } }
     if(p.k==='counter'){ const n=num('pgN'+i); state.counters=state.counters||{}; state.counters[p.id]=(state.counters[p.id]||0)+n; if(n) lines.push(p.srcName+': счёт '+state.counters[p.id]+' / '+p.goal); }
     if(p.k==='duelXp') (p.holders||state.units.filter(r=>{const u=findUnit(r.unitId);return u&&LEADER_CATS.includes(u.category)&&r.status!=='dead';}).map(r=>r.uid)).forEach(uid=>{ if(chk('pgD'+i+'_'+uid)){ const r=getRU(uid); if(r){ r.xp=(r.xp||0)+p.xp; lines.push((r.customName||findUnit(r.unitId).name)+': +'+p.xp+' XP за единоборство'); } } });
     if(p.k==='oath') state.units.forEach(r=>{ if(chk('pgO'+i+'_'+r.uid)){ r.xp=Math.max(0,(r.xp||0)+p.xp); lines.push((r.customName||findUnit(r.unitId).name)+': '+p.xp+' XP — нарушил слово'); } });
@@ -5445,7 +5380,6 @@ function unitCost(ru){
   const hire=Math.max(0,pi.model*ru.modelCount+pi.flat);
   return hire + opt + gearPrice(wcost+acost+ecost,pi.gearPct) + tcost + wlcost + (mt?mt.cost:0);
 }
-function rosterTotal(){ return state.units.reduce((s,ru)=>s+unitCost(ru),0); }
 function effStats(ru){
   const u=findUnit(ru.unitId); if(!u) return null;
   const base={...u.stats}; const m=ruMods(ru); const bm=bandStatMods(u);   // m — развитие и травмы, bm — эффекты банды: патрон, бог
@@ -6030,7 +5964,7 @@ function renderCampaignPanel(){
     <div style="text-align:right"><button class="btn ghost sm" data-act="cend">завершить кампанию</button></div></div>`;
 }
 // кампания: покупка за золото — снимок стоимости банды до действия и расчёт после всех обработчиков (одна точка на все кнопки покупки)
-const BUY_ACTS=new Set(['add','inc','dec','del','delunit','rmgear','rmgearx','rmmount','mpoolrm','opt','ckrow','mpick','wizlevel']);
+const BUY_ACTS=new Set(['delunit','rmgear','rmgearx','rmmount','mpoolrm','opt','ckrow','mpick','wizlevel']);
 const BUY_SEL=['[data-rebuyapply]','[data-addconfirm]','[data-pickitem]'];
 let buySnap=null;
 function buyStart(e){
@@ -6210,45 +6144,6 @@ function renderSetup(){
     html+='<div style="color:var(--faint);font-size:10.5px;margin-top:2px;opacity:.7">Благосклонность отслеживается во вкладке «Кампания»</div>';
   }
   $('#factionRules').innerHTML=html;
-}
-
-function _legacy_renderCatalog(){ /* устарело: заменено openAddModal */
-  const fl=state.filters;
-  let list=faction().units.slice();
-  if(fl.cat!=='all') list=list.filter(u=>u.category===fl.cat);
-  if(fl.tag!=='all') list=list.filter(u=>u.tags.includes(fl.tag));
-  if(fl.search.trim()){
-    const q=fl.search.toLowerCase();
-    list=list.filter(u=>(u.name+' '+u.role+' '+u.tags.join(' ')).toLowerCase().includes(q));
-  }
-  if(fl.sort==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
-  else if(fl.sort==='cost_asc') list.sort((a,b)=>a.baseCost-b.baseCost);
-  else if(fl.sort==='cost_desc') list.sort((a,b)=>b.baseCost-a.baseCost);
-  else list.sort((a,b)=>catOrder.indexOf(a.category)-catOrder.indexOf(b.category)||a.baseCost-b.baseCost);
-
-  $('#catCount').textContent=list.length+' юн.';
-  $('#catalog').innerHTML = list.map(u=>{
-    const ava=avaOf(u), have=rosterCountOf(u.id), atCap=have>=ava;
-    return `
-    <div class="ucard">
-      <img class="uicon" src="icons/${u.id}.jpg" alt="" onerror="this.style.visibility='hidden'">
-      <div>
-        <div class="nm">${esc(u.name)}</div>
-        <div class="role">${esc(u.role)}</div>
-      </div>
-      <div style="text-align:right">
-        <div class="cost">${priceHtml(u)}</div>
-        <div class="sub">${u.minModels}–${u.maxModels} мод.</div>
-      </div>
-      <div class="foot">
-        <span class="badge cat-${u.category}">${catLabel[u.category]}</span>
-        <span class="chip" title="Availability: лимит записей юнита в ростере (подфракция даёт 2 «своим»)" style="${ava===2?'color:var(--gold2);border-color:var(--gold)':''}">Ava ${ava}${have?` · ${have}`:''}</span>
-        ${u.tags.map(t=>`<span class="chip">${t}</span>`).join('')}
-        <button class="btn gold sm" data-act="add" data-id="${u.id}" style="margin-left:auto${atCap?';opacity:.4;pointer-events:none':''}" ${atCap?'disabled title="Достигнут лимит Ava"':''}>${atCap?'Ava макс':'+ Добавить'}</button>
-      </div>
-      ${(u.mountIds&&u.mountIds.length)?`<div class="role" style="margin-top:4px;color:var(--gold2)">🐎 ${mountsForUnit(u).map(m=>esc(m.name)).join(' · ')}</div>`:''}
-      ${statStrip(u.stats,u.unitType,u)}
-    </div>`;}).join('') || '<div class="empty">Ничего не найдено по фильтрам.</div>';
 }
 
 function renderRoster(){
@@ -6647,78 +6542,8 @@ function openPickModal(uidv,cat,opt){
     </div>`);
 }
 
-function _legacy_rosterUnitHtml(ru){ /* устарело: заменено tcRowHtml + renderUnitDetail */
-  const u=findUnit(ru.unitId); if(!u) return '';
-  const opts=optionsFor(u);
-  const lvl=xpToLevel(ru.xp||0);
-  const cinfo=[];
-  cinfo.push(`<span class="ctag lvl">Lvl ${lvl} · XP ${ru.xp||0}</span>`);
-  if(ru.status==='dead') cinfo.push('<span class="ctag dead">погиб</span>');
-  else if(ru.status==='miss_next_game') cinfo.push('<span class="ctag miss">пропуск игры</span>');
-  else if(ru.status==='retired') cinfo.push('<span class="ctag miss">'+({hunger:'ушёл: голод',beast:'одичал',wage:'ушёл: нет жалованья'}[ru.left]||'в отставке')+'</span>');
-  if(ru.hunger>0&&ru.status!=='retired'&&campaignOn()) cinfo.push('<span class="ctag miss">голодает</span>');
-  (ru.injuries||[]).forEach(i=>cinfo.push(`<span class="ctag">🩸 ${esc(injName(i))}</span>`));
-  (ru.boons||[]).forEach(b=>cinfo.push(`<span class="ctag">★ ${esc(b)}</span>`));
-  (ru.scars||[]).forEach(s=>cinfo.push(`<span class="ctag">▲ ${esc(s)}</span>`));
-
-  // несъёмные опции (командная группа; позже — скиллы/трейты): галочка + разворачиваемое описание
-  const optHtml = opts.length? `<div class="gearline"><span class="glab">🎖 Опции:</span></div>`+opts.map(oid=>{
-    const o=COMMON_OPTIONS[oid]; const on=(ru.selectedOptions||[]).includes(oid);
-    return `<div class="optrow">
-      <div class="orh">
-        <label><input type="checkbox" data-act="opt" data-uid="${ru.uid}" data-opt="${oid}" ${on?'checked':''}> ${esc(o.name)} <span style="color:var(--faint)">+${o.cost}</span>${on?' <span style="color:var(--gold2)">✓</span>':''}</label>
-        <button class="chev" data-act="optinfo" title="Показать описание">▾</button>
-      </div>
-      <div class="odesc">${esc(o.desc)}</div>
-    </div>`;
-  }).join(''):'';
-
-  // Верховое животное (только у лидеров/героев с доступными маунтами)
-  const mts=mountsForUnit(u,ru);
-  const curMt=mountOf(ru);
-  const mountHtml = mts.length? `<div class="opts" style="align-items:center">
-      <span style="color:var(--gold2);font-size:12px">🐎 Верховое:</span>
-      <select data-act="mount" data-uid="${ru.uid}" class="btn sm" style="padding:3px 8px;max-width:230px">
-        <option value="">— пешим —</option>
-        ${mts.map(m=>`<option value="${m.id}" ${ru.mountId===m.id?'selected':''}>${esc(m.name)} (+${m.cost})</option>`).join('')}
-      </select>
-      ${curMt?`<span class="ctag" data-act="ginfo" data-kind="mount" data-id="${curMt.id}" data-uid="${ru.uid}" style="color:var(--gold2);cursor:pointer" title="Клик — профиль маунта">${esc(mountChip(curMt))}</span>`:''}
-    </div>`:'';
-
-  const gearHtml = gearSectionsHtml(ru,u);
-
-  return `<div class="runit">
-    <div class="top">
-      <img class="uicon sm" src="icons/${u.id}.jpg" alt="" onerror="this.style.visibility='hidden'">
-      <span class="nm">${esc(u.name)}${curMt?' <span style="color:var(--gold2)">🐎</span>':''}</span>
-      <input class="cname" data-act="cname" data-uid="${ru.uid}" value="${esc(ru.customName||'')}" placeholder="имя/прозвище…">
-      ${(u.category==='leader'||u.category==='hero')?`<button class="btn ghost sm" data-act="genname" data-uid="${ru.uid}" title="Сгенерировать имя (Total War WH3 / WFRP)">🎲</button>`:''}
-      <div class="stepper">
-        <button data-act="dec" data-uid="${ru.uid}">−</button>
-        <span class="mc">${ru.modelCount}</span>
-        <button data-act="inc" data-uid="${ru.uid}">+</button>
-      </div>
-      <button class="btn ghost sm danger" data-act="del" data-uid="${ru.uid}" title="Убрать">✕</button>
-      <span class="sub">${unitCost(ru)}</span>
-    </div>
-    ${gearHtml}
-    ${optHtml}
-    ${mountHtml}
-    <div class="cinfo">${cinfo.join('')}</div>
-  </div>`;
-}
-
 /* Секции арсенала в стиле Trench Companion: выпадающий «+ добавить…» на категорию,
    выбранное — строками с ✕; недоступные пункты disabled с причиной прямо в тексте */
-function wpnShort(w){
-  const p=[];
-  if(w.t==='r') p.push(w.rng+'"');
-  if(w.h===2) p.push('2р');
-  if(w.hit) p.push((w.hit>0?'+':'')+w.hit+' n+');
-  if(w.b) p.push('+'+w.b+'куб');
-  if(w.ap) p.push('AP'+w.ap);
-  return p.join(' ');
-}
 /* Чекбокс-ряд с разворачиваемым описанием (паттерн Goetic из Trench Companion) */
 function checkRow(uidv,key,id,label,sub,on,dis,desc){
   return `<div class="optrow${on?' on':''}">
@@ -8464,11 +8289,6 @@ function openAddModal(grp){
     </div>`);
 }
 function getRU(uidv){ return state.units.find(r=>r.uid===uidv); }
-function changeModel(uidv,d){
-  const ru=getRU(uidv); if(!ru)return; const u=findUnit(ru.unitId);
-  ru.modelCount=Math.max(u.minModels,Math.min(u.maxModels,ru.modelCount+d));
-  renderRoster(); autosave();
-}
 function toggleOpt(uidv,opt,on){
   const ru=getRU(uidv); if(!ru)return; ru.selectedOptions=ru.selectedOptions||[];
   if(on){
@@ -8605,7 +8425,6 @@ function applyLevelUp(ru){
    СОХРАНЕНИЕ / ЭКСПОРТ
    ========================================================================= */
 const LS_CUR='fb_builder_current', LS_SAVES='fb_builder_saves';
-function snapshot(){ const s={...state}; return JSON.parse(JSON.stringify(s)); }
 function autosave(){ try{ localStorage.setItem(LS_CUR, JSON.stringify(state)); }catch(e){} }
 function loadAutosave(){
   try{ const s=localStorage.getItem(LS_CUR); if(s){ adopt(JSON.parse(s)); return true; } }catch(e){}
@@ -8835,11 +8654,7 @@ function bind(){
   document.addEventListener('click',e=>{
     const b=e.target.closest('[data-act]'); if(!b) return;
     const a=b.dataset.act, u=b.dataset.uid;
-    if(a==='add') addUnit(b.dataset.id);
-    else if(a==='inc') changeModel(u,1);
-    else if(a==='dec') changeModel(u,-1);
-    else if(a==='del') delUnit(u);
-    else if(a==='rmgear'){ toggleGear(u,b.dataset.key,b.dataset.id,false); }
+    if(a==='rmgear'){ toggleGear(u,b.dataset.key,b.dataset.id,false); }
     else if(a==='rmgearx'){ toggleGear(u,b.dataset.key,b.dataset.id,false); closeModal(); }
     else if(a==='ginfo'){ openGearModal(b.dataset.kind,b.dataset.id,b.dataset.uid); }
     else if(a==='optinfo'){ const r=b.closest('.optrow'); if(r) r.classList.toggle('open'); }
@@ -9936,8 +9751,8 @@ function renderLoreSectionBlock(kind,id,section){
         ${overridden!=null?`<button class="btn sm danger" data-lore-reset="${esc(key)}">↺ Сброс</button>`:''}
       </div>
     </div>
-    <div class="lore-view" data-lore-view="${esc(key)}">${viewHtml}</div>
-    <div class="lore-edit" data-lore-editbox="${esc(key)}" style="display:none">
+    <div class="lore-view">${viewHtml}</div>
+    <div class="lore-edit" style="display:none">
       <textarea class="lore-textarea" rows="6" style="width:100%;background:var(--panel2);border:1px solid var(--line2);border-radius:8px;color:var(--ink);padding:8px;font-family:inherit;font-size:13px">${esc(displayText)}</textarea>
       <div class="row" style="margin-top:6px"><button class="btn sm gold" data-lore-save="${esc(key)}">💾 Сохранить правку</button> <button class="btn sm" data-lore-canceledit="${esc(key)}">Отмена</button></div>
     </div>
