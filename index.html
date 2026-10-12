@@ -3504,7 +3504,10 @@ function blankState(){
 
 /* ---------- Доступ к данным ---------- */
 const faction = ()=> GAME_DATA.factions.find(f=>f.id===state.factionId);
-const format  = ()=> GAME_DATA.formats.find(f=>f.id===state.formatId);
+// формат битвы; в кампании с порогами — порог и потолок юнитов битвы поверх правил Warband или Host (решение 12.10.2026)
+const format  = ()=>{ const n=campaignOn()?nextBattleNo():0, t=n?campThreshold(n):null;
+  const f=GAME_DATA.formats.find(x=>x.id===(t?ladderFormat(n):state.formatId));
+  return t?Object.assign({},f,{points:t,unitCap:campUnitCap(n),camp:true}):f; };
 function findUnit(unitId){
   const f = faction(); if(!f) return null;
   return f.units.find(u=>u.id===unitId) || null;
@@ -4330,7 +4333,7 @@ const PATRON_SKILLS = {"emp_pat_von_volk":["Тень Пустоты","Персо
    бывает: checks/audit_runtime.js роняет батарею на патроне или боге без разметки.
    Скидки найма — в очках ростера; золото, займы и доля с добычи — в казне.
    ========================================================================= */
-const FX_KINDS={cost:1,limit:1,stat:1,ava2off:1,grant:1,income:1,cut:1,favor:1,injury:1,token:1,counter:1,freeModel:1,tribute:1,captiveSale:1,noReturn:1,oath:1,duelXp:1,trophyStat:1,table:1,manual:1,
+const FX_KINDS={xpCurse:1,cost:1,limit:1,stat:1,ava2off:1,grant:1,income:1,cut:1,favor:1,injury:1,token:1,counter:1,freeModel:1,tribute:1,captiveSale:1,noReturn:1,oath:1,duelXp:1,trophyStat:1,table:1,manual:1,
   // блок 2 (правила фракций и подфракций): категория для слотов, потолок и обязательный юнит, опыт после игры,
   // своя система билдера (Книга обид, особенности, контракт), запрет особенностей
   cat:1,cap:1,require:1,xp:1,system:1,noTraits:1,
@@ -4473,7 +4476,7 @@ const GOD_FX={
  loec:{bless:FX_T,curse:FX_T},
  morai_heg:{bless:[{k:'token',use:'injuryReroll',scope:'campaign'}],curse:FX_T},
  hekarti:{bless:FX_T,curse:FX_T},
- old_ones:{bless:FX_T,curse:[{k:'manual',why:'XP за победу билдер не начисляет — удержи его сам'}]},
+ old_ones:{bless:FX_T,curse:[{k:'xpCurse',what:'win'}]},
  nagash:{bless:FX_T,curse:FX_T}, stromfels:{bless:FX_T,curse:FX_T},
  ptra:{bless:FX_T,curse:[{k:'ava2off'}]},
  usirian:{bless:[{k:'token',use:'injuryReroll',scope:'game'}],curse:[{k:'noReturn'}]},
@@ -4487,7 +4490,7 @@ const GOD_FX={
  great_maw:{bless:FX_T,curse:[{k:'upkeep',mult:2}]},
  undivided_chaos:{bless:FX_T,curse:FX_T}, grungni:{bless:FX_T,curse:FX_T},
  valaya:{bless:FX_T,curse:[{k:'oath',xp:-1}]},
- grimnir:{bless:FX_T,curse:[{k:'manual',why:'XP за участие билдер не начисляет — удержи его сам'}]},
+ grimnir:{bless:FX_T,curse:[{k:'xpCurse',what:'part',sel:{hasTags:['unbreakable']}}]},
  gazul:{bless:[{k:'token',use:'injuryReroll',scope:'game'}],curse:[{k:'injury',mod:-1,sel:{hero:true}}]},
  morgrim:{bless:FX_T,curse:FX_T}, smednir:{bless:FX_T,curse:FX_T},
  tungni:{bless:FX_T,curse:[{k:'cost',sel:{tags:['rune']},pct:15}]},
@@ -4939,6 +4942,7 @@ function fxLabel(p){
     }
     // n+ показатели (Бой, Стрельба, Броня, Воля) лучше, когда меньше, — подпись говорит «лучше/хуже», а не знак
     case 'stat': return Object.keys(FX_STAT_TXT).filter(k=>p[k]).map(k=>FX_STAT_TXT[k]+(['meleeN','rangedN','armour','resolve'].includes(k)?(p[k]<0?' лучше на '+(-p[k]):' хуже на '+p[k]):' '+(p[k]>0?'+':'')+p[k])).concat(p.save?['броня не хуже '+p.save+'+']:[]).join(', ')+' — '+fxSelTxt(p.sel)+(p.when==='livingAndUndead'?', пока в банде есть и живые, и нежить':p.when==='lossStreak'?', после поражения — до первой победы':'');
+    case 'xpCurse': return p.what==='win'?'после битвы, где банда отклонилась от Плана, — в следующей без опыта за победу':'без опыта за участие, если не атаковал Крупную цель или персонажа: '+fxSelTxt(p.sel);
     case 'ava2off': return 'Ava 2 подфракции не действует';
     case 'grant': return 'при выборе патрона: '+(p.gold?'+'+fxDiceTxt(p.gold)+' в казну':p.loan?('заём '+fxDiceTxt(p.loan)+' в казну, возврат '+p.rate+'% добычи каждой игры'):(p.favor?'милость '+(p.favor>0?'+':'')+p.favor:''));
     case 'income': return (p.per==='captives'?'за каждого взятого пленника':p.per?('за каждого: «'+p.per+'»'+(p.chance?', на '+p.chance+'+ по к6':''))
@@ -4985,7 +4989,7 @@ function regrowable(ru){ return (ru.injuries||[]).slice(); }
 // снимок до броска травмы: переигровка возвращает и травмы, и потерянный предмет, и запись о Ненависти
 function injSnap(ru){ return JSON.parse(JSON.stringify({status:ru.status||'active',xp:ru.xp||0,injuries:ru.injuries||[],scars:ru.scars||[],boons:ru.boons||[],weapons:ru.weapons||[],armour:ru.armour||[],equip:ru.equip||[],weaponAp:ru.weaponAp||{}})); }
 // бросок травмы с учётом эффектов банды; fixed — заранее заданный результат (обратить в лёгкую)
-function rollInjury(ru,fixed){
+function rollInjury(ru,fixed,quiet){   // quiet — бросок из окна «После битвы»: выбор «рука или глаз» откроется после него
   const u=findUnit(ru.unitId); if(!u) return;
   const g=lastGame(), gi=(state.log||[]).length;
   const notes=[]; let roll;
@@ -5005,7 +5009,7 @@ function rollInjury(ru,fixed){
   applyInjury(ru,roll);
   if(ru.status!=='dead'&&fxOn('injury',p=>p.forceMiss).length){ ru.status='miss_next_game'; notes.push('Остывшие Руки: пропуск битвы'); }
   ru._inj={roll,snap,game:gi};
-  if(roll===3&&ru.status!=='dead'&&canShoot(ru)&&typeof document!=='undefined') openArmEyePick(ru);
+  if(roll===3&&ru.status!=='dead'&&canShoot(ru)&&typeof document!=='undefined'){ if(quiet) ru._eyePick=true; else openArmEyePick(ru); }
   if(notes.length&&!(roll===1&&Object.values(BLOODLINE_LEADER).includes(ru.unitId))) toast('🎲 '+roll+': '+TBL_INJURY[roll-1][1]+' — '+notes.join(', '));
 }
 // развитие d10: результат, который юниту не подходит, перебрасывается (решение 06.10.2026)
@@ -5090,6 +5094,7 @@ function openPostGame(gi){
   const rowsH=[];
   const oppSrc=fx.filter(p=>(p.k==='injury'&&p.deathTo)||p.vs);
   if(oppSrc.length) rowsH.push(`<div class="gearline"><span class="glab">Соперник:</span><select id="pgOppF"><option value="">— фракция не указана —</option>${GAME_DATA.factions.map(f=>`<option value="${f.id}" ${g.oppFaction===f.id?'selected':''}>${esc(f.name)}</option>`).join('')}</select> <span style="color:var(--faint);font-size:11px">нужно для: ${esc([...new Set(oppSrc.map(p=>p.srcName))].join(', '))}</span></div>`);
+  rowsH.push(...casualtyRows(g));   // потери и опыт — первыми, как в своде
   rowsH.push(...battleRewardRows(g));
   if(campaignOn()&&g.cno) rowsH.push('<div id="pgCamp">'+campaignRows(g).join('')+'</div>');   // переброс куба разведки перерисует только этот блок
   rowsH.push(`<div class="gearline"><span class="glab">Добыча:</span><input id="pgLoot" type="number" min="0" value="0" style="width:90px"> прочее золото за битву <span style="color:var(--faint);font-size:11px">— с него и с наград битвы берутся доли патрона и возврат долгов, остаток идёт в казну</span></div>`);
@@ -5122,11 +5127,13 @@ function applyPostGame(gi){
   const val=id=>{const el=document.getElementById(id);return el?el.value:'';};
   const num=id=>Math.max(0,+val(id)||0);
   const chk=id=>{const el=document.getElementById(id);return !!(el&&el.checked);};
-  const fx=activeFx(); const lines=[];
+  const fx=activeFx(); const lines=[], later=[];
   if(val('pgOppF')) g.oppFaction=val('pgOppF');
+  applyCasualties(g,lines,{num,chk},later);   // потери и травмы, опыт за участие, выбитых врагов и победу
   const br=applyBattleRewards(g,lines,{val,num,chk});   // награды битвы: План, таблица наград, сценарий, поворот
-  const camp=campaignOn()&&g.cno, later=[];
-  const ci=camp?campaignIncome(g,lines,{num}):{loot:0};   // разведка: находки и продажа осколков
+  const camp=campaignOn()&&g.cno, reinf=!!(camp&&chk('pgReinf'));
+  const ci=camp&&!reinf?campaignIncome(g,lines,{num}):{loot:0};   // разведка: находки и продажа осколков (при подкреплениях — нет)
+  if(reinf) lines.push('подкрепления: разведки после этой битвы нет');
   const loot=num('pgLoot')+br.loot+ci.loot; let net=loot;
   // доли патрона с добычи
   fx.filter(p=>p.k==='cut').forEach(p=>{
@@ -5204,9 +5211,11 @@ function applyPostGame(gi){
     if(d){ state.favor=(state.favor||0)+d; lines.push(god.n+': милость '+(d>0?'+':'')+d+' по заветам → '+state.favor); }
   }
   if(br.taken){ const t=Math.min(br.taken,Math.max(0,(state.treasury||0)+gold)); gold-=t; lines.push('Засада: из казны −'+t); }   // жертва засады отдаёт победителю (не больше, чем есть)
-  if(camp) gold=campaignLate(g,lines,{val,num,chk},gold,later);   // беда, провизия и голод, жалованье, подкрепления
+  if(camp) gold=campaignLate(g,lines,{val,num,chk},gold,later,reinf);   // беда, провизия и голод, жалованье, подкрепления
   state.treasury=(state.treasury||0)+gold;
   if(gold) lines.push('казна '+(gold>0?'+':'')+gold+' → '+state.treasury);
+  if(reinf){ const b=Math.max(0,nextLimit()-bandValue()); state.treasury=b; state.reinf={win:campaignLog().length,budget:b};
+    lines.push('подкрепления: на найм '+b+' золотых — разница между порогом битвы '+nextBattleNo()+' и стоимостью банды; остаток сгорит, когда будет записана следующая битва'); }
   g.after=lines;
   closeModal(); renderAll(); autosave();
   later.forEach(f=>f());   // броски, которые открывают свои окна (травма от беды), — после окна «После битвы»
@@ -5518,7 +5527,7 @@ function validate(){
   const mismatchedLeaders=[];
   // легальность списка (лимиты очков/Ava/героев и т.п.) проверяется только для того, что реально едет на ЭТУ игру —
   // остальная банда живёт в левой колонке без каких-либо ограничений формата
-  const gu=state.units.filter(ru=>ru.forGame!==false);
+  const gu=state.units.filter(ru=>ru.forGame!==false&&ru.status!=='dead'&&ru.status!=='retired');
   if(phoenixCount()>1) errors.push('Фениксов в банде: '+phoenixCount()+' — феникс один на банду.');
   const relics={};
   state.units.forEach(r=>gearIdsOf(r).forEach(id=>{ const g=gearOf(id); if(g&&g.band1) relics[id]=(relics[id]||0)+1; }));
@@ -5585,6 +5594,9 @@ function validate(){
   if(counts.leader>1) errors.push('Больше одного лидера ('+counts.leader+'). Допустим ровно 1.');
   if(mismatchedLeaders.length) errors.push('Не годится в лидеры для этой подфракции: '+mismatchedLeaders.join(', ')+' — нужен: '+reqLeader.map(id=>(findUnit(id)||{}).name||id).join(' / ')+'.');
   if(total>fmt.points) errors.push('Превышен лимит очков: '+total+' / '+fmt.points+'.');
+  // размер банды — в юнитах (свод, решение 12.10.2026): в кампании потолок растёт с порогом — ошибка; в разовой игре рамка формата — совет
+  if(fmt.unitCap){ if(gu.length>fmt.unitCap) errors.push('Юнитов на битву: '+gu.length+' — порог битвы позволяет '+fmt.unitCap+'.'); }
+  else if(gu.length&&(gu.length<fmt.size[0]||gu.length>fmt.size[1])) warnings.push('Юнитов на битву: '+gu.length+' — рамка формата '+fmt.size[0]+'–'+fmt.size[1]+'.');
   // слоты формата: база + прибавки правил и патрона; «only» — места только для названных юнитов (у духовидицы унголов и у принца-изгнанника Нехекары)
   const slot=(what,base)=>{ const only=fxOn('limit',p=>p.what===what&&p.only).reduce((s,p)=>s+Math.min(p.add,gu.filter(r=>p.only.includes(r.unitId)).length),0);
     const cap=(base||0)+fxLimit(what); return {cap,only,max:cap+only,plus:cap!==(base||0)||only>0}; };
@@ -5623,11 +5635,9 @@ function validate(){
     const hasMagic=gu.some(ru=>{const u=findUnit(ru.unitId);return u&&u.tags.includes('wizard');});
     if(!hasRanged) warnings.push('Нет ни одного стрелкового/артиллерийского ответа.');
     if(!hasMagic) warnings.push('Нет мага — нет ответа на вражескую магию.');
-    if(modelTotal<fmt.size[0]) warnings.push('Маловато моделей: '+modelTotal+' (рекоменд. '+fmt.size[0]+'–'+fmt.size[1]+').');
-    if(modelTotal>fmt.size[1]) warnings.push('Очень много моделей: '+modelTotal+' (рекоменд. '+fmt.size[0]+'–'+fmt.size[1]+').');
   }
 
-  return {errors,warnings,total,counts,modelTotal,bigCount};
+  return {errors,warnings,total,counts,modelTotal,bigCount,gameUnits:gu.length};
 }
 /* Рейтинг банды и удача отстающего (решение 06.10.2026, по Пирсону: помощь отстающему приходит в самом бою, случайно,
    по одной простой мерке и выглядит законом мира; прежний бонус опыта «+1 XP за 50 очков разницы» заменён). */
@@ -5793,6 +5803,45 @@ function preBattleScnHtml(){
   return h+`<div style="color:var(--faint);font-size:11px">Выбранное попадёт в запись боя; награды сценария и Плана начислит окно «После битвы».</div>`;
 }
 // окно «После битвы»: награды битвы — План, таблица наград победителю, сценарий и поворот
+// потери и опыт после битвы (решение 12.10.2026 «Опыт и потери кодом»): игрок отмечает, кто выбыл и сколько моделей потеряно, —
+// билдер бросает травмы персонажам и d10 за модели (1–3 — погибла), потом даёт опыт: +1 выжившим участникам, персонажу +1 за
+// каждый выбитый им вражеский юнит, лидеру банды +1 за победу
+function battleUnits(g){ return (g.units||[]).map(getRU).filter(r=>r&&r.status!=='dead'&&r.status!=='retired'&&findUnit(r.unitId)); }
+function casualtyRows(g){
+  const us=battleUnits(g); if(!us.length) return [];
+  const grim=fxOn('xpCurse',p=>p.what==='part')[0], old=fxOn('xpCurse',p=>p.what==='win')[0];
+  const rows=[`<div class="gearline"><b>🩸 Потери и опыт</b> <span style="color:var(--faint);font-size:11px">отметьте, кто выбыл и сколько моделей потеряно, — травмы, d10 за модели и опыт билдер посчитает сам</span></div>`];
+  us.forEach(r=>{ const u=findUnit(r.unitId), ch=LEADER_CATS.includes(u.category), squad=u.maxModels>1;
+    rows.push(`<div class="gearline" style="font-size:12.5px;flex-wrap:wrap;gap:4px 12px"><span style="min-width:150px">${esc(nameOf(r))}${squad?' · '+r.modelCount+' мод.':''}</span>`
+      +(squad?`<span>выбыло моделей <input id="pgLost_${r.uid}" type="number" min="0" max="${r.modelCount}" value="0" style="width:54px"></span>`:`<label><input type="checkbox" id="pgOut_${r.uid}"> выбыл</label>`)
+      +(ch?`<span>вывел из строя врагов <input id="pgKill_${r.uid}" type="number" min="0" value="0" style="width:54px"></span>`:'')
+      +(grim&&fxSel(grim.sel,u)?`<label><input type="checkbox" id="pgGrim_${r.uid}"> атаковал Крупную цель или персонажа</label>`:'')
+      +'</div>'); });
+  if(old) rows.push((state.noWinXp?`<div class="gearline" style="font-size:12px;color:var(--danger)">${esc(old.srcName)}: в прошлой битве банда отклонилась от Плана — в этой опыта за победу нет</div>`:'')
+    +`<label class="gearline" style="font-size:12.5px"><input type="checkbox" id="pgDeviate"> ${esc(old.srcName)}: банда отклонилась от Плана — в следующей битве без опыта за победу</label>`);
+  return rows;
+}
+function applyCasualties(g,lines,{num,chk},later){
+  const us=battleUnits(g); if(!us.length) return;
+  const grim=fxOn('xpCurse',p=>p.what==='part')[0], old=fxOn('xpCurse',p=>p.what==='win')[0];
+  const noWin=!!(state.noWinXp&&old), lead=bandLeaderRu(); state.noWinXp=!!(old&&chk('pgDeviate'));   // лидер банды — каким он был в битве
+  us.forEach(r=>{ const u=findUnit(r.unitId), squad=u.maxModels>1;
+    if(squad){ const lost=Math.min(r.modelCount,num('pgLost_'+r.uid)); if(!lost) return;
+      const rolls=[...Array(lost)].map(()=>rolld10()), dead=rolls.filter(d=>d<=3).length;
+      r.modelCount-=dead; lines.push(nameOf(r)+': выбыло '+lost+', d10 '+rolls.join('·')+' — погибло '+dead);
+      if(r.modelCount<=0){ r.modelCount=1; r.status='dead'; lines.push(nameOf(r)+': отряд погиб целиком'); } return; }
+    if(!chk('pgOut_'+r.uid)) return;
+    if(LEADER_CATS.includes(u.category)){ const was=r._inj; rollInjury(r,undefined,true); const inj=r._inj!==was?r._inj:null;   // персонаж — таблица травм
+      if(r._eyePick){ delete r._eyePick; later.push(()=>openArmEyePick(r)); }
+      lines.push(nameOf(r)+': '+(!inj?'бросок травмы не делается':inj.saved?'выбыл — лекари успели':'травма d10 = '+inj.roll+' — '+TBL_INJURY[inj.roll-1][1])); return; }
+    const d=rolld10(); if(d<=3) r.status='dead';   // соло без таблицы травм (монстр, машина) — как модель отряда
+    lines.push(nameOf(r)+': выбыл, d10 = '+d+(d<=3?' — погиб':' — вернулся в строй')); });
+  us.filter(r=>r.status!=='dead'&&r.status!=='retired').forEach(r=>{ const u=findUnit(r.unitId);
+    if(grim&&fxSel(grim.sel,u)&&!chk('pgGrim_'+r.uid)){ lines.push(nameOf(r)+': без опыта за участие ('+grim.srcName+')'); return; }
+    const k=LEADER_CATS.includes(u.category)?num('pgKill_'+r.uid):0; r.xp=(r.xp||0)+1+k;
+    lines.push(nameOf(r)+': +'+(1+k)+' XP'+(k?' (участие и выбитые враги: '+k+')':' за участие')); });
+  if(g.result==='win'&&lead&&us.includes(lead)&&lead.status!=='dead'){ if(noWin) lines.push(old.srcName+': опыта за победу нет'); else { lead.xp=(lead.xp||0)+1; lines.push(nameOf(lead)+': +1 XP — победа (лидер банды)'); } }
+}
 function battleRewardRows(g){
   const rows=[], s=scnById(g.scenarioId), lead=bandLeaderRu();
   const alive=state.units.filter(r=>r.status!=='dead'&&r.status!=='retired'&&findUnit(r.unitId));
@@ -5852,6 +5901,10 @@ function applyBattleRewards(g,lines,{val,num,chk}){
    Правила — свод, «Цикл кампании» и «Золото, провизия, разведка»; считает всё окно «После битвы». */
 const CAMPAIGN_POINTS={win:3,draw:2,loss:1};
 const START_PROVISIONS=10, PROVISION_PRICE=5, MERC_WAGE=5, LATECOMER_XP=2;
+// 12.10.2026 (решение человека): кампания как в Trench Crusade — порог битвы растёт после каждой битвы: 600 очков и 5 юнитов в
+// первой, дальше +50 очков (в кампании на 6 битв +100) и +1 юнит за каждую. Остальные лимиты — персонажи, редкие, монстры,
+// наёмники, Ходы, стол — как в Warband, пока порог меньше 1000, и как в Host с 1000. Рост порога войск не даёт.
+const CAMPAIGN_START=600, CAMPAIGN_STEP=50, CAMPAIGN_UNITS=5, HOST_FROM=1000;
 const FORAGE_BASE='d10+3', FORAGE_PLACE={forest:2,coast:2,river:2,snow:-2};
 const EXPLORE_DICE=[[1,2,3],[3,5,4],[6,9,5],[10,999,6]];                                    // номер битвы от–до → кубов разведки
 const SHARD_STEPS=[[1,8,1],[9,17,2],[18,27,3],[28,38,4],[39,47,5],[48,55,6],[56,9999,7]];   // сумма кубов → осколков
@@ -5889,8 +5942,13 @@ function campaignOn(){ return !!(state.campaign&&state.campaign.on); }
 function campaignLog(){ return campaignOn()?state.log.filter(g=>g.cno):[]; }
 // номер следующей битвы банды (опоздавший начинает со своего номера)
 function nextBattleNo(){ return ((state.campaign&&state.campaign.startNo)||1)+campaignLog().length; }
-// ступень: кампания делится на две равные части — Warband, затем Host (Patrol убран 12.10.2026); без длины ступеней нет
-function ladderFormat(n){ const len=state.campaign&&state.campaign.len; if(!len) return null; return n<=len/2?'warband':'host'; }
+// порог битвы n и потолок юнитов (null — кампании с порогами нет); после последней битвы порог больше не растёт
+function campThreshold(n){ const len=campaignOn()&&state.campaign.len; return len?CAMPAIGN_START+Math.round(CAMPAIGN_STEP*12/len)*(Math.min(n,len)-1):null; }
+function campUnitCap(n){ const len=campaignOn()&&state.campaign.len; return len?CAMPAIGN_UNITS+Math.min(n,len)-1:null; }
+// база правил битвы в кампании: Warband, пока порог меньше 1000, затем Host
+function ladderFormat(n){ const t=campThreshold(n); return t==null?null:(t>=HOST_FROM?'host':'warband'); }
+// лимит следующей битвы: порог кампании или очки выбранного формата (кампания без порогов)
+function nextLimit(){ return campThreshold(nextBattleNo())||(GAME_DATA.formats.find(f=>f.id===state.formatId)||{points:0}).points; }
 function isFinalBattle(n){ const len=state.campaign&&state.campaign.len; return !!len&&n===len; }
 function campaignPointsOf(g){ return g&&g.cno?(CAMPAIGN_POINTS[g.result]||0)*(g.final?2:1):0; }
 function campaignPoints(){ return campaignLog().reduce((s,g)=>s+campaignPointsOf(g),0); }
@@ -5921,11 +5979,10 @@ function wageList(){
     return {ru:r,n:Math.max(0,Math.round(MERC_WAGE*(100+pct)/100))}; });
 }
 // сколько юнитов не хватает до минимума формата следующей битвы — право на подкрепления
-function reinfNeed(){
-  const c=state.campaign, n=nextBattleNo(); if(c&&c.len&&n>c.len) return 0;   // кампания сыграна — следующей битвы нет
-  const fid=ladderFormat(n)||state.formatId, f=GAME_DATA.formats.find(x=>x.id===fid); return f?Math.max(0,f.size[0]-aliveUnits().length):0;
-}
-function coreForReinf(){ return poolUnits(faction()).filter(u=>u.category==='core').sort((a,b)=>a.baseCost*a.minModels-b.baseCost*b.minModels); }
+// подкрепления (как в Trench Crusade, решение 12.10.2026): казна, осколки и запас снаряжения — в ноль, разведки и рынка нет, на найм —
+// разница между порогом следующей битвы и стоимостью банды; редкое так не купить; остаток сгорает, когда записана следующая битва
+function reinfActive(){ return !!(state.reinf&&campaignOn()&&state.reinf.win===campaignLog().length); }
+function reinfOffered(){ const c=state.campaign, n=nextBattleNo(); return !!(c&&!(c.len&&n>c.len)); }   // кампания сыграна — следующей битвы нет
 // броски окна «После битвы», от которых зависит выбор игрока: разведка, находки, беда, фураж — один раз на битву
 function rollAfterBattle(g){
   const n=exploreDiceN(g.cno||1), dice=[]; for(let i=0;i<n;i++) dice.push(rolld10());
@@ -5974,9 +6031,7 @@ function campaignRows(g){
   if(short||up.some(x=>x.ru.hunger)) rows.push(`<details ${short?'open':''} style="margin:2px 0 4px 22px;font-size:12px"><summary style="color:var(--muted)">Кто голодает (не хватит провизии — голодают последние в списке)</summary>${up.map(x=>`<label class="gearline" style="margin-top:2px"><input type="checkbox" id="pgHungry_${x.ru.uid}"> ${esc(nameOf(x.ru))} · содержание ${x.n}${x.ru.hunger?' · уже голодал':''}</label>`).join('')}</details>`);
   const wl=wageList().filter(x=>x.n);
   if(wl.length) rows.push(small(`💂 Жалованье: ${wl.map(x=>esc(nameOf(x.ru))+' '+x.n).join(' · ')} = ${wl.reduce((s,x)=>s+x.n,0)} золотых (нет денег — d10, на 1–4 наёмник уходит)`));
-  const rn=reinfNeed();
-  if(rn) rows.push(`<label style="display:block;margin-top:6px;cursor:pointer"><input type="checkbox" id="pgReinf"> 🛡 Призвать подкрепления: казна и осколки обнулятся, бесплатно придут ${rn} ${rn===1?'основной юнит':rn<5?'основных юнита':'основных юнитов'}</label>`
-    +[...Array(rn).keys()].map(i=>`<div class="gearline" style="margin-left:22px;font-size:12px">юнит ${i+1}: <select id="pgReinfU${i}">${coreForReinf().map(u=>`<option value="${u.id}">${esc(u.name)} ×${u.minModels}</option>`).join('')}</select></div>`).join(''));
+  if(reinfOffered()) rows.push(`<label style="display:block;margin-top:6px;cursor:pointer"><input type="checkbox" id="pgReinf"> 🛡 Призвать подкрепления: казна, осколки и запас снаряжения обнулятся, разведки и рынка после этой битвы нет; на найм — разница между порогом битвы ${nextBattleNo()} (${nextLimit()}) и стоимостью банды после потерь</label>`);
   rows.push(small(`🏁 Битва ${g.cno}${state.campaign.len?' из '+state.campaign.len:''}${g.final?' — финал, очки ×2':''}: очки кампании +${campaignPointsOf(g)}`));
   return rows;
 }
@@ -5991,8 +6046,8 @@ function campaignIncome(g,lines,{num}){
   return {loot};
 }
 // беда, провизия и голод, жалованье, подкрепления; gold — золото битвы, ещё не внесённое в казну; later — после закрытия окна
-function campaignLate(g,lines,{val,num,chk},gold,later){
-  const ex=g.ex||{findRes:[],forage:0}, m=ex.misRes, cash=()=>(state.treasury||0)+gold;
+function campaignLate(g,lines,{val,num,chk},gold,later,reinf){
+  const ex=g.ex||{findRes:[],forage:0}, m=reinf?null:ex.misRes, cash=()=>(state.treasury||0)+gold;   // подкрепления: разведки нет — нет и беды
   if(m){
     lines.push('беда «'+m.n+'»');
     if(m.goldLoss){ const t=Math.min(m.goldLoss,Math.max(0,cash())); gold-=t; lines.push('беда: −'+t+' золотых'); }
@@ -6003,7 +6058,7 @@ function campaignLate(g,lines,{val,num,chk},gold,later){
   }
   // провизия: запас + фураж + находки ± беда + покупка; кормят по списку, отмеченные голодают первыми
   const buy=Math.min(num('pgProvBuy'),Math.floor(Math.max(0,cash())/PROVISION_PRICE)); gold-=buy*PROVISION_PRICE;
-  let prov=Math.max(0,(state.provisions||0)+exProv(ex))+buy, eaten=0;
+  let prov=Math.max(0,(state.provisions||0)+(reinf?ex.forage:exProv(ex)))+buy, eaten=0;
   upkeepList().forEach(x=>{ const r=x.ru;
     if(!chk('pgHungry_'+r.uid)&&prov>=x.n){ prov-=x.n; eaten+=x.n; r.hunger=0; return; }
     if(findUnit(r.unitId).tags.includes('beast')){ r.status='retired'; r.left='beast'; lines.push(nameOf(r)+': зверь без корма одичал и ушёл'); return; }
@@ -6017,22 +6072,16 @@ function campaignLate(g,lines,{val,num,chk},gold,later){
     if(cash()>=x.n){ gold-=x.n; lines.push(nameOf(x.ru)+': жалованье −'+x.n); return; }
     const d=rolld10(); if(d<=4){ x.ru.status='retired'; x.ru.left='wage'; }
     lines.push(nameOf(x.ru)+': жалованья нет, d10 = '+d+(d<=4?' — ушёл':' — остался')); });
-  // подкрепления: казна и осколки — в ноль, основные юниты минимальной численности бесплатно
-  const rn=reinfNeed();
-  if(rn&&chk('pgReinf')){
-    gold=-(state.treasury||0); state.shards=0;
-    const ids=[...Array(rn).keys()].map(i=>val('pgReinfU'+i)).filter(id=>findUnit(id));
-    ids.forEach(id=>{ addUnit(id,'',findUnit(id).minModels); });
-    lines.push('подкрепления: казна и осколки обнулены, +'+ids.length+' юнит(ов)');
-  }
+  // подкрепления: казна, осколки и запас снаряжения — в ноль; бюджет найма ставит applyPostGame после всех шагов
+  if(reinf){ gold=-(state.treasury||0); state.shards=0; state.stash=[]; lines.push('подкрепления: казна, осколки и запас снаряжения обнулены'); }
   return gold;
 }
 // начать кампанию: казна — лимит первой битвы за вычетом уже собранной банды, провизия 10, опоздавшему — запас опыта
 function startCampaign(len,startNo){
   startNo=Math.max(1,startNo||1);
-  state.campaign={on:true,len:len||0,startNo,xpPool:LATECOMER_XP*(startNo-1)};
+  state.campaign={on:true,len:len||0,startNo,xpPool:LATECOMER_XP*(startNo-1),thr:1};   // thr — кампания по порогам (12.10.2026)
   const fid=ladderFormat(startNo); if(fid) state.formatId=fid;
-  const lim=(GAME_DATA.formats.find(f=>f.id===state.formatId)||{points:0}).points;
+  const lim=campThreshold(startNo)||(GAME_DATA.formats.find(f=>f.id===state.formatId)||{points:0}).points;
   state.treasury=Math.max(0,lim-bandValue()); state.provisions=START_PROVISIONS; state.shards=0;
   state.trophies=0; state.perks={}; state.market=null; state.stash=[]; state.markup=null;   // рынок — с чистого листа
   state.pendingBattle=isFinalBattle(startNo)?{scn:'final'}:null;
@@ -6041,11 +6090,11 @@ function startCampaign(len,startNo){
 function renderCampaignPanel(){
   const box=$('#campaignPanel'); if(!box) return;
   if(!campaignOn()){
-    box.innerHTML=`<div class="panel" style="padding:12px;margin-bottom:12px"><b>🏁 Кампания</b> <span style="color:var(--faint);font-size:12px">не начата — билдер не ведёт ступени, золото, провизию и разведку</span>
-      <div class="gearline"><span class="glab">Длина:</span><select id="cLen"><option value="12">12 битв</option><option value="6">6 битв</option><option value="0">без ступеней и финала</option></select>
+    box.innerHTML=`<div class="panel" style="padding:12px;margin-bottom:12px"><b>🏁 Кампания</b> <span style="color:var(--faint);font-size:12px">не начата — билдер не ведёт пороги, золото, провизию и разведку</span>
+      <div class="gearline"><span class="glab">Длина:</span><select id="cLen"><option value="12">12 битв</option><option value="6">6 битв</option><option value="0">без порогов и финала</option></select>
         <span style="color:var(--muted);font-size:12px">начать с битвы</span><input id="cStart" type="number" min="1" value="1" style="width:60px">
         <button class="btn gold sm" data-act="cstart">Начать кампанию</button></div>
-      <div style="color:var(--faint);font-size:11px">Казна станет равной лимиту первой битвы за вычетом уже собранной банды, провизия — ${START_PROVISIONS}. Опоздавший начинает с номера битвы, которую играет лидер кампании, и раздаёт персонажам по ${LATECOMER_XP} опыта за каждую уже сыгранную лидером битву.</div></div>`;
+      <div style="color:var(--faint);font-size:11px">Казна станет равной порогу первой битвы (${CAMPAIGN_START}) за вычетом уже собранной банды, провизия — ${START_PROVISIONS}. Порог растёт после каждой битвы: +${CAMPAIGN_STEP} очков (в кампании на 6 битв +${CAMPAIGN_STEP*2}) и +1 юнит к ${CAMPAIGN_UNITS} в первой. Опоздавший начинает с номера битвы, которую играет лидер кампании, и раздаёт персонажам по ${LATECOMER_XP} опыта за каждую уже сыгранную лидером битву.</div></div>`;
     return;
   }
   const c=state.campaign, n=nextBattleNo(), fid=ladderFormat(n)||state.formatId, F=GAME_DATA.formats.find(x=>x.id===fid);
@@ -6054,7 +6103,7 @@ function renderCampaignPanel(){
   const chars=aliveUnits().filter(r=>LEADER_CATS.includes(findUnit(r.unitId).category));
   box.innerHTML=`<div class="panel" style="padding:12px;margin-bottom:12px">
     <div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap"><b>🏁 Кампания</b>
-      <span style="color:var(--muted);font-size:12.5px">${done?'сыграна':'битва <b>'+n+'</b>'+(c.len?' из '+c.len:'')+(F?' · '+esc(F.name):'')+(isFinalBattle(n)?' · <b>финал</b>':'')} · очки кампании <b>${campaignPoints()}</b></span></div>
+      <span style="color:var(--muted);font-size:12.5px">${done?'сыграна':'битва <b>'+n+'</b>'+(c.len?' из '+c.len:'')+(campThreshold(n)?' · порог <b>'+campThreshold(n)+'</b>, юнитов до '+campUnitCap(n):F?' · '+esc(F.name):'')+(isFinalBattle(n)?' · <b>финал</b>':'')} · очки кампании <b>${campaignPoints()}</b></span></div>
     <div class="gearline">💰 казна <b>${state.treasury||0}</b> · 🍖 провизия <b>${state.provisions||0}</b> (содержание ${up}) · осколков <b>${state.shards||0}</b>
       <button class="btn sm" data-act="cprov">+1 провизия за ${PROVISION_PRICE}</button></div>
     ${c.xpPool>0?`<div class="gearline" style="font-size:12.5px">Опоздавшему осталось раздать <b>${c.xpPool}</b> опыта: ${chars.map(r=>`<button class="btn sm" data-act="cxp" data-uid="${r.uid}">+1 ${esc(nameOf(r))}</button>`).join(' ')||'персонажей нет'}</div>`:''}
@@ -6103,6 +6152,7 @@ function marketCheck(df){
   for(const it of df.items){
     if(it.ru.borrowed) return {err:'Одолженному отряду снаряжение не покупают — он уйдёт после битвы'};
     const N=rarityOf(it.id), nm=itemName(it.id), price=it.c*it.mult;
+    if(N&&reinfActive()) return {err:'«'+nm+'» — Редкость '+N+': во время подкреплений рынка нет, редкое не купить'};
     if(open&&N){
       const pm=rarePermit(it.ru,it.id);
       if(!pm) return {err:'«'+nm+'» — Редкость '+N+': нужен свободный бросок рынка '+N+'+ или право «без броска» (вкладка «Кампания» → Рынок)'};
@@ -6122,13 +6172,15 @@ function marketCheck(df){
 function marketPick(ru,id){
   const u=findUnit(ru.unitId);
   if(u&&u.maxModels<=1&&(state.stash||[]).includes(id)) return {stash:true};
-  const N=rarityOf(id); if(!N||!marketOpen()||ru.borrowed) return {};
+  const N=rarityOf(id); if(N&&reinfActive()) return {dis:true,why:'Подкрепления: рынка нет'};
+  if(!N||!marketOpen()||ru.borrowed) return {};
   return rarePermit(ru,id)?{}:{dis:true,why:'Редкость '+N+': нужен бросок рынка '+N+'+'};
 }
 // панель рынка во вкладке «Кампания»: броски на редкость, права «без броска», трофеи, запас снятого снаряжения
 function marketHtml(){
   const pk=state.perks||{}, tro=state.trophies||0, stash=state.stash||[], out=[];
   if(!marketOpen()) out.push('<span style="color:var(--faint)">откроется после первой битвы: до неё банда собирается свободно, Редкость не проверяется</span>');
+  else if(reinfActive()) out.push(`<span>🛡 Подкрепления: на найм осталось <b>${state.treasury||0}</b> золотых — остаток сгорит, когда будет записана следующая битва. Рынка в этот раз нет: броски на редкость не делаются, редкое не купить.</span>`);
   else {
     const m=marketState(), n=marketChars().length, rt=rerollTok('market');
     out.push(m.rolls.length
@@ -6149,7 +6201,7 @@ function marketHtml(){
   return `<div style="margin-top:8px"><b>🛒 Рынок</b> <span style="color:var(--faint);font-size:11px">обычное — всегда; редкое (Р5–Р9) — по броску d10 на N+</span>${out.map(t=>`<div class="gearline" style="font-size:12.5px;flex-wrap:wrap;gap:6px">${t}</div>`).join('')}</div>`;
 }
 function marketRoll(){
-  const m=marketState(); if(m.rolls.length||!marketOpen()) return;
+  const m=marketState(); if(m.rolls.length||!marketOpen()||reinfActive()) return;
   m.rolls=marketChars().map(r=>({uid:r.uid,name:nameOf(r),v:rolld10(),used:null}));
   toast('🎲 рынок: '+m.rolls.map(r=>r.name+' '+r.v).join(' · ')); renderAll(); autosave();
 }
@@ -6421,12 +6473,12 @@ function renderRoster(){
   let valHtml='';
   v.errors.forEach(e=>valHtml+=`<div class="v-item err"><span class="ic">✕</span><span>${esc(e)}</span></div>`);
   v.warnings.forEach(w=>valHtml+=`<div class="v-item warn"><span class="ic">!</span><span>${esc(w)}</span></div>`);
-  if(!v.errors.length && ws.gameCount) valHtml+=`<div class="v-item ok"><span class="ic">✓</span><span>Ростер легален для формата ${fmt.id}.</span></div>`;
+  if(!v.errors.length && ws.gameCount) valHtml+=`<div class="v-item ok"><span class="ic">✓</span><span>Ростер легален ${fmt.camp?'для порога '+fmt.points:'для формата '+fmt.id}.</span></div>`;
   $('#summary').innerHTML=`
     <div style="display:flex;align-items:baseline;gap:10px">
       <span style="font-family:Georgia,serif;font-size:22px;font-weight:700;${over?'color:var(--danger)':''}">${v.total}</span>
       <span style="color:var(--muted)">/ ${fmt.points} очков</span>
-      <span style="margin-left:auto;color:var(--muted);font-size:12px">${v.modelTotal} мод. · реком. ${fmt.size[0]}–${fmt.size[1]}</span>
+      <span style="margin-left:auto;color:var(--muted);font-size:12px">${v.gameUnits} юн. (${fmt.unitCap?'не больше '+fmt.unitCap:'рамка '+fmt.size[0]+'–'+fmt.size[1]}) · ${v.modelTotal} мод.</span>
     </div>
     <div class="counts">${pills||'<span class="pill">пусто</span>'}</div>
     <div class="valid">${valHtml}</div>`;
@@ -7716,7 +7768,7 @@ const RULE_TERMS=[
  {t:'Отложенный юнит',g:'base',f:['Отложенный юнит','Отложенные юниты','отложенный юнит'],d:'Не ставится при расстановке: в начале указанного раунда его ставят целиком в пределах 3" от указанного края, не в контакте с врагом.'},
  {t:'Отстающий',g:'base',d:'Банда с меньшим рейтингом; вне кампании и при равном рейтинге — проигравший бросок перед битвой.'},
  {t:'Очки кампании',g:'base',d:'За каждую битву кампании: победа — 3, ничья — 2, поражение — 1; за последнюю битву — вдвое. У кого больше после последней битвы, тот победил в кампании.'},
- {t:'Ступень',g:'base',d:'Лимит битвы в кампании: первая половина битв — Warband, вторая — Host.'},
+ {t:'Порог',g:'base',d:'Лимит битвы в кампании: 600 очков и 5 юнитов в первой битве, после каждой битвы +50 очков и +1 юнит (в кампании на 6 битв +100 очков и +1 юнит).'},
  {t:'Провизия',g:'base',d:'Еда, корм и реагенты банды. После каждой битвы приходит фураж и уходит содержание: 1 за юнит, Крупная цель — 2.'},
  {t:'Голод',g:'base',d:'Юнит без провизии в следующей битве получает −1 к броскам Бой и Воли; голодал две битвы подряд — уходит из банды.'},
  {t:'Движение',g:'act',en:'Move',d:'Простое действие: юнит проходит до M". Поворот на месте — тоже Движение. Юнит может выполнить его дважды за активацию.'},
@@ -7840,7 +7892,7 @@ function renderCompendium(){
 
   sec('play','Как сыграть битву',`
     <ol>
-      <li><b>Выберите формат.</b> Он задаёт очки банды, лимиты и число Ходов в раунде (таблица ниже).</li>
+      <li><b>Выберите формат.</b> Он задаёт очки банды, лимиты и число Ходов в раунде (таблица ниже). Warband и Host — форматы разовой игры; в кампании лимит задаёт порог битвы (см. «Цикл кампании»).</li>
       <li><b>Соберите банды</b> во вкладке «Сборка ростера»: билдер считает очки и проверяет лимиты.</li>
       <li><b>Подготовьте битву</b> (см. «Подготовка битвы»): стол, место действия, сценарий, поворот, местность, Планы, расстановка.</li>
       <li><b>Играйте раунды</b> (см. «Раунд, Ход, активация») — столько, сколько задаёт сценарий.</li>
@@ -8385,7 +8437,7 @@ function renderCompendium(){
       <li><b>Планы:</b> каждый игрок тайно выбирает План (см. «Планы»).</li>
       <li><b>Расстановка.</b> Игроки ставят юниты в свои зоны по одному поочерёдно; начинает банда, у которой больше юнитов (при равенстве — проигравший бросок). Юнит со Скрытностью может встать Скрытым (см. «Скрытность»). ${K('Отложенный юнит','Отложенные юниты')} не ставят.</li>
     </ol>
-    <p class="note">В кампании формат задаёт ступень (см. «Цикл кампании»). Место действия, сценарий, поворот и Планы бросает билдер: «Кампания → Перед боем».</p>`);
+    <p class="note">В кампании лимит битвы задаёт порог (см. «Цикл кампании»). Место действия, сценарий, поворот и Планы бросает билдер: «Кампания → Перед боем».</p>`);
 
   sec('victory','Конец битвы и победа',`
     <p>Битва длится столько раундов, сколько задаёт сценарий.</p>
@@ -8489,7 +8541,7 @@ function renderCompendium(){
     </ul>
     <table class="ref wrap"><thead><tr><th>d10</th><th>Что внутри</th></tr></thead><tbody>${SHRINE_TABLE.map(t=>`<tr><td>${rangeTxt(t[0])}</td><td style="text-align:left"><b>${esc(t[1])}.</b> ${KX(t[2])}</td></tr>`).join('')}</tbody></table>
     <h3>Финал кампании · Последняя битва</h3>
-    <p>Последняя битва кампании не бросается по таблице сценариев; её формат — ступень Host. Обе банды бросают в бой всё, что у них есть.</p>
+    <p>Последняя битва кампании не бросается по таблице сценариев; её лимит — порог последней битвы, остальные правила — как в Host. Обе банды бросают в бой всё, что у них есть.</p>
     <ul>
       <li><b>Цели:</b> центральная — кусок местности, ближайший к центру стола, и по одной на каждой половине стола: её кусок местности выбирает противник.</li>
       <li><b>Очки.</b> В конце каждого раунда, начиная со 2-го, — 1 ОП за каждую удержанную цель. Выбывший вражеский лидер банды приносит 3 ОП вместо 1, каждый другой выбывший вражеский персонаж — 1 ОП.</li>
@@ -8512,29 +8564,35 @@ function renderCompendium(){
   sec('campaign','Цикл кампании',`
     <p>Кампания — 12 битв каждой банды; группа может договориться о 6. После последней битвы побеждает банда, у которой больше очков кампании.</p>
     <ul>
-      <li><b>${K('Ступень','Ступени')}.</b> Кампания делится на две равные части: Warband (600) и Host (1000). В кампании на 12 битв: 1–6 — Warband, 7–12 — Host; на 6 битв — 1–3 и 4–6. Вместе с лимитом меняются все правила формата. Новая ступень войск не даёт: банда растёт на заработанное золото.</li>
+      <li><b>${K('Порог')}</b> битвы — сколько очков и юнитов банда выводит на битву. В первой битве — ${CAMPAIGN_START} очков и ${CAMPAIGN_UNITS} юнитов, после каждой битвы порог растёт на ${CAMPAIGN_STEP} очков и 1 юнит (в кампании на 6 битв — на ${CAMPAIGN_STEP*2} очков и 1 юнит). Персонажи, редкие, монстры, наёмники, Ходы и стол — как в Warband, пока порог меньше ${HOST_FROM}, и как в Host с ${HOST_FROM}. Рост порога войск не даёт: банда растёт на заработанное золото или призывает подкрепления.</li>
       <li><b>${K('Очки кампании')}:</b> победа — 3, ничья — 2, поражение — 1. Последняя битва — сценарий «Последняя битва» (см. «Сценарии»), очки за неё удваиваются. Поровну — победителей несколько.</li>
-      <li><b>Опоздавший</b> начинает с номера битвы, которую играет лидер кампании (банда, сыгравшая больше всех битв): собирает банду по лимиту этой ступени и раздаёт персонажам по ${LATECOMER_XP} опыта за каждую битву, которую лидер уже сыграл.</li>
+      <li><b>Опоздавший</b> начинает с номера битвы, которую играет лидер кампании (банда, сыгравшая больше всех битв): собирает банду по порогу этой битвы и раздаёт персонажам по ${LATECOMER_XP} опыта за каждую битву, которую лидер уже сыграл.</li>
     </ul>
+    <table class="ref"><thead><tr><th>Битва</th>${[...Array(12).keys()].map(i=>'<th>'+(i+1)+'</th>').join('')}</tr></thead><tbody>
+      <tr><td style="text-align:left">Порог</td>${[...Array(12).keys()].map(i=>'<td>'+(CAMPAIGN_START+CAMPAIGN_STEP*i)+'</td>').join('')}</tr>
+      <tr><td style="text-align:left">Юнитов</td>${[...Array(12).keys()].map(i=>'<td>'+(CAMPAIGN_UNITS+i)+'</td>').join('')}</tr>
+      <tr><td style="text-align:left">Правила</td>${[...Array(12).keys()].map(i=>'<td>'+(CAMPAIGN_START+CAMPAIGN_STEP*i>=HOST_FROM?'Host':'Warband')+'</td>').join('')}</tr>
+    </tbody></table>
+    <p class="note">Кампания на 12 битв. На 6 битв порог растёт вдвое быстрее (${CAMPAIGN_START}, ${CAMPAIGN_START+CAMPAIGN_STEP*2} … ${CAMPAIGN_START+CAMPAIGN_STEP*10}), а юнитов — так же, на 1 за битву.</p>
     <h3>Порядок кампании</h3>
     <ol>
-      <li><b>Банда.</b> Казна — лимит первой битвы, провизия — ${START_PROVISIONS}. Соберите ростер на эти деньги, выберите подфракцию, патрона и бога — они дают особые правила и доход.</li>
+      <li><b>Банда.</b> Казна — порог первой битвы (${CAMPAIGN_START}), провизия — ${START_PROVISIONS}. Соберите ростер на эти деньги, выберите подфракцию, патрона и бога — они дают особые правила и доход.</li>
       <li><b>Перед битвой.</b> Отстающая по рейтингу банда бросает Удачу отстающего. Игроки бросают место действия, сценарий и поворот, тайно выбирают Планы и делают объявления перед битвой (обида гномов, Акт Искупления и т. п.). Всё это бросает билдер: «Кампания → Перед боем».</li>
       <li><b>Битва.</b></li>
       <li><b>После битвы</b> — шаги ниже, по порядку.</li>
     </ol>
     <h3>После битвы</h3>
     <ol>
-      <li><b>Травмы.</b> Каждый выбывший персонаж бросает d10 по таблице травм (кнопка «Травма» в карточке, таблица — во вкладке «Справочник»). За каждую выбывшую модель отряда бросают d10: на 1–3 она погибла, иначе вернулась в строй. Шрамы закаляют: за каждый шрам персонаж получает +1 к броскам Воли против Страха и Ужаса, не больше +2.</li>
+      <li><b>Травмы.</b> Каждый выбывший персонаж бросает d10 по таблице травм (таблица — во вкладке «Справочник»; в окне «После битвы» отметьте выбывших — билдер бросит сам). За каждую выбывшую модель отряда бросают d10: на 1–3 она погибла, иначе вернулась в строй. Шрамы закаляют: за каждый шрам персонаж получает +1 к броскам Воли против Страха и Ужаса, не больше +2.</li>
       <li><b>Опыт.</b> Каждый выживший юнит получает +1 опыт за участие. Персонаж — ещё +1 за каждый вражеский юнит, который он сам вывел из строя. Лидер банды — ещё +1 за победу. Юнит, выполнивший План, — ещё +1.</li>
       <li><b>Награды.</b> Победитель бросает d10 по таблице наград; награда сценария — в его описании (см. «Конец битвы и победа»).</li>
       <li><b>Разведка и осколки:</b> кубы по номеру битвы, находки, беда, продажа осколков (см. «Золото, провизия, разведка»).</li>
       <li><b>Содержание:</b> фураж, провизия на каждый юнит, голод.</li>
       <li><b>Жалованье</b> наёмникам (см. «Наёмники и прислужники»).</li>
-      <li><b>Подкрепления</b>, если банда поредела, иначе <b>рынок и вербовка</b>: броски на редкость, купить и продать снаряжение и трофеи, нанять бойцов, раздать снаряжение из запаса (см. «Рынок»).</li>
+      <li><b>Подкрепления</b> — по желанию, после тяжёлых потерь (см. «Подкрепления»): тогда разведки и рынка после этой битвы нет. Иначе — <b>рынок и вербовка</b>: броски на редкость, купить и продать снаряжение и трофеи, нанять бойцов, раздать снаряжение из запаса (см. «Рынок»).</li>
       <li><b>Рейтинг банды</b> билдер пересчитывает сам.</li>
     </ol>
-    <p class="note">Окно «После битвы» в билдере проходит шаги по порядку: награды битвы → разведка и продажа осколков → беда, провизия и голод → жалованье → подкрепления → добыча, доли патрона и возврат долгов → доход от патронов, подфракций и скиллов → заветы бога (каждый соблюдённый +${FAVOR_PER_STRICTURE} к милости, нарушенный −${FAVOR_PER_STRICTURE}) → счётчики фракций. Погибшая модель теряет всё снаряжение. Если погиб лидер банды, лидером становится персонаж с лучшей Волей.</p>`);
+    <p class="note">Окно «После битвы» в билдере проходит шаги по порядку: потери, травмы и опыт → награды битвы → разведка и продажа осколков → беда, провизия и голод → жалованье → подкрепления → добыча, доли патрона и возврат долгов → доход от патронов, подфракций и скиллов → заветы бога (каждый соблюдённый +${FAVOR_PER_STRICTURE} к милости, нарушенный −${FAVOR_PER_STRICTURE}) → счётчики фракций. Погибшая модель теряет всё снаряжение. Если погиб лидер банды, лидером становится персонаж с лучшей Волей.</p>`);
 
   sec('xp','Опыт, развитие, левелап',`
     <p>Опыт копится в карточке юнита. Каждый новый уровень опыта — 3, 6, 10 и 15 опыта, дальше каждые 5 — даёт один бросок Развития: d10 по таблице развития (кнопка «Развитие» в карточке считает заработанные броски, таблица — во вкладке «Справочник»): +1" к M; +1 к броскам Бой, Стрел или Воли; +1 куб к броскам Бой; +1 Рана или Выносливость (каждая не больше +2); скилл; черта фракции. Результат, который юниту не подходит, перебрасывается: скилл или черта выпали отряду, характеристика уже на максимуме, выбрать не из чего.</p>
@@ -8550,10 +8608,10 @@ function renderCompendium(){
   sec('economy','Золото, провизия, разведка',`
     <h3>Золото</h3>
     <ul>
-      <li><b>Старт:</b> казна равна лимиту первой битвы. До первой битвы банду собирают свободно: всё покупается и возвращается по полной цене.</li>
+      <li><b>Старт:</b> казна равна порогу первой битвы (${CAMPAIGN_START}). До первой битвы банду собирают свободно: всё покупается и возвращается по полной цене.</li>
       <li><b>Покупки</b> после первой битвы — из казны по цене в очках: новый юнит, модель в отряд, маунт, снаряжение. Билдер списывает золото сам; дороже, чем есть в казне, купить нельзя.</li>
       <li><b>Продажа:</b> распущенный юнит или снятое снаряжение возвращают в казну половину цены. За погибших ничего не возвращается.</li>
-      <li><b>На битву</b> берут юниты на очки ступени; остальные ждут в Хранилище.</li>
+      <li><b>На битву</b> берут юниты в пределах порога — и по очкам, и по числу юнитов; остальные ждут в Хранилище.</li>
     </ul>
     <h3>${K('Провизия')}</h3>
     <ul>
@@ -8575,7 +8633,7 @@ function renderCompendium(){
     <table class="ref wrap"><thead><tr><th>d10</th><th>Беда</th></tr></thead><tbody>${MISHAPS.map(t=>`<tr><td>${rangeTxt(t[0])}</td><td style="text-align:left"><b>${esc(t[1])}.</b> ${KX(t[2])}</td></tr>`).join('')}</tbody></table>
     <table class="ref wrap"><thead><tr><th>Рейтинг банды</th><th>Золотых за осколок</th></tr></thead><tbody>${SHARD_PRICE.map(p=>`<tr><td style="white-space:nowrap">${p[1]>9999?p[0]+'+':(p[0]?p[0]+'–'+p[1]:'до '+p[1])}</td><td>${p[2]}</td></tr>`).join('')}</tbody></table>
     <h3>Подкрепления</h3>
-    <p>Если в банде меньше юнитов, чем минимум формата следующей битвы, после битвы она может призвать подкрепления вместо рынка и вербовки: казна и запас осколков обнуляются, банда бесплатно получает основные юниты минимальной численности, с базовым снаряжением, — до минимума формата.</p>
+    <p>После тяжёлых потерь банда может призвать подкрепления — решение принимают в окне «После битвы». Казна, запас осколков и запас снаряжения обнуляются, разведки и рынка после этой битвы нет. Взамен банда бесплатно нанимает юниты со снаряжением на разницу между порогом следующей битвы и своей стоимостью после потерь; редкое так не купить. Неистраченное сгорает, когда записана следующая битва.</p>
     <h3>Рынок</h3>
     <ul>
       <li><b>Обычное</b> снаряжение доступно всегда по цене из арсенала.</li>
@@ -8987,6 +9045,13 @@ function adopt(obj){
     const un=fUnits.find(x=>x.id===r.unitId);
     if(un) r.modelCount=Math.max(un.minModels,Math.min(un.maxModels,r.modelCount||1));
   });
+  // 12.10.2026: кампания идёт по порогам (как в Trench Crusade) — сохранённой кампании показать, что поменялось
+  if(campaignOn()&&state.campaign.len&&!state.campaign.thr){
+    state.campaign.thr=1; const n=nextBattleNo(), nf=ladderFormat(n); if(nf) state.formatId=nf;
+    adoptNotes.push({h:'Кампания по порогам',p:['Ступеней Warband и Host в кампании больше нет: лимит битвы задаёт порог, как в Trench Crusade. В первой битве — '+CAMPAIGN_START+' очков и '+CAMPAIGN_UNITS+' юнитов, после каждой битвы +'+Math.round(CAMPAIGN_STEP*12/state.campaign.len)+' очков и +1 юнит.',
+      'Ваша следующая битва — '+n+'-я: порог '+campThreshold(n)+' очков, юнитов не больше '+campUnitCap(n)+'. Персонажи, редкие, монстры и наёмники — как в '+(nf==='host'?'Host':'Warband')+'.',
+      'Подкрепления теперь можно призвать после любой битвы: казна, осколки и запас обнуляются, а банда бесплатно добирает юнитов до порога следующей битвы.']});
+  }
   // 07.10.2026: снятый патрон (PATRON_GONE) — банда переходит к ближайшему новому, навык патрона у героев тоже.
   // До этого такой сейв молча оставался без патрона, а навык пропадал из карточки героя
   const gone=PATRON_GONE[state.patronId];
@@ -9152,8 +9217,8 @@ function bind(){
   });
   $('#fGod').addEventListener('change',e=>{state.godId=e.target.value||null; state.favor=0; renderSetup(); renderCampaign(); autosave();});
   $('#fFormat').addEventListener('change',e=>{
-    const lf=campaignOn()&&ladderFormat(nextBattleNo());   // в кампании формат задаёт ступень
-    if(lf&&e.target.value!==lf){ e.target.value=lf; toast('В кампании формат задаёт ступень: битва '+nextBattleNo()+' — '+GAME_DATA.formats.find(f=>f.id===lf).name); return; }
+    const lf=campaignOn()&&ladderFormat(nextBattleNo());   // в кампании лимит задаёт порог битвы
+    if(lf&&e.target.value!==lf){ e.target.value=lf; toast('В кампании лимит задаёт порог: битва '+nextBattleNo()+' — '+campThreshold(nextBattleNo())+' очков, юнитов до '+campUnitCap(nextBattleNo())); return; }
     state.formatId=e.target.value;renderRoster();autosave();});
 
   // (каталог-фильтры удалены: найм через «+» секций, стиль Trench Companion)
@@ -9214,7 +9279,7 @@ function bind(){
     else if(a==='pbtide'){ const d=rolld10(), t=d10Row(TIDES,d); toast('🎲 '+d+' — '+t[1]+': '+t[2]); }
     else if(a==='cstart'){
       const len=+(($('#cLen')||{}).value||12), st=Math.max(1,+(($('#cStart')||{}).value||1));
-      if(state.log.length&&!confirm('Начать кампанию? Казна станет равной лимиту битвы '+st+' за вычетом банды, провизия — '+START_PROVISIONS+'. Прежние записи боёв в кампанию не войдут.')) return;
+      if(state.log.length&&!confirm('Начать кампанию? Казна станет равной порогу битвы '+st+' за вычетом банды, провизия — '+START_PROVISIONS+'. Прежние записи боёв в кампанию не войдут.')) return;
       const t=startCampaign(len,st), over=bandValue()-format().points; renderAll(); autosave();
       toast('🏁 Кампания начата: казна '+t+', провизия '+START_PROVISIONS+(over>0?' · банда дороже лимита битвы на '+over+' — на битву берите не всех':''));
     }
@@ -9227,7 +9292,7 @@ function bind(){
     else if(a==='exreroll'){ scoutReroll(+b.dataset.gi); }
     else if(a==='cprov'){ if((state.treasury||0)<PROVISION_PRICE){ toast('Не хватает золота'); return; } state.treasury-=PROVISION_PRICE; state.provisions=(state.provisions||0)+1; renderAll(); autosave(); }
     else if(a==='cxp'){ const ru=getRU(u), c=state.campaign; if(ru&&c&&c.xpPool>0){ ru.xp=(ru.xp||0)+1; c.xpPool--; renderAll(); autosave(); } }
-    else if(a==='cend'){ if(confirm('Завершить кампанию? Записи боёв останутся, ступени и экономика кампании выключатся.')){ state.campaign.on=false; renderAll(); autosave(); } }
+    else if(a==='cend'){ if(confirm('Завершить кампанию? Записи боёв останутся, пороги и экономика кампании выключатся.')){ state.campaign.on=false; renderAll(); autosave(); } }
     else if(a==='debtpay'){
       const d=(state.debts||[]).find(x=>x.creditor===b.dataset.cr&&x.left>0); if(!d) return;
       const pay=Math.min(d.left,Math.max(0,state.treasury||0));
@@ -9308,17 +9373,20 @@ function bind(){
   // журнал боёв
   $('#gAdd').addEventListener('click',()=>{
     const opp=$('#gOpp').value, res=$('#gRes').value, pb=state.pendingBattle||{}, scn=battleSetupTxt(pb);
-    const cno=campaignOn()?nextBattleNo():null;   // номер битвы в кампании: ступень, разведка, очки кампании
+    const cno=campaignOn()?nextBattleNo():null;   // номер битвы в кампании: порог, разведка, очки кампании
+    const reinfLeft=reinfActive()?(state.treasury||0):-1;   // подкрепления: неистраченное сгорает с записью следующей битвы
     // подготовка из «Перед боем» — в запись боя; pg — окно «После битвы» ещё не пройдено
     state.log.unshift({opponent:opp,scenario:scn,scenarioId:pb.scn||null,role:pb.role||null,place:pb.place||null,twist:pb.twist||null,plan:pb.plan||null,pg:1,result:res,notes:$('#gNotes').value,ts:Date.now()});
     if(cno){ state.log[0].cno=cno; state.log[0].final=isFinalBattle(cno); }
+    state.log[0].units=state.units.filter(r=>r.forGame!==false&&!r.borrowed&&r.status!=='dead'&&r.status!=='retired').map(r=>r.uid);   // кто был в битве — для потерь и опыта
+    if(reinfLeft>=0){ state.treasury=0; state.reinf=null; if(reinfLeft){ state.log[0].reinfLeft=reinfLeft; toast('Подкрепления: остаток '+reinfLeft+' золотых сгорел'); } }
     if(state.pendingUnderdog){ state.log[0].underdog=state.pendingUnderdog; state.pendingUnderdog=null; }   // удача отстающего — в запись этого боя
     // одолженные на битву отряды уходят, как только битва записана; их доля добычи — в окне «После битвы»
     const bw=state.units.filter(r=>r.borrowed);
     if(bw.length){ state.log[0].borrowed=bw.map(r=>({name:nameOf(r),unitId:r.unitId,src:r.borrowed.src,cut:r.borrowed.cut||0}));
       state.units.forEach(r=>{ if(bw.some(x=>x.uid===r.attachId)) r.attachId=null; }); state.units=state.units.filter(r=>!r.borrowed); }
     state.pendingBattle=null;
-    if(cno){ const nf=ladderFormat(nextBattleNo()); if(nf) state.formatId=nf; if(isFinalBattle(nextBattleNo())) state.pendingBattle={scn:'final'}; }   // следующая ступень и финал
+    if(cno){ const nf=ladderFormat(nextBattleNo()); if(nf) state.formatId=nf; if(isFinalBattle(nextBattleNo())) state.pendingBattle={scn:'final'}; }   // база правил следующего порога и финал
     $('#gOpp').value='';$('#gNotes').value='';
     renderCampaign(); autosave(); toast('Бой записан');
     // гномы: поражение — достойный повод для записи в Dammaz Kron (откроется после окна «После игры»)
