@@ -1723,9 +1723,10 @@ const FACTION_LORE_IDS = {
 
 /* ---------- Форматы и лимиты ---------- */
 const FORMATS = [
-  {id:'patrol', name:'Patrol — 300', points:300, heroMax:1, rareMax:0, bigMax:0, dupMax:1, mercMax:1, size:[4,7]},
-  {id:'warband',name:'Warband — 600',points:600, heroMax:2, rareMax:1, bigMax:1, dupMax:2, mercMax:2, size:[6,10]},
-  {id:'host',   name:'Host — 1000',  points:1000,heroMax:3, rareMax:2, bigMax:2, dupMax:3, mercMax:3, size:[8,14]}
+  // 12.10.2026: Patrol убран по решению человека («не хочу обрезанный формат с ограничениями»); вместе с ним ушёл
+  // лимит «одинаковых не основных» — при Ava 1–2 он связывал только в Patrol
+  {id:'warband',name:'Warband — 600',points:600, heroMax:2, rareMax:1, bigMax:1, mercMax:2, size:[6,10]},
+  {id:'host',   name:'Host — 1000',  points:1000,heroMax:3, rareMax:2, bigMax:2, mercMax:3, size:[8,14]}
 ];
 
 /* ---------- GAME_DATA ---------- */
@@ -1735,7 +1736,7 @@ const GAME_DATA = { version:'0.1', formats:FORMATS, factions:[
 F('empire','The Empire','order','Гибрид людей, пороха, дисциплины, рыцарей и боевой магии.',
  [['State Troops','Пехота Основы стоит на 5 очков дешевле, если в ростере есть Empire Captain или General of the Empire.'],
   ['Black Powder Line','Первый в ростере юнит Основы или Элиты/Спец с пороховым оружием раз за битву перебрасывает один бросок Стрел.'],
-  ['Colleges of Magic','Магов-персонажей — не больше одного в Patrol и Warband и не больше двух в Host.']],
+  ['Colleges of Magic','Магов-персонажей — не больше одного в Warband и не больше двух в Host.']],
  [['reikland','Reikland','Рейксгвардия — только здесь; лидер +1 к броскам Воли.'],
   ['middenland','Middenland','Великий герцог в Карробурге и его пикинёры с алебардщиками: Spearmen на 10% дешевле и получают +1 к Выносливости.'],
   ['nuln','Nuln','Курфюрстина и пороховая школа Нульна: пороховые юниты и артиллерия на 5% дешевле.'],
@@ -3540,9 +3541,6 @@ function isBigUnit(u){
 }
 function isMonsterMount(mt){ return !!mt&&(mt.cls==='monster'||mt.cls==='flying_monster'); }
 function isBigRu(ru,u){ u=u||findUnit(ru.unitId); return isBigUnit(u)||isMonsterMount(mountOf(ru)); }
-// обязательный командир подфракции, когда все варианты командира — монстры: в Patrol ему можно (решение 08.10.2026);
-// исключение только для самого юнита — монстр-маунт ему в Patrol всё равно не взять
-function patrolBossOk(u){ const req=requiredLeaderIds(); return !!(u&&req&&req.includes(u.id)&&req.every(id=>isBigUnit(findUnit(id)))); }
 function mountsForUnit(u,ru){
   if(!u || !u.mountIds || !u.mountIds.length) return [];
   const list=FACTION_MOUNTS[state.factionId]||[];
@@ -4507,7 +4505,7 @@ const FACTION_FX={
  empire:[
   [{k:'cost',sel:{cat:'core',hasTags:['infantry']},flat:-5,need:['emp_captain','emp_general']}],
   [{k:'table',note:'первый пороховой основной или элитный юнит раз за битву перебрасывает один бросок Стрел'}],
-  [{k:'cap',sel:{tags:['wizard'],hero:true},fmt:{patrol:1,warband:1,host:2}}]],
+  [{k:'cap',sel:{tags:['wizard'],hero:true},fmt:{warband:1,host:2}}]],
  dwarfs:[
   [{k:'system',what:'grudges'},{k:'table',note:'объявленная перед битвой обида: банда перебрасывает натуральные 1 в Схватке с обидчиком; кровная — Ненависть к обидчику'}],
   [{k:'table',note:'пехота со щитом, не выполнявшая Движение в этом раунде: +1 к спасу Брони'}],
@@ -5544,7 +5542,7 @@ function validate(){
     modelTotal+=ru.modelCount;
     if(ru.modelCount<u.minModels || ru.modelCount>u.maxModels)
       errors.push(u.name+': число моделей должно быть '+u.minModels+'–'+u.maxModels+' (сейчас '+ru.modelCount+').');
-    if(isBigRu(ru,u)&&!(fmt.bigMax===0&&patrolBossOk(u)&&!isMonsterMount(mountOf(ru)))) bigCount++;   // командир-монстр подфракции в Patrol — можно
+    if(isBigRu(ru,u)) bigCount++;
     dupMap[u.id]=(dupMap[u.id]||0)+1;
     // конфликт опций
     (ru.selectedOptions||[]).forEach(oid=>{
@@ -5610,12 +5608,8 @@ function validate(){
     const ava=avaOf(u);
     if(dupMap[id]>ava) errors.push('«'+u.name+'»: '+dupMap[id]+' записей при Ava '+ava+(ava===1?' (без подфракции все юниты Ava 1)':'')+'.');
   });
-  // спецификация форматов: в Patrol монстров и машин нет вовсе (решение 06.10.2026 — ошибка, а не совет);
-  // в Warband и Host лимит пока остаётся рекомендацией
-  if(bigCount>fmt.bigMax){
-    if(fmt.bigMax===0) errors.push('Patrol: монстры и машины запрещены (в ростере '+bigCount+': монстры, машины и герои на больших маунтах).');
-    else warnings.push('Монстров/машин: '+bigCount+' (рекоменд. макс '+fmt.bigMax+' для '+fmt.id+').');
-  }
+  // лимит монстров и машин в Warband и Host — рекомендация
+  if(bigCount>fmt.bigMax) warnings.push('Монстров/машин: '+bigCount+' (рекоменд. макс '+fmt.bigMax+' для '+fmt.id+').');
 
   // предупреждения
   if(counts.core===0 && gu.length>0) warnings.push('Нет core-юнитов — основа ростера пустая.');
@@ -5669,7 +5663,7 @@ function rollUnderdog(opp){
 /* ---------- Подготовка битвы и сценарии (решение 06.10.2026) ----------
    Стол и местность — по формату; место действия, сценарий и поворот — d10 по таблицам ниже; Планы тянутся по Воле
    лидера банды. Боевые правила сценариев — текстом в своде (часть «Сценарии»); награды кампании считает окно «После битвы». */
-const BATTLE_TABLE={patrol:{size:'36"×36"',terrain:6,goals:3,loot:3},warband:{size:'48"×36"',terrain:8,goals:3,loot:4},host:{size:'48"×48"',terrain:10,goals:5,loot:5}};
+const BATTLE_TABLE={warband:{size:'48"×36"',terrain:8,goals:3,loot:4},host:{size:'48"×48"',terrain:10,goals:5,loot:5}};
 // места действия: [d10 от, до], id, название, что на столе, какие правила включает
 const BATTLE_PLACES=[
  [[1,3],'ruins','Городские руины','Половина кусков местности или больше — руины со стенами и этажами; завалы — сложная местность.','«руинный сценарий»'],
@@ -5853,7 +5847,7 @@ function applyBattleRewards(g,lines,{val,num,chk}){
   return out;
 }
 /* ---------- Кампания: длина, ступени, золото и провизия, разведка, финал (решения человека 06.10.2026) ----------
-   12 битв (или 6) с финалом, очки кампании 3/2/1 (финал ×2); лимит битвы по ступеням Patrol → Warband → Host;
+   12 битв (или 6) с финалом, очки кампании 3/2/1 (финал ×2); лимит битвы по ступеням Warband → Host (Patrol убран 12.10.2026);
    найм и снаряжение — за золото, содержание — провизией; разведка по номеру битвы, осколки — по цене от рейтинга.
    Правила — свод, «Цикл кампании» и «Золото, провизия, разведка»; считает всё окно «После битвы». */
 const CAMPAIGN_POINTS={win:3,draw:2,loss:1};
@@ -5895,8 +5889,8 @@ function campaignOn(){ return !!(state.campaign&&state.campaign.on); }
 function campaignLog(){ return campaignOn()?state.log.filter(g=>g.cno):[]; }
 // номер следующей битвы банды (опоздавший начинает со своего номера)
 function nextBattleNo(){ return ((state.campaign&&state.campaign.startNo)||1)+campaignLog().length; }
-// ступень: кампания делится на три равные части — Patrol, Warband, Host; без длины ступеней нет
-function ladderFormat(n){ const len=state.campaign&&state.campaign.len; if(!len) return null; const t=len/3; return n<=t?'patrol':n<=2*t?'warband':'host'; }
+// ступень: кампания делится на две равные части — Warband, затем Host (Patrol убран 12.10.2026); без длины ступеней нет
+function ladderFormat(n){ const len=state.campaign&&state.campaign.len; if(!len) return null; return n<=len/2?'warband':'host'; }
 function isFinalBattle(n){ const len=state.campaign&&state.campaign.len; return !!len&&n===len; }
 function campaignPointsOf(g){ return g&&g.cno?(CAMPAIGN_POINTS[g.result]||0)*(g.final?2:1):0; }
 function campaignPoints(){ return campaignLog().reduce((s,g)=>s+campaignPointsOf(g),0); }
@@ -6787,8 +6781,7 @@ function openPickModal(uidv,cat,opt){
     title='🐎 Завести маунта';
     items=mountsForUnit(u,ru).filter(m=>!(ru.mountPool||[]).includes(m.id)).map(m=>{
       const second=ONE_PER_BAND_MOUNTS.includes(m.id)&&phoenixCount()>=1;   // второй феникс в банду не берут
-      const bigBan=isMonsterMount(m)&&format().bigMax===0;                   // Patrol: монстры и машины запрещены
-      return {id:m.id,dis:second||bigBan,why:second?'феникс уже есть в банде':bigBan?'Patrol: без монстров':'',name:m.name.split(' (')[0],prof:mountChip(m),cost:'+'+m.cost};
+      return {id:m.id,dis:second,why:second?'феникс уже есть в банде':'',name:m.name.split(' (')[0],prof:mountChip(m),cost:'+'+m.cost};
     });
   } else if(cat==='attach'){
     title='🤝 Присоединение к отряду';
@@ -7250,8 +7243,8 @@ function renderReference(){
     TAG_GLOSSARY.map(([t,d])=>{const i=d.indexOf(':');return `<div class="gloss"><b>${esc(d.slice(0,i))}</b> <span style="color:var(--faint);font-size:11px">${t}</span><br><span style="color:var(--muted)">${kwify(esc(d.slice(i+1).trim()))}</span></div>`;}).join('')+'</div>';
 
   html+='<div class="ref-head"><h3>Форматы и лимиты</h3></div>';
-  html+='<table class="ref"><thead><tr><th>Формат</th><th>Очки</th><th>Героев</th><th>Rare</th><th>Монстры/машины</th><th>Дубли не-core</th><th>Реком. размер</th></tr></thead><tbody>'+
-    GAME_DATA.formats.map(f=>`<tr><td style="text-align:left">${f.id}</td><td>${f.points}</td><td>${f.heroMax}</td><td>${f.rareMax}</td><td>${f.bigMax}</td><td>${f.dupMax}</td><td>${f.size[0]}–${f.size[1]}</td></tr>`).join('')+'</tbody></table>';
+  html+='<table class="ref"><thead><tr><th>Формат</th><th>Очки</th><th>Героев</th><th>Rare</th><th>Монстры/машины</th><th>Реком. размер</th></tr></thead><tbody>'+
+    GAME_DATA.formats.map(f=>`<tr><td style="text-align:left">${f.id}</td><td>${f.points}</td><td>${f.heroMax}</td><td>${f.rareMax}</td><td>${f.bigMax}</td><td>${f.size[0]}–${f.size[1]}</td></tr>`).join('')+'</tbody></table>';
 
   $('#refContent').innerHTML=html;
   wrapRefTables('#refContent');
@@ -7723,7 +7716,7 @@ const RULE_TERMS=[
  {t:'Отложенный юнит',g:'base',f:['Отложенный юнит','Отложенные юниты','отложенный юнит'],d:'Не ставится при расстановке: в начале указанного раунда его ставят целиком в пределах 3" от указанного края, не в контакте с врагом.'},
  {t:'Отстающий',g:'base',d:'Банда с меньшим рейтингом; вне кампании и при равном рейтинге — проигравший бросок перед битвой.'},
  {t:'Очки кампании',g:'base',d:'За каждую битву кампании: победа — 3, ничья — 2, поражение — 1; за последнюю битву — вдвое. У кого больше после последней битвы, тот победил в кампании.'},
- {t:'Ступень',g:'base',d:'Лимит битвы в кампании: первая треть битв — Patrol, вторая — Warband, последняя — Host.'},
+ {t:'Ступень',g:'base',d:'Лимит битвы в кампании: первая половина битв — Warband, вторая — Host.'},
  {t:'Провизия',g:'base',d:'Еда, корм и реагенты банды. После каждой битвы приходит фураж и уходит содержание: 1 за юнит, Крупная цель — 2.'},
  {t:'Голод',g:'base',d:'Юнит без провизии в следующей битве получает −1 к броскам Бой и Воли; голодал две битвы подряд — уходит из банды.'},
  {t:'Движение',g:'act',en:'Move',d:'Простое действие: юнит проходит до M". Поворот на месте — тоже Движение. Юнит может выполнить его дважды за активацию.'},
@@ -7825,8 +7818,8 @@ function renderCompendium(){
           <span style="color:var(--faint);font-size:11px">Всадники: ${esc(riders)} · <b>+${m.cost} очк.</b></span></td></tr>`;
     }).join('');
   }).join('');
-  const TURNS={patrol:6,warband:8,host:10};
-  const fmtRows=GAME_DATA.formats.map(f=>`<tr><td style="text-align:left"><b>${esc(f.name.split(' —')[0])}</b></td><td>${f.points}</td><td>${f.size[0]}–${f.size[1]}</td><td>${f.heroMax}</td><td>${f.rareMax}</td><td>${f.bigMax}</td><td>${f.mercMax}</td><td>${f.dupMax}</td><td>${TURNS[f.id]||'—'}</td></tr>`).join('');
+  const TURNS={warband:8,host:10};
+  const fmtRows=GAME_DATA.formats.map(f=>`<tr><td style="text-align:left"><b>${esc(f.name.split(' —')[0])}</b></td><td>${f.points}</td><td>${f.size[0]}–${f.size[1]}</td><td>${f.heroMax}</td><td>${f.rareMax}</td><td>${f.bigMax}</td><td>${f.mercMax}</td><td>${TURNS[f.id]||'—'}</td></tr>`).join('');
 
   const S=[]; let PART='';
   const part=t=>{PART=t;};
@@ -7855,8 +7848,8 @@ function renderCompendium(){
       <li><b>В кампании</b> после битвы пройдите шаги «После битвы».</li>
     </ol>
     <p><b>Поражение.</b> Банда проигрывает сразу, когда все её юниты выбыли или Деморализованы, или когда она объявила ${K('Отступление банды')} (см. «Надлом и Отступление банды»). Иначе после последнего раунда победителя решают очки победы.</p>
-    <table class="ref"><thead><tr><th>Формат</th><th>Очки</th><th>Юнитов</th><th>Персонажей</th><th>Редких</th><th>Монстров и машин</th><th>Наёмников</th><th>Одинаковых не основных</th><th>Ходов в раунде</th></tr></thead><tbody>${fmtRows}</tbody></table>
-    <p class="note">В Patrol монстры и боевые машины запрещены, в том числе персонажи на монстрах. Исключение — обязательный командир подфракции, если он сам монстр: такую банду ведёт он и в Patrol. Модели, которые банда получила бесплатно, всё равно считаются в очках формата.</p>`);
+    <table class="ref"><thead><tr><th>Формат</th><th>Очки</th><th>Юнитов</th><th>Персонажей</th><th>Редких</th><th>Монстров и машин</th><th>Наёмников</th><th>Ходов в раунде</th></tr></thead><tbody>${fmtRows}</tbody></table>
+    <p class="note">Модели, которые банда получила бесплатно, всё равно считаются в очках формата.</p>`);
 
   sec('dice','Кубы и проверки',`
     <p>Бросок — это пул d10. Число кубов и порог берутся из профиля: «Бой 5+ ×2» — два куба, хит на 5 и выше.</p>
@@ -7918,7 +7911,7 @@ function renderCompendium(){
   sec('round','Раунд, Ход, активация',`
     <ol>
       <li><b>Инициатива.</b> В первом раунде первой действует сторона с меньшим числом юнитов. При равенстве лидеры банд бросают Волю: у кого больше хитов, тот и первый (при равенстве — перебросить). Дальше инициатива передаётся в конце раунда (шаг 4).</li>
-      <li><b>Ходы.</b> В каждом ${K('Ход','Ходе')} сторона с инициативой активирует один юнит, затем другая — один. Сторона может активировать и юнит, который в этом раунде уже действовал (повторная активация); если все её юниты уже активировались, она может спасовать, а если активировать некого — пасует. Раунд заканчивается, когда сыграно столько Ходов, сколько задаёт формат (Patrol — 6, Warband — 8, Host — 10), даже если активировались не все юниты.</li>
+      <li><b>Ходы.</b> В каждом ${K('Ход','Ходе')} сторона с инициативой активирует один юнит, затем другая — один. Сторона может активировать и юнит, который в этом раунде уже действовал (повторная активация); если все её юниты уже активировались, она может спасовать, а если активировать некого — пасует. Раунд заканчивается, когда сыграно столько Ходов, сколько задаёт формат (Warband — 8, Host — 10), даже если активировались не все юниты.</li>
       <li><b>${K('Активация')}.</b> Юнит получает жетон активации и выполняет до двух простых действий или одно долгое. Простое действие нельзя повторить в одной активации, кроме Движения. Юнит может активироваться в раунде не один раз: если жетон активации на нём уже лежит, вместо жетона он получает 1 Стресс (повторная активация).</li>
       <li><b>Конец раунда</b>, по порядку:
         <ul>
@@ -8383,10 +8376,10 @@ function renderCompendium(){
   sec('setup','Подготовка битвы',`
     <ol>
       <li><b>Бросок.</b> Игроки бросают по d10, при равенстве перебрасывают; у кого больше — победитель броска. ${K('Отстающий')} — банда с меньшим рейтингом (см. «Рейтинг, Удача отстающего, продвижение»); вне кампании и при равном рейтинге — проигравший бросок.</li>
-      <li><b>Стол:</b> Patrol — ${BTAB.patrol.size}, Warband — ${BTAB.warband.size}, Host — ${BTAB.host.size}.</li>
+      <li><b>Стол:</b> Warband — ${BTAB.warband.size}, Host — ${BTAB.host.size}.</li>
       <li><b>Место действия</b> — d10 по таблице «Места действия» или по договорённости.</li>
       <li><b>Сценарий</b> — d10 по таблице «Сценарии», затем <b>поворот</b> — d10 по таблице «Повороты».</li>
-      <li><b>Местность:</b> Patrol — ${BTAB.patrol.terrain} кусков, Warband — ${BTAB.warband.terrain}, Host — ${BTAB.host.terrain}, если место действия не говорит иного. Игроки ставят куски по одному поочерёдно, начинает проигравший бросок; куски — не ближе 3" друг к другу. Местность не должна запирать зону расстановки или цель сценария: к ним остаётся проход. Чем считается каждый кусок, игроки договариваются (см. «Местность»).</li>
+      <li><b>Местность:</b> Warband — ${BTAB.warband.terrain} кусков, Host — ${BTAB.host.terrain}, если место действия не говорит иного. Игроки ставят куски по одному поочерёдно, начинает проигравший бросок; куски — не ближе 3" друг к другу. Местность не должна запирать зону расстановки или цель сценария: к ним остаётся проход. Чем считается каждый кусок, игроки договариваются (см. «Местность»).</li>
       <li><b>Края и зоны.</b> Победитель броска выбирает длинный край стола (на квадратном — любой); противоположный край — край противника. Зона расстановки — полоса 8" вдоль своего края, если сценарий не говорит иного.</li>
       <li><b>Цели и маркеры</b> ставят, как сказано в сценарии; цели — на куски местности. Если подходящего куска нет, цель ставят маркером по тем же правилам.</li>
       <li><b>Планы:</b> каждый игрок тайно выбирает План (см. «Планы»).</li>
@@ -8451,7 +8444,7 @@ function renderCompendium(){
     <h3>2–3 · Захват земли</h3>
     <p>Обе банды пришли занять выгодные места: колодец, высоту, перекрёсток.</p>
     <ul>
-      <li><b>Цели:</b> Patrol и Warband — ${BTAB.warband.goals}, Host — ${BTAB.host.goals}. Центральная цель — кусок местности, ближайший к центру стола. Остальные по очереди выбирают игроки, начиная с проигравшего бросок: каждый — кусок местности вне зон расстановки, не ближе 8" к другой цели.</li>
+      <li><b>Цели:</b> Warband — ${BTAB.warband.goals}, Host — ${BTAB.host.goals}. Центральная цель — кусок местности, ближайший к центру стола. Остальные по очереди выбирают игроки, начиная с проигравшего бросок: каждый — кусок местности вне зон расстановки, не ближе 8" к другой цели.</li>
       <li><b>Очки.</b> В конце каждого раунда, начиная со 2-го, — 1 ОП за каждую удержанную цель.</li>
       <li><b>Перелом.</b> С 4-го раунда центральная цель приносит 2 ОП.</li>
       <li><b>Раунды:</b> ${RND('grab')}.</li>
@@ -8468,7 +8461,7 @@ function renderCompendium(){
     <h3>6–7 · Добыча</h3>
     <p>Посреди стола брошены ценности: обоз, тайник, разорённый склеп.</p>
     <ul>
-      <li><b>Сокровища:</b> Patrol — ${BTAB.patrol.loot}, Warband — ${BTAB.warband.loot}, Host — ${BTAB.host.loot} маркеров. Игроки кладут их по очереди, начиная с проигравшего бросок: по одному на кусок местности вне зон расстановки, не ближе 6" друг к другу.</li>
+      <li><b>Сокровища:</b> Warband — ${BTAB.warband.loot}, Host — ${BTAB.host.loot} маркеров. Игроки кладут их по очереди, начиная с проигравшего бросок: по одному на кусок местности вне зон расстановки, не ближе 6" друг к другу.</li>
       <li><b>Перелом.</b> Когда сокровище поднимают впервые, поднявший юнит бросает d10: 1 — сокровище проклято, и каждый юнит, который его поднимает или принимает, Кровоточит; 10 — это реликвия, она приносит 3 ОП вместо 2; 2–9 — обычное сокровище.</li>
       <li><b>Очки.</b> В конце битвы — 2 ОП за каждое сокровище, которое несёт юнит банды, лежит в её зоне расстановки или унесено за её край. Юнит с сокровищем может уйти за свой край.</li>
       <li><b>Раунды:</b> ${RND('loot')}.</li>
@@ -8519,7 +8512,7 @@ function renderCompendium(){
   sec('campaign','Цикл кампании',`
     <p>Кампания — 12 битв каждой банды; группа может договориться о 6. После последней битвы побеждает банда, у которой больше очков кампании.</p>
     <ul>
-      <li><b>${K('Ступень','Ступени')}.</b> Кампания делится на три равные части: Patrol (300), Warband (600), Host (1000). В кампании на 12 битв: 1–4 — Patrol, 5–8 — Warband, 9–12 — Host; на 6 битв — 1–2, 3–4, 5–6. Вместе с лимитом меняются все правила формата. Новая ступень войск не даёт: банда растёт на заработанное золото.</li>
+      <li><b>${K('Ступень','Ступени')}.</b> Кампания делится на две равные части: Warband (600) и Host (1000). В кампании на 12 битв: 1–6 — Warband, 7–12 — Host; на 6 битв — 1–3 и 4–6. Вместе с лимитом меняются все правила формата. Новая ступень войск не даёт: банда растёт на заработанное золото.</li>
       <li><b>${K('Очки кампании')}:</b> победа — 3, ничья — 2, поражение — 1. Последняя битва — сценарий «Последняя битва» (см. «Сценарии»), очки за неё удваиваются. Поровну — победителей несколько.</li>
       <li><b>Опоздавший</b> начинает с номера битвы, которую играет лидер кампании (банда, сыгравшая больше всех битв): собирает банду по лимиту этой ступени и раздаёт персонажам по ${LATECOMER_XP} опыта за каждую битву, которую лидер уже сыграл.</li>
     </ul>
@@ -8606,7 +8599,7 @@ function renderCompendium(){
   sec('mercs','Наёмники и прислужники',`
     <p>У каждой фракции есть раздел «Наёмники и прислужники»: солдаты удачи, прирученные звери, порабощённые твари.</p>
     <ul>
-      <li><b>Лимит по формату:</b> Patrol — 1, Warband — 2, Host — 3. В лимиты персонажей и редких наёмники не входят.</li>
+      <li><b>Лимит по формату:</b> Warband — 2, Host — 3. В лимиты персонажей и редких наёмники не входят.</li>
       <li><b>Чужаки:</b> наёмники не получают черт фракции, реноунов и знамён; опыт и травмы — как у отрядов.</li>
       <li><b>Жалованье</b> после каждой битвы: наёмным солдатам — ${MERC_WAGE} золотых из казны (нет денег — d10, на 1–4 уходят). Звери жалованья не берут, но едят провизию, как все (см. «Золото, провизия, разведка»). Рабы и порабощённые твари жалованья не требуют, но при гибели лидера банды сразу разбегаются (до конца битвы).</li>
       <li>Наёмник, оставшийся последним юнитом банды, может уйти со стола — он выбывает.</li>
@@ -8769,13 +8762,12 @@ function openAddModal(grp){
     const ava=avaOf(u), have=rosterCountOf(u.id);
     // запрет правилом подфракции или фракции (потолок 0 в этом формате) — виден сразу, а не только ошибкой проверки
     const ban=fxOn('cap',p=>(p.fmt?p.fmt[state.formatId]:p.max)===0&&fxSel(p.sel,u))[0];
-    const bigBan=(format().bigMax===0)&&isBigUnit(u)&&!patrolBossOk(u);   // Patrol: монстры и машины запрещены, кроме командира-монстра подфракции
-    const atCap=have>=ava||!!ban||bigBan;
+    const atCap=have>=ava||!!ban;
     return `<div class="addunit-row ${atCap?'dis':''}" data-selrow="${u.id}">
       <img class="uicon sm" src="icons/${u.id}.jpg" alt="" onerror="this.style.visibility='hidden'">
       <div class="aumain">
         <b>${esc(u.name)}</b> <span style="color:var(--faint);font-size:11px">${esc(u.role)}</span><br>
-        <span style="color:var(--muted);font-size:11px">${ban?`Запрещено правилом «${esc(ban.srcName)}»`:bigBan?'Patrol: монстры и машины запрещены':have>=ava?`Лимит достигнут (${have}/${ava})`:`Взято: ${have} / Ava: ${ava}`}${u.maxModels>1?' · 1–'+u.maxModels+' мод.':''}</span>
+        <span style="color:var(--muted);font-size:11px">${ban?`Запрещено правилом «${esc(ban.srcName)}»`:have>=ava?`Лимит достигнут (${have}/${ava})`:`Взято: ${have} / Ava: ${ava}`}${u.maxModels>1?' · 1–'+u.maxModels+' мод.':''}</span>
         ${statStrip(u.stats,u.unitType,u)}
       </div>
       <span class="trcost">${priceHtml(u)}${u.maxModels>1?'/мод':''}</span>
@@ -8958,6 +8950,18 @@ function adopt(obj){
   state.filters=Object.assign({search:'',cat:'all',tag:'all',sort:'cat'},obj.filters||{});
   // защита: фракция существует
   if(!GAME_DATA.factions.find(f=>f.id===state.factionId)) state.factionId=GAME_DATA.factions[0].id;
+  // 12.10.2026: формата Patrol больше нет — сейв переходит на ступень кампании или в Warband; кампании, начатой с Patrol,
+  // в казну добавляется разница стартовых лимитов (300), чтобы она не отставала от новых
+  if(!GAME_DATA.formats.find(f=>f.id===state.formatId)){
+    const wasPatrol=state.formatId==='patrol', nf=(campaignOn()&&ladderFormat(nextBattleNo()))||'warband';
+    state.formatId=nf;
+    if(wasPatrol){
+      const p=['Формата Patrol в игре больше нет: ростер теперь собирается на '+GAME_DATA.formats.find(f=>f.id===nf).name+'.'];
+      if(campaignOn()){ state.treasury=(state.treasury||0)+300;
+        p.push('Кампания идёт по новой лестнице: первая половина битв — Warband (600), вторая — Host (1000). В казну добавлено 300 золотых — столько не хватало до нового стартового лимита.'); }
+      adoptNotes.push({h:'Patrol убран',p});
+    }
+  }
   // bump uid counter
   let mx=0; (state.units||[]).forEach(r=>{const n=parseInt(String(r.uid).replace(/\D/g,''));if(n>mx)mx=n;}); _uid=mx+1;
   // миграция старых сейвов: новые поля, чистка исчезнувших опций, кламп размеров
